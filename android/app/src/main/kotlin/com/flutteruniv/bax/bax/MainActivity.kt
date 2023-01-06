@@ -1,4 +1,4 @@
-package com.flutteruniv.bax.bax
+package com.flutteruniv.bax
 
 import io.flutter.embedding.android.FlutterActivity
 

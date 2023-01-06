@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.flutteruniv.bax.bax">
+    package="com.flutteruniv.bax">
    <application
         android:label="bax"
         android:name="${applicationName}"
