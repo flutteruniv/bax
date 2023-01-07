@@ -5,7 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final themeProvider = Provider((_) => baxTheme);
 
 final defaultTheme = ThemeData(
-  colorScheme: const ColorScheme.light(primary: BaxColor.primaryColor),
+  brightness: Brightness.light,
+  colorScheme: const ColorScheme.light(
+    primary: BaxColor.primaryColor,
+    secondary: Colors.lightBlueAccent,
+  ),
   primaryColor: BaxColor.primaryColor,
   fontFamily: 'NotoSansJP',
 );
