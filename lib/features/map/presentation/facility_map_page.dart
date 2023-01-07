@@ -1,5 +1,7 @@
+import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/search_text_form_field.dart';
 
@@ -47,7 +49,9 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
+          },
           child: const Icon(
             Icons.network_check,
           ),

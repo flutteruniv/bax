@@ -15,6 +15,9 @@ final defaultTheme = ThemeData(
 );
 
 final baxTheme = defaultTheme.copyWith(
+  appBarTheme: const AppBarTheme(
+    elevation: 0,
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
