@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Wi-Fi速度の測定のために許可をお願いします</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Wi-Fi速度の測定のために許可をお願いします</string>
 </dict>
 </plist>

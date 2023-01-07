@@ -26,29 +26,39 @@ class WelComePage extends ConsumerWidget {
                 ),
               ),
               const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('利用規約'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('プライバシーポリシー'),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await authService.anonymousLogin();
-                  context.go(FacilityMapPage.route);
-                },
-                child: const Text('規約に同意してはじめる'),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: const Text('データを引き継ぐ'),
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 280,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('利用規約'),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('プライバシーポリシー'),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await authService.anonymousLogin();
+                        context.go(FacilityMapPage.route);
+                      },
+                      child: const Text('規約に同意してはじめる'),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: const Text('データを引き継ぐ'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
             ],

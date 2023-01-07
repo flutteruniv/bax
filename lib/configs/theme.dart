@@ -8,7 +8,7 @@ final defaultTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
     primary: BaxColor.primaryColor,
-    secondary: Colors.lightBlueAccent,
+    secondary: BaxColor.secondaryColor,
   ),
   primaryColor: BaxColor.primaryColor,
   fontFamily: 'NotoSansJP',
@@ -21,7 +21,6 @@ final baxTheme = defaultTheme.copyWith(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
-      minimumSize: const Size(240, 40),
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
@@ -29,7 +28,6 @@ final baxTheme = defaultTheme.copyWith(
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      minimumSize: const Size(240, 40),
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
