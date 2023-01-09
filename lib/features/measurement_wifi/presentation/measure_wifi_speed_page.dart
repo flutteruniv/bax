@@ -15,6 +15,7 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
 
 class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   WifiMeasurementResult? wifiMeasurementResult;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -18,7 +18,6 @@ final routerProvider = Provider(
         return null;
       },
       routes: [
-        // ignore: lines_longer_than_80_chars
         GoRoute(
           path: FacilityMapPage.route,
           builder: (context, state) => const FacilityMapPage(),
