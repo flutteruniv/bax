@@ -2,6 +2,7 @@ import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_pa
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'widgets/search_text_form_field.dart';
 
@@ -17,9 +18,18 @@ class FacilityMapPage extends ConsumerStatefulWidget {
 class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   final controller = TextEditingController();
 
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   void dispose() {
     controller.dispose();
+    mapController.dispose();
     super.dispose();
   }
 
@@ -31,12 +41,12 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.grey,
-              alignment: Alignment.center,
-              child: const Text('ここにマップが入る'),
+            GoogleMap(
+              onMapCreated: onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 11,
+              ),
             ),
             SafeArea(
               child: Padding(
