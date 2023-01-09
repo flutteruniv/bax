@@ -1,3 +1,5 @@
+import 'package:bax/features/load/application/loading_notifier.dart';
+import 'package:bax/features/measurement_wifi/domain/wifi_measurement_result.dart';
 import 'package:bax/features/measurement_wifi/domain/wifi_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,9 +14,9 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
 }
 
 class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
+  WifiMeasurementResult? wifiMeasurementResult;
   @override
   Widget build(BuildContext context) {
-    final wifiScannerAsyncValue = ref.watch(wifiScannerProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -43,61 +45,88 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                 ),
               ],
             ),
-
+            if (wifiMeasurementResult != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('SSID: ${wifiMeasurementResult!.ssid}'),
+                  Text('ダウンロード速度: ${wifiMeasurementResult!.downloadSpeedMbps.toStringAsFixed(2)} Mbps'),
+                  Text('アップロード速度: ${wifiMeasurementResult!.uploadSpeedMbps.toStringAsFixed(2)} Mbps'),
+                ],
+              ),
             Expanded(
-              child: wifiScannerAsyncValue.when(
-                loading: () {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  );
-                },
-                error: (e, s) {
-                  return ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('接続を見直す'),
-                  );
-                },
-                data: (data) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: SizedBox.square(
-                      dimension: 120,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final res = await data.measureInternetSpeed();
-                          print(res.ssid);
-                          print(res.downloadSpeedMbps);
-                          print(res.uploadSpeedMbps);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              '計測',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                            Text(
-                              'スタート',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 22,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+              child: WiFiMeasureButton(
+                onComplete: (wifiMeasurementResult) async {
+                  this.wifiMeasurementResult = wifiMeasurementResult;
+                  setState(() {});
                 },
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class WiFiMeasureButton extends ConsumerWidget {
+  const WiFiMeasureButton({
+    super.key,
+    required this.onComplete,
+  });
+
+  final void Function(WifiMeasurementResult) onComplete;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(wifiScannerProvider).when(
+      loading: () {
+        return Container(
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(),
+        );
+      },
+      error: (e, s) {
+        return ElevatedButton(
+          onPressed: () {},
+          child: const Text('接続を見直す'),
+        );
+      },
+      data: (data) {
+        return Container(
+          alignment: Alignment.center,
+          child: SizedBox.square(
+            dimension: 120,
+            child: ElevatedButton(
+              onPressed: () async {
+                ref.read(loadingProvider.notifier).show();
+                final wifiMeasurementResult = await data.measureInternetSpeed();
+                ref.read(loadingProvider.notifier).hide();
+                onComplete(wifiMeasurementResult);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    '計測',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    'スタート',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

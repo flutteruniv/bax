@@ -1,17 +1,15 @@
-/// WiFi速度の計測結果
-class WiFiMeasurementResult {
-  WiFiMeasurementResult({
-    required this.downloadSpeedMbps,
-    required this.uploadSpeedMbps,
-    required this.ssid,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  /// ダウンロードスピード（Mbps）
-  final double downloadSpeedMbps;
+part 'wifi_measurement_result.freezed.dart';
+part 'wifi_measurement_result.g.dart';
 
-  /// ダウンロードスピード（Mbps）
-  final double uploadSpeedMbps;
+@freezed
+class WifiMeasurementResult with _$WifiMeasurementResult {
+  const factory WifiMeasurementResult({
+    required double downloadSpeedMbps,
+    required double uploadSpeedMbps,
+    required String ssid,
+  }) = _WifiMeasurementResult;
 
-  /// 接続していた SSID
-  final String ssid;
+  factory WifiMeasurementResult.fromJson(Map<String, dynamic> json) => _$WifiMeasurementResultFromJson(json);
 }

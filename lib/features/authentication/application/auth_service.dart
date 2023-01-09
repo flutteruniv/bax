@@ -1,5 +1,8 @@
 import 'package:bax/features/authentication/data/firebase_auth.dart';
+import 'package:bax/features/load/application/loading_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../load/application/scaffold_manager_key.dart';
 
 /// 読み込み中の場合はnull
 /// ログイン中であれば true そうでなければ false を返す
@@ -23,6 +26,9 @@ class AuthService {
 
   /// 匿名ログイン
   Future<void> anonymousLogin() async {
+    ref.read(loadingProvider.notifier).show();
     await ref.read(firebaseAuthProvider).signInAnonymously();
+    ref.read(loadingProvider.notifier).hide();
+    ref.read(snackBarServiceProvider).showSnackBar('ログインしました');
   }
 }

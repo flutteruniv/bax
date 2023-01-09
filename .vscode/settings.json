@@ -1,8 +1,4 @@
 {
   "dart.lineLength": 120,
-  "cSpell.words": [
-    "Mbps",
-    "Notosans",
-    "SSID"
-  ],
+  "cSpell.words": ["Mbps", "nodoc", "Notosans", "SSID"]
 }

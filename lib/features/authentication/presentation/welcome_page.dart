@@ -1,8 +1,6 @@
 import 'package:bax/features/authentication/application/auth_service.dart';
-import 'package:bax/features/map/presentation/facility_map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class WelComePage extends ConsumerWidget {
   const WelComePage({super.key});
@@ -49,7 +47,6 @@ class WelComePage extends ConsumerWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await authService.anonymousLogin();
-                        context.go(FacilityMapPage.route);
                       },
                       child: const Text('規約に同意してはじめる'),
                     ),

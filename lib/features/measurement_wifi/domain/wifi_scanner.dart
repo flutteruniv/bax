@@ -23,7 +23,7 @@ class WiFiScanner {
     final settings = await _speedTeatDart.getSettings();
     // Russiaのサーバーからははじかれるためリストから取り除く
     final servers = settings.servers.where((element) => element.country != 'Russia').toList();
-    return await _speedTeatDart.getBestServers(servers: servers);
+    return _speedTeatDart.getBestServers(servers: servers);
   }
 
   /// 通信状況を確認する
@@ -32,7 +32,7 @@ class WiFiScanner {
     if (status.isDenied) {
       return null;
     }
-    return await _networkInfo.getWifiName();
+    return _networkInfo.getWifiName();
   }
 
   /// wifiScanner のインスタンスを生成する
@@ -42,7 +42,9 @@ class WiFiScanner {
   }
 
   /// インターネットの通信速度を Mbps で返す
-  Future<WiFiMeasurementResult> measureInternetSpeed() async {
+  ///
+  /// 実機でのみ動作する
+  Future<WifiMeasurementResult> measureInternetSpeed() async {
     final ssid = await fetchSSID();
     if (ssid == null) {
       throw Exception('No Connect WiFi');
@@ -50,7 +52,7 @@ class WiFiScanner {
     final downloadSpeedMbps = (await _speedTeatDart.testDownloadSpeed(servers: _bestServers)) * 8;
     final uploadSpeedMbps = (await _speedTeatDart.testUploadSpeed(servers: _bestServers)) * 8;
 
-    return WiFiMeasurementResult(
+    return WifiMeasurementResult(
       downloadSpeedMbps: downloadSpeedMbps,
       uploadSpeedMbps: uploadSpeedMbps,
       ssid: ssid,
