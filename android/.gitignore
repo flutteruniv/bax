@@ -13,3 +13,6 @@ key.properties
 **/*.jks
 
 **/keys.xml
+
+/app/src/main/res/mipmap**
+/app/google-services.json

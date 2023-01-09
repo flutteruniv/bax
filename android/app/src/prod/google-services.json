@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "389851683341",
+    "project_id": "bax-wifi",
+    "storage_bucket": "bax-wifi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389851683341:android:7fc6919afeaf0727861344",
+        "android_client_info": {
+          "package_name": "com.flutteruniv.bax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389851683341-lbsmnsc05ol1025crphrpgunkhs8u4ho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutteruniv.bax",
+            "certificate_hash": "3bec4d2d50eb9a939c3a0e36f8a4cdbd07b959c9"
+          }
+        },
+        {
+          "client_id": "389851683341-8esq1eql5phnvhpkhd8d57afe2gvu81v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-xo-sfBMOXr2_WFIi8PHPNIAqcU1-pvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389851683341-8esq1eql5phnvhpkhd8d57afe2gvu81v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

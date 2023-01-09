@@ -5,9 +5,38 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "デバッグビルド",
+      "name": "開発環境デバッグビルド",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": [
+        "--dart-define=FLAVOR=dev"
+      ]
+    },
+    {
+      "name": "本番環境デバッグビルド",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ]
+    },
+    {
+      "name": "開発環境リリースビルド",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": [
+        "--dart-define=FLAVOR=dev"
+      ]
+    },
+    {
+      "name": "本番環境リリースビルド",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ]
     },
     {
       "name": "リリースビルド",
