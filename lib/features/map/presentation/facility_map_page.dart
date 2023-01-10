@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bax/features/map/application/map_service.dart';
 import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +30,12 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   }
 
   @override
+  void initState() {
+    ref.read(mapServiceProvider).fetchFacilities();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     mapController.dispose();
@@ -35,6 +44,17 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mapService = ref.watch(facilitiesProvider);
+
+    /// test
+    final stream = mapService.when(
+      data: (facilities) {
+        facilities.forEach(print);
+      },
+      error: (error, stackTrace) {},
+      loading: () {},
+    );
+
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
