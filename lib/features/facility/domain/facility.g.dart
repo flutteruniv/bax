@@ -12,18 +12,22 @@ _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       address: json['address'] as String,
-      downloadSpeed: json['downloadSpeed'],
-      uploadSpeed: json['uploadSpeed'],
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      hasPowerSource: json['hasPowerSource'],
-      noPowerSource: json['noPowerSource'],
-      hasWorkSpace: json['hasWorkSpace'],
-      noWorkSpace: json['noWorkSpace'],
-      powerSourceSpots: (json['powerSourceSpots'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      docRef: json['docRef'],
+      downloadSpeed: json['downloadSpeed'] as int,
+      uploadSpeed: json['uploadSpeed'] as int,
+      createdAt:
+          const TimestampConverter().fromJson(json['createdAt'] as Object),
+      updatedAt:
+          const TimestampConverter().fromJson(json['updatedAt'] as Object),
+      hasPowerSource: json['hasPowerSource'] as int? ?? 0,
+      noPowerSource: json['noPowerSource'] as int? ?? 0,
+      hasWorkSpace: json['hasWorkSpace'] as int? ?? 0,
+      noWorkSpace: json['noWorkSpace'] as int? ?? 0,
+      powerSourceSpots: (json['powerSourceSpots'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      docRef: const DocumentReferenceConverter()
+          .fromJson(json['docRef'] as DocumentReference<Object?>),
     );
 
 Map<String, dynamic> _$$_FacilityToJson(_$_Facility instance) =>
@@ -35,12 +39,12 @@ Map<String, dynamic> _$$_FacilityToJson(_$_Facility instance) =>
       'address': instance.address,
       'downloadSpeed': instance.downloadSpeed,
       'uploadSpeed': instance.uploadSpeed,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'updatedAt': const TimestampConverter().toJson(instance.updatedAt),
       'hasPowerSource': instance.hasPowerSource,
       'noPowerSource': instance.noPowerSource,
       'hasWorkSpace': instance.hasWorkSpace,
       'noWorkSpace': instance.noWorkSpace,
       'powerSourceSpots': instance.powerSourceSpots,
-      'docRef': instance.docRef,
+      'docRef': const DocumentReferenceConverter().toJson(instance.docRef),
     };

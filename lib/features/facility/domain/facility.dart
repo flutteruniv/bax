@@ -1,11 +1,12 @@
-
+import 'package:bax/configs/converter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'facility.freezed.dart';
 part 'facility.g.dart';
 
 @freezed
-class Facility with _$Facility{
-  const factory Facility ({
+class Facility with _$Facility {
+  const factory Facility({
     /// 施設Id
     required String id,
 
@@ -22,42 +23,41 @@ class Facility with _$Facility{
     required String address,
 
     /// ダウンロード速度
-    required Int downloadSpeed,
+    required int downloadSpeed,
 
     /// アップロード速度
-    required Int uploadSpeed,
+    required int uploadSpeed,
 
     /// 作成日
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
 
     /// 更新日
-    required DateTime updatedAt,
+    @TimestampConverter() required DateTime updatedAt,
 
     /// 電源あり報告
-    required Int hasPowerSource,
+    @Default(0) int hasPowerSource,
 
     /// 電源なし報告
-    required Int noPowerSource,
+    @Default(0) int noPowerSource,
 
     /// 作業スペースあり報告
-    required Int hasWorkSpace,
+    @Default(0) int hasWorkSpace,
 
     /// 作業スペースなし報告
-    required Int noWorkSpace,
+    @Default(0) int noWorkSpace,
 
     /// 電源スポットの写真
-    required List<String> powerSourceSpots,
+    @Default(<String>[]) List<String> powerSourceSpots,
 
     /// DocumentReference
-    required DocumentReference docRef,
+    @DocumentReferenceConverter() required DocumentReference docRef,
   }) = _Facility;
 
-
-  /// 
+  ///
   /// Wi-Fiの速度の3段階評価ロジック
   /// ダウンロード速度だけを判定する
   /// 0 < 30     100 < それ以上
-  /// 
+  ///
   /// collection名 facility でいこう
 
   factory Facility.fromJson(Map<String, dynamic> json) => _$FacilityFromJson(json);

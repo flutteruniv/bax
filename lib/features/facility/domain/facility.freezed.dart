@@ -36,34 +36,37 @@ mixin _$Facility {
   String get address => throw _privateConstructorUsedError;
 
   /// ダウンロード速度
-  Int get downloadSpeed => throw _privateConstructorUsedError;
+  int get downloadSpeed => throw _privateConstructorUsedError;
 
   /// アップロード速度
-  Int get uploadSpeed => throw _privateConstructorUsedError;
+  int get uploadSpeed => throw _privateConstructorUsedError;
 
   /// 作成日
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   /// 更新日
+  @TimestampConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// 電源あり報告
-  Int get hasPowerSource => throw _privateConstructorUsedError;
+  int get hasPowerSource => throw _privateConstructorUsedError;
 
   /// 電源なし報告
-  Int get noPowerSource => throw _privateConstructorUsedError;
+  int get noPowerSource => throw _privateConstructorUsedError;
 
   /// 作業スペースあり報告
-  Int get hasWorkSpace => throw _privateConstructorUsedError;
+  int get hasWorkSpace => throw _privateConstructorUsedError;
 
   /// 作業スペースなし報告
-  Int get noWorkSpace => throw _privateConstructorUsedError;
+  int get noWorkSpace => throw _privateConstructorUsedError;
 
   /// 電源スポットの写真
   List<String> get powerSourceSpots => throw _privateConstructorUsedError;
 
   /// DocumentReference
-  DocumentReference get docRef => throw _privateConstructorUsedError;
+  @DocumentReferenceConverter()
+  DocumentReference<Object?> get docRef => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -82,16 +85,16 @@ abstract class $FacilityCopyWith<$Res> {
       double latitude,
       double longitude,
       String address,
-      Int downloadSpeed,
-      Int uploadSpeed,
-      DateTime createdAt,
-      DateTime updatedAt,
-      Int hasPowerSource,
-      Int noPowerSource,
-      Int hasWorkSpace,
-      Int noWorkSpace,
+      int downloadSpeed,
+      int uploadSpeed,
+      @TimestampConverter() DateTime createdAt,
+      @TimestampConverter() DateTime updatedAt,
+      int hasPowerSource,
+      int noPowerSource,
+      int hasWorkSpace,
+      int noWorkSpace,
       List<String> powerSourceSpots,
-      DocumentReference docRef});
+      @DocumentReferenceConverter() DocumentReference<Object?> docRef});
 }
 
 /// @nodoc
@@ -112,16 +115,16 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
     Object? latitude = null,
     Object? longitude = null,
     Object? address = null,
-    Object? downloadSpeed = freezed,
-    Object? uploadSpeed = freezed,
+    Object? downloadSpeed = null,
+    Object? uploadSpeed = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? hasPowerSource = freezed,
-    Object? noPowerSource = freezed,
-    Object? hasWorkSpace = freezed,
-    Object? noWorkSpace = freezed,
+    Object? hasPowerSource = null,
+    Object? noPowerSource = null,
+    Object? hasWorkSpace = null,
+    Object? noWorkSpace = null,
     Object? powerSourceSpots = null,
-    Object? docRef = freezed,
+    Object? docRef = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -144,14 +147,14 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      downloadSpeed: freezed == downloadSpeed
+      downloadSpeed: null == downloadSpeed
           ? _value.downloadSpeed
           : downloadSpeed // ignore: cast_nullable_to_non_nullable
-              as Int,
-      uploadSpeed: freezed == uploadSpeed
+              as int,
+      uploadSpeed: null == uploadSpeed
           ? _value.uploadSpeed
           : uploadSpeed // ignore: cast_nullable_to_non_nullable
-              as Int,
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -160,30 +163,30 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      hasPowerSource: freezed == hasPowerSource
+      hasPowerSource: null == hasPowerSource
           ? _value.hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
-              as Int,
-      noPowerSource: freezed == noPowerSource
+              as int,
+      noPowerSource: null == noPowerSource
           ? _value.noPowerSource
           : noPowerSource // ignore: cast_nullable_to_non_nullable
-              as Int,
-      hasWorkSpace: freezed == hasWorkSpace
+              as int,
+      hasWorkSpace: null == hasWorkSpace
           ? _value.hasWorkSpace
           : hasWorkSpace // ignore: cast_nullable_to_non_nullable
-              as Int,
-      noWorkSpace: freezed == noWorkSpace
+              as int,
+      noWorkSpace: null == noWorkSpace
           ? _value.noWorkSpace
           : noWorkSpace // ignore: cast_nullable_to_non_nullable
-              as Int,
+              as int,
       powerSourceSpots: null == powerSourceSpots
           ? _value.powerSourceSpots
           : powerSourceSpots // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      docRef: freezed == docRef
+      docRef: null == docRef
           ? _value.docRef
           : docRef // ignore: cast_nullable_to_non_nullable
-              as DocumentReference,
+              as DocumentReference<Object?>,
     ) as $Val);
   }
 }
@@ -201,16 +204,16 @@ abstract class _$$_FacilityCopyWith<$Res> implements $FacilityCopyWith<$Res> {
       double latitude,
       double longitude,
       String address,
-      Int downloadSpeed,
-      Int uploadSpeed,
-      DateTime createdAt,
-      DateTime updatedAt,
-      Int hasPowerSource,
-      Int noPowerSource,
-      Int hasWorkSpace,
-      Int noWorkSpace,
+      int downloadSpeed,
+      int uploadSpeed,
+      @TimestampConverter() DateTime createdAt,
+      @TimestampConverter() DateTime updatedAt,
+      int hasPowerSource,
+      int noPowerSource,
+      int hasWorkSpace,
+      int noWorkSpace,
       List<String> powerSourceSpots,
-      DocumentReference docRef});
+      @DocumentReferenceConverter() DocumentReference<Object?> docRef});
 }
 
 /// @nodoc
@@ -229,16 +232,16 @@ class __$$_FacilityCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? address = null,
-    Object? downloadSpeed = freezed,
-    Object? uploadSpeed = freezed,
+    Object? downloadSpeed = null,
+    Object? uploadSpeed = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? hasPowerSource = freezed,
-    Object? noPowerSource = freezed,
-    Object? hasWorkSpace = freezed,
-    Object? noWorkSpace = freezed,
+    Object? hasPowerSource = null,
+    Object? noPowerSource = null,
+    Object? hasWorkSpace = null,
+    Object? noWorkSpace = null,
     Object? powerSourceSpots = null,
-    Object? docRef = freezed,
+    Object? docRef = null,
   }) {
     return _then(_$_Facility(
       id: null == id
@@ -261,14 +264,14 @@ class __$$_FacilityCopyWithImpl<$Res>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      downloadSpeed: freezed == downloadSpeed
+      downloadSpeed: null == downloadSpeed
           ? _value.downloadSpeed
           : downloadSpeed // ignore: cast_nullable_to_non_nullable
-              as Int,
-      uploadSpeed: freezed == uploadSpeed
+              as int,
+      uploadSpeed: null == uploadSpeed
           ? _value.uploadSpeed
           : uploadSpeed // ignore: cast_nullable_to_non_nullable
-              as Int,
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -277,30 +280,30 @@ class __$$_FacilityCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      hasPowerSource: freezed == hasPowerSource
+      hasPowerSource: null == hasPowerSource
           ? _value.hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
-              as Int,
-      noPowerSource: freezed == noPowerSource
+              as int,
+      noPowerSource: null == noPowerSource
           ? _value.noPowerSource
           : noPowerSource // ignore: cast_nullable_to_non_nullable
-              as Int,
-      hasWorkSpace: freezed == hasWorkSpace
+              as int,
+      hasWorkSpace: null == hasWorkSpace
           ? _value.hasWorkSpace
           : hasWorkSpace // ignore: cast_nullable_to_non_nullable
-              as Int,
-      noWorkSpace: freezed == noWorkSpace
+              as int,
+      noWorkSpace: null == noWorkSpace
           ? _value.noWorkSpace
           : noWorkSpace // ignore: cast_nullable_to_non_nullable
-              as Int,
+              as int,
       powerSourceSpots: null == powerSourceSpots
           ? _value._powerSourceSpots
           : powerSourceSpots // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      docRef: freezed == docRef
+      docRef: null == docRef
           ? _value.docRef
           : docRef // ignore: cast_nullable_to_non_nullable
-              as DocumentReference,
+              as DocumentReference<Object?>,
     ));
   }
 }
@@ -316,14 +319,14 @@ class _$_Facility implements _Facility {
       required this.address,
       required this.downloadSpeed,
       required this.uploadSpeed,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.hasPowerSource,
-      required this.noPowerSource,
-      required this.hasWorkSpace,
-      required this.noWorkSpace,
-      required final List<String> powerSourceSpots,
-      required this.docRef})
+      @TimestampConverter() required this.createdAt,
+      @TimestampConverter() required this.updatedAt,
+      this.hasPowerSource = 0,
+      this.noPowerSource = 0,
+      this.hasWorkSpace = 0,
+      this.noWorkSpace = 0,
+      final List<String> powerSourceSpots = const <String>[],
+      @DocumentReferenceConverter() required this.docRef})
       : _powerSourceSpots = powerSourceSpots;
 
   factory _$_Facility.fromJson(Map<String, dynamic> json) =>
@@ -351,41 +354,48 @@ class _$_Facility implements _Facility {
 
   /// ダウンロード速度
   @override
-  final Int downloadSpeed;
+  final int downloadSpeed;
 
   /// アップロード速度
   @override
-  final Int uploadSpeed;
+  final int uploadSpeed;
 
   /// 作成日
   @override
+  @TimestampConverter()
   final DateTime createdAt;
 
   /// 更新日
   @override
+  @TimestampConverter()
   final DateTime updatedAt;
 
   /// 電源あり報告
   @override
-  final Int hasPowerSource;
+  @JsonKey()
+  final int hasPowerSource;
 
   /// 電源なし報告
   @override
-  final Int noPowerSource;
+  @JsonKey()
+  final int noPowerSource;
 
   /// 作業スペースあり報告
   @override
-  final Int hasWorkSpace;
+  @JsonKey()
+  final int hasWorkSpace;
 
   /// 作業スペースなし報告
   @override
-  final Int noWorkSpace;
+  @JsonKey()
+  final int noWorkSpace;
 
   /// 電源スポットの写真
   final List<String> _powerSourceSpots;
 
   /// 電源スポットの写真
   @override
+  @JsonKey()
   List<String> get powerSourceSpots {
     if (_powerSourceSpots is EqualUnmodifiableListView)
       return _powerSourceSpots;
@@ -395,7 +405,8 @@ class _$_Facility implements _Facility {
 
   /// DocumentReference
   @override
-  final DocumentReference docRef;
+  @DocumentReferenceConverter()
+  final DocumentReference<Object?> docRef;
 
   @override
   String toString() {
@@ -414,25 +425,25 @@ class _$_Facility implements _Facility {
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
             (identical(other.address, address) || other.address == address) &&
-            const DeepCollectionEquality()
-                .equals(other.downloadSpeed, downloadSpeed) &&
-            const DeepCollectionEquality()
-                .equals(other.uploadSpeed, uploadSpeed) &&
+            (identical(other.downloadSpeed, downloadSpeed) ||
+                other.downloadSpeed == downloadSpeed) &&
+            (identical(other.uploadSpeed, uploadSpeed) ||
+                other.uploadSpeed == uploadSpeed) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality()
-                .equals(other.hasPowerSource, hasPowerSource) &&
-            const DeepCollectionEquality()
-                .equals(other.noPowerSource, noPowerSource) &&
-            const DeepCollectionEquality()
-                .equals(other.hasWorkSpace, hasWorkSpace) &&
-            const DeepCollectionEquality()
-                .equals(other.noWorkSpace, noWorkSpace) &&
+            (identical(other.hasPowerSource, hasPowerSource) ||
+                other.hasPowerSource == hasPowerSource) &&
+            (identical(other.noPowerSource, noPowerSource) ||
+                other.noPowerSource == noPowerSource) &&
+            (identical(other.hasWorkSpace, hasWorkSpace) ||
+                other.hasWorkSpace == hasWorkSpace) &&
+            (identical(other.noWorkSpace, noWorkSpace) ||
+                other.noWorkSpace == noWorkSpace) &&
             const DeepCollectionEquality()
                 .equals(other._powerSourceSpots, _powerSourceSpots) &&
-            const DeepCollectionEquality().equals(other.docRef, docRef));
+            (identical(other.docRef, docRef) || other.docRef == docRef));
   }
 
   @JsonKey(ignore: true)
@@ -444,16 +455,16 @@ class _$_Facility implements _Facility {
       latitude,
       longitude,
       address,
-      const DeepCollectionEquality().hash(downloadSpeed),
-      const DeepCollectionEquality().hash(uploadSpeed),
+      downloadSpeed,
+      uploadSpeed,
       createdAt,
       updatedAt,
-      const DeepCollectionEquality().hash(hasPowerSource),
-      const DeepCollectionEquality().hash(noPowerSource),
-      const DeepCollectionEquality().hash(hasWorkSpace),
-      const DeepCollectionEquality().hash(noWorkSpace),
+      hasPowerSource,
+      noPowerSource,
+      hasWorkSpace,
+      noWorkSpace,
       const DeepCollectionEquality().hash(_powerSourceSpots),
-      const DeepCollectionEquality().hash(docRef));
+      docRef);
 
   @JsonKey(ignore: true)
   @override
@@ -476,16 +487,19 @@ abstract class _Facility implements Facility {
       required final double latitude,
       required final double longitude,
       required final String address,
-      required final Int downloadSpeed,
-      required final Int uploadSpeed,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      required final Int hasPowerSource,
-      required final Int noPowerSource,
-      required final Int hasWorkSpace,
-      required final Int noWorkSpace,
-      required final List<String> powerSourceSpots,
-      required final DocumentReference docRef}) = _$_Facility;
+      required final int downloadSpeed,
+      required final int uploadSpeed,
+      @TimestampConverter()
+          required final DateTime createdAt,
+      @TimestampConverter()
+          required final DateTime updatedAt,
+      final int hasPowerSource,
+      final int noPowerSource,
+      final int hasWorkSpace,
+      final int noWorkSpace,
+      final List<String> powerSourceSpots,
+      @DocumentReferenceConverter()
+          required final DocumentReference<Object?> docRef}) = _$_Facility;
 
   factory _Facility.fromJson(Map<String, dynamic> json) = _$_Facility.fromJson;
 
@@ -512,35 +526,37 @@ abstract class _Facility implements Facility {
   @override
 
   /// ダウンロード速度
-  Int get downloadSpeed;
+  int get downloadSpeed;
   @override
 
   /// アップロード速度
-  Int get uploadSpeed;
+  int get uploadSpeed;
   @override
 
   /// 作成日
+  @TimestampConverter()
   DateTime get createdAt;
   @override
 
   /// 更新日
+  @TimestampConverter()
   DateTime get updatedAt;
   @override
 
   /// 電源あり報告
-  Int get hasPowerSource;
+  int get hasPowerSource;
   @override
 
   /// 電源なし報告
-  Int get noPowerSource;
+  int get noPowerSource;
   @override
 
   /// 作業スペースあり報告
-  Int get hasWorkSpace;
+  int get hasWorkSpace;
   @override
 
   /// 作業スペースなし報告
-  Int get noWorkSpace;
+  int get noWorkSpace;
   @override
 
   /// 電源スポットの写真
@@ -548,7 +564,8 @@ abstract class _Facility implements Facility {
   @override
 
   /// DocumentReference
-  DocumentReference get docRef;
+  @DocumentReferenceConverter()
+  DocumentReference<Object?> get docRef;
   @override
   @JsonKey(ignore: true)
   _$$_FacilityCopyWith<_$_Facility> get copyWith =>
