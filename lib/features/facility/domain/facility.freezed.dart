@@ -310,7 +310,7 @@ class __$$_FacilityCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Facility implements _Facility {
+class _$_Facility extends _Facility {
   const _$_Facility(
       {required this.id,
       required this.name,
@@ -327,7 +327,8 @@ class _$_Facility implements _Facility {
       this.noWorkSpace = 0,
       final List<String> powerSourceSpots = const <String>[],
       @DocumentReferenceConverter() required this.docRef})
-      : _powerSourceSpots = powerSourceSpots;
+      : _powerSourceSpots = powerSourceSpots,
+        super._();
 
   factory _$_Facility.fromJson(Map<String, dynamic> json) =>
       _$$_FacilityFromJson(json);
@@ -480,7 +481,7 @@ class _$_Facility implements _Facility {
   }
 }
 
-abstract class _Facility implements Facility {
+abstract class _Facility extends Facility {
   const factory _Facility(
       {required final String id,
       required final String name,
@@ -500,6 +501,7 @@ abstract class _Facility implements Facility {
       final List<String> powerSourceSpots,
       @DocumentReferenceConverter()
           required final DocumentReference<Object?> docRef}) = _$_Facility;
+  const _Facility._() : super._();
 
   factory _Facility.fromJson(Map<String, dynamic> json) = _$_Facility.fromJson;
 

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../common_widgets/bax_indicator.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -23,7 +24,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(35.65896199999999, 139.7481391);
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -45,48 +46,49 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final mapService = ref.watch(facilitiesProvider);
-
-    /// test
-    final stream = mapService.when(
+    return mapService.when(
       data: (facilities) {
-        facilities.forEach(print);
-      },
-      error: (error, stackTrace) {},
-      loading: () {},
-    );
-
-    return GestureDetector(
-      onTap: () => primaryFocus?.unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            GoogleMap(
-              onMapCreated: onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11,
+        return GestureDetector(
+          onTap: () => primaryFocus?.unfocus(),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Stack(
+              children: [
+                GoogleMap(
+                  onMapCreated: onMapCreated,
+                  markers: facilities.map((facility) => facility.getMarker).toSet(),
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11,
+                  ),
+                ),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SearchTextFormField(
+                      controller: controller,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
+              },
+              child: const Icon(
+                Icons.network_check,
               ),
             ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: SearchTextFormField(
-                  controller: controller,
-                ),
-              ),
-            )
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
-          },
-          child: const Icon(
-            Icons.network_check,
           ),
-        ),
-      ),
+        );
+      },
+      error: (error, stackTrace) {
+        return const SizedBox();
+      },
+      loading: () {
+        return const BaxIndicator();
+      },
     );
   }
 }

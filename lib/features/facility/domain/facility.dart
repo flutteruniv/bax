@@ -1,6 +1,7 @@
 import 'package:bax/configs/converter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 part 'facility.freezed.dart';
 part 'facility.g.dart';
 
@@ -53,12 +54,24 @@ class Facility with _$Facility {
     @DocumentReferenceConverter() required DocumentReference docRef,
   }) = _Facility;
 
-  ///
-  /// Wi-Fiの速度の3段階評価ロジック
-  /// ダウンロード速度だけを判定する
-  /// 0 < 30     100 < それ以上
-  ///
-  /// collection名 facility でいこう
+  const Facility._();
 
   factory Facility.fromJson(Map<String, dynamic> json) => _$FacilityFromJson(json);
+
+  Marker get getMarker => Marker(
+        markerId: MarkerId(id),
+        position: LatLng(latitude, longitude),
+        icon: BitmapDescriptor.defaultMarkerWithHue(markerColor),
+      );
+
+  // ダウンロード速度速度に応じて3段階評価
+  double get markerColor {
+    if (downloadSpeed < 30) {
+      return BitmapDescriptor.hueRed;
+    } else if (downloadSpeed > 100) {
+      return BitmapDescriptor.hueGreen;
+    } else {
+      return BitmapDescriptor.hueBlue;
+    }
+  }
 }
