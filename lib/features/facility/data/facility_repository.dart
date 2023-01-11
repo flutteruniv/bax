@@ -27,14 +27,12 @@ class FacilityRepository {
 
   Stream<List<Facility>> changesFacilities() => _facilityChangesController.stream;
 
-  Future<List<Facility>> fetchFacilities() async {
+  void monitorFacility() {
     final query = firestore.collection(facilityCollectionName).withFacilityConverter();
-    final snapshot = await query.get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
-  }
-
-  void updateFacilities(List<Facility> facilities) {
-    _facilityChangesController.add(facilities);
+    query.snapshots().listen((snapshot) {
+      final facilities = snapshot.docs.map((doc) => doc.data()).toList();
+      _facilityChangesController.add(facilities);
+    });
   }
 }
 
