@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-WifiMeasurementResult _$WifiMeasurementResultFromJson(Map<String, dynamic> json) {
+WifiMeasurementResult _$WifiMeasurementResultFromJson(
+    Map<String, dynamic> json) {
   return _WifiMeasurementResult.fromJson(json);
 }
 
@@ -26,19 +27,22 @@ mixin _$WifiMeasurementResult {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $WifiMeasurementResultCopyWith<WifiMeasurementResult> get copyWith => throw _privateConstructorUsedError;
+  $WifiMeasurementResultCopyWith<WifiMeasurementResult> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $WifiMeasurementResultCopyWith<$Res> {
-  factory $WifiMeasurementResultCopyWith(WifiMeasurementResult value, $Res Function(WifiMeasurementResult) then) =
+  factory $WifiMeasurementResultCopyWith(WifiMeasurementResult value,
+          $Res Function(WifiMeasurementResult) then) =
       _$WifiMeasurementResultCopyWithImpl<$Res, WifiMeasurementResult>;
   @useResult
   $Res call({double downloadSpeedMbps, double uploadSpeedMbps, String ssid});
 }
 
 /// @nodoc
-class _$WifiMeasurementResultCopyWithImpl<$Res, $Val extends WifiMeasurementResult>
+class _$WifiMeasurementResultCopyWithImpl<$Res,
+        $Val extends WifiMeasurementResult>
     implements $WifiMeasurementResultCopyWith<$Res> {
   _$WifiMeasurementResultCopyWithImpl(this._value, this._then);
 
@@ -72,9 +76,10 @@ class _$WifiMeasurementResultCopyWithImpl<$Res, $Val extends WifiMeasurementResu
 }
 
 /// @nodoc
-abstract class _$$_WifiMeasurementResultCopyWith<$Res> implements $WifiMeasurementResultCopyWith<$Res> {
-  factory _$$_WifiMeasurementResultCopyWith(
-          _$_WifiMeasurementResult value, $Res Function(_$_WifiMeasurementResult) then) =
+abstract class _$$_WifiMeasurementResultCopyWith<$Res>
+    implements $WifiMeasurementResultCopyWith<$Res> {
+  factory _$$_WifiMeasurementResultCopyWith(_$_WifiMeasurementResult value,
+          $Res Function(_$_WifiMeasurementResult) then) =
       __$$_WifiMeasurementResultCopyWithImpl<$Res>;
   @override
   @useResult
@@ -85,7 +90,8 @@ abstract class _$$_WifiMeasurementResultCopyWith<$Res> implements $WifiMeasureme
 class __$$_WifiMeasurementResultCopyWithImpl<$Res>
     extends _$WifiMeasurementResultCopyWithImpl<$Res, _$_WifiMeasurementResult>
     implements _$$_WifiMeasurementResultCopyWith<$Res> {
-  __$$_WifiMeasurementResultCopyWithImpl(_$_WifiMeasurementResult _value, $Res Function(_$_WifiMeasurementResult) _then)
+  __$$_WifiMeasurementResultCopyWithImpl(_$_WifiMeasurementResult _value,
+      $Res Function(_$_WifiMeasurementResult) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -115,9 +121,13 @@ class __$$_WifiMeasurementResultCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_WifiMeasurementResult implements _WifiMeasurementResult {
-  const _$_WifiMeasurementResult({required this.downloadSpeedMbps, required this.uploadSpeedMbps, required this.ssid});
+  const _$_WifiMeasurementResult(
+      {required this.downloadSpeedMbps,
+      required this.uploadSpeedMbps,
+      required this.ssid});
 
-  factory _$_WifiMeasurementResult.fromJson(Map<String, dynamic> json) => _$$_WifiMeasurementResultFromJson(json);
+  factory _$_WifiMeasurementResult.fromJson(Map<String, dynamic> json) =>
+      _$$_WifiMeasurementResultFromJson(json);
 
   @override
   final double downloadSpeedMbps;
@@ -136,20 +146,24 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_WifiMeasurementResult &&
-            (identical(other.downloadSpeedMbps, downloadSpeedMbps) || other.downloadSpeedMbps == downloadSpeedMbps) &&
-            (identical(other.uploadSpeedMbps, uploadSpeedMbps) || other.uploadSpeedMbps == uploadSpeedMbps) &&
+            (identical(other.downloadSpeedMbps, downloadSpeedMbps) ||
+                other.downloadSpeedMbps == downloadSpeedMbps) &&
+            (identical(other.uploadSpeedMbps, uploadSpeedMbps) ||
+                other.uploadSpeedMbps == uploadSpeedMbps) &&
             (identical(other.ssid, ssid) || other.ssid == ssid));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, downloadSpeedMbps, uploadSpeedMbps, ssid);
+  int get hashCode =>
+      Object.hash(runtimeType, downloadSpeedMbps, uploadSpeedMbps, ssid);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$_WifiMeasurementResultCopyWith<_$_WifiMeasurementResult> get copyWith =>
-      __$$_WifiMeasurementResultCopyWithImpl<_$_WifiMeasurementResult>(this, _$identity);
+      __$$_WifiMeasurementResultCopyWithImpl<_$_WifiMeasurementResult>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -165,7 +179,8 @@ abstract class _WifiMeasurementResult implements WifiMeasurementResult {
       required final double uploadSpeedMbps,
       required final String ssid}) = _$_WifiMeasurementResult;
 
-  factory _WifiMeasurementResult.fromJson(Map<String, dynamic> json) = _$_WifiMeasurementResult.fromJson;
+  factory _WifiMeasurementResult.fromJson(Map<String, dynamic> json) =
+      _$_WifiMeasurementResult.fromJson;
 
   @override
   double get downloadSpeedMbps;
@@ -175,5 +190,6 @@ abstract class _WifiMeasurementResult implements WifiMeasurementResult {
   String get ssid;
   @override
   @JsonKey(ignore: true)
-  _$$_WifiMeasurementResultCopyWith<_$_WifiMeasurementResult> get copyWith => throw _privateConstructorUsedError;
+  _$$_WifiMeasurementResultCopyWith<_$_WifiMeasurementResult> get copyWith =>
+      throw _privateConstructorUsedError;
 }

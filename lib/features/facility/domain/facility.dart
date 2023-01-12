@@ -2,6 +2,9 @@ import 'package:bax/configs/converter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../../configs/union_timestamp.dart';
+
 part 'facility.freezed.dart';
 part 'facility.g.dart';
 
@@ -30,10 +33,12 @@ class Facility with _$Facility {
     required int uploadSpeed,
 
     /// 作成日
-    @TimestampConverter() required DateTime createdAt,
+    @unionTimestampConverter @Default(UnionTimestamp.serverTimestamp()) UnionTimestamp createdAt,
 
     /// 更新日
-    @TimestampConverter() required DateTime updatedAt,
+    @alwaysUseServerTimestampUnionTimestampConverter
+    @Default(UnionTimestamp.serverTimestamp())
+        UnionTimestamp updatedAt,
 
     /// 電源あり報告
     @Default(0) int hasPowerSource,

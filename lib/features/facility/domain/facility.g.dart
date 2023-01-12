@@ -14,10 +14,13 @@ _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
       address: json['address'] as String,
       downloadSpeed: json['downloadSpeed'] as int,
       uploadSpeed: json['uploadSpeed'] as int,
-      createdAt:
-          const TimestampConverter().fromJson(json['createdAt'] as Object),
-      updatedAt:
-          const TimestampConverter().fromJson(json['updatedAt'] as Object),
+      createdAt: json['createdAt'] == null
+          ? const UnionTimestamp.serverTimestamp()
+          : unionTimestampConverter.fromJson(json['createdAt'] as Object),
+      updatedAt: json['updatedAt'] == null
+          ? const UnionTimestamp.serverTimestamp()
+          : alwaysUseServerTimestampUnionTimestampConverter
+              .fromJson(json['updatedAt'] as Object),
       hasPowerSource: json['hasPowerSource'] as int? ?? 0,
       noPowerSource: json['noPowerSource'] as int? ?? 0,
       hasWorkSpace: json['hasWorkSpace'] as int? ?? 0,
@@ -39,8 +42,9 @@ Map<String, dynamic> _$$_FacilityToJson(_$_Facility instance) =>
       'address': instance.address,
       'downloadSpeed': instance.downloadSpeed,
       'uploadSpeed': instance.uploadSpeed,
-      'createdAt': const TimestampConverter().toJson(instance.createdAt),
-      'updatedAt': const TimestampConverter().toJson(instance.updatedAt),
+      'createdAt': unionTimestampConverter.toJson(instance.createdAt),
+      'updatedAt': alwaysUseServerTimestampUnionTimestampConverter
+          .toJson(instance.updatedAt),
       'hasPowerSource': instance.hasPowerSource,
       'noPowerSource': instance.noPowerSource,
       'hasWorkSpace': instance.hasWorkSpace,

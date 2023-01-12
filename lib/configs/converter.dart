@@ -10,7 +10,10 @@ class TimestampConverter implements JsonConverter<DateTime, Object> {
   }
 
   @override
-  Object toJson(DateTime object) {
+  Object toJson(DateTime? object) {
+    if (object == null) {
+      return FieldValue.serverTimestamp();
+    }
     return Timestamp.fromDate(object);
   }
 }

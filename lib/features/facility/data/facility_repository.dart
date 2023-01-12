@@ -11,33 +11,27 @@ final facilityRepositoryProvider = Provider(
   ),
 );
 
+final facilitiesStreamProvider = StreamProvider(
+  (ref) {
+    return ref.watch(facilityRepositoryProvider).facilitiesStream();
+  },
+);
+
 class FacilityRepository {
   FacilityRepository({
     required this.firestore,
   });
 
   final FirebaseFirestore firestore;
-  final _facilityChangesController = StreamController<List<Facility>>.broadcast();
 
   static const facilityCollectionName = 'facility';
 
-  void dispose() {
-    _facilityChangesController.close();
+  Stream<List<QueryDocumentSnapshot<Facility>>> facilitiesStream() {
+    return _facilityCollectionReference.snapshots().map((event) => event.docs);
   }
 
-  Stream<List<Facility>> changesFacilities() => _facilityChangesController.stream;
-
-  void monitorFacility() {
-    final query = firestore.collection(facilityCollectionName).withFacilityConverter();
-    query.snapshots().listen((snapshot) {
-      final facilities = snapshot.docs.map((doc) => doc.data()).toList();
-      _facilityChangesController.add(facilities);
-    });
-  }
-}
-
-extension _CollectionReferenceEx on CollectionReference<Map<String, dynamic>> {
-  CollectionReference<Facility> withFacilityConverter() => withConverter(
+  CollectionReference<Facility> get _facilityCollectionReference =>
+      firestore.collection(facilityCollectionName).withConverter<Facility>(
         fromFirestore: (snapshot, options) {
           final json = snapshot.data();
           return Facility.fromJson(json!);

@@ -42,12 +42,12 @@ mixin _$Facility {
   int get uploadSpeed => throw _privateConstructorUsedError;
 
   /// 作成日
-  @TimestampConverter()
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  @unionTimestampConverter
+  UnionTimestamp get createdAt => throw _privateConstructorUsedError;
 
   /// 更新日
-  @TimestampConverter()
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  @alwaysUseServerTimestampUnionTimestampConverter
+  UnionTimestamp get updatedAt => throw _privateConstructorUsedError;
 
   /// 電源あり報告
   int get hasPowerSource => throw _privateConstructorUsedError;
@@ -87,14 +87,17 @@ abstract class $FacilityCopyWith<$Res> {
       String address,
       int downloadSpeed,
       int uploadSpeed,
-      @TimestampConverter() DateTime createdAt,
-      @TimestampConverter() DateTime updatedAt,
+      @unionTimestampConverter UnionTimestamp createdAt,
+      @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
       int hasPowerSource,
       int noPowerSource,
       int hasWorkSpace,
       int noWorkSpace,
       List<String> powerSourceSpots,
       @DocumentReferenceConverter() DocumentReference<Object?> docRef});
+
+  $UnionTimestampCopyWith<$Res> get createdAt;
+  $UnionTimestampCopyWith<$Res> get updatedAt;
 }
 
 /// @nodoc
@@ -158,11 +161,11 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as UnionTimestamp,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as UnionTimestamp,
       hasPowerSource: null == hasPowerSource
           ? _value.hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
@@ -189,6 +192,22 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
               as DocumentReference<Object?>,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UnionTimestampCopyWith<$Res> get createdAt {
+    return $UnionTimestampCopyWith<$Res>(_value.createdAt, (value) {
+      return _then(_value.copyWith(createdAt: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UnionTimestampCopyWith<$Res> get updatedAt {
+    return $UnionTimestampCopyWith<$Res>(_value.updatedAt, (value) {
+      return _then(_value.copyWith(updatedAt: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -206,14 +225,19 @@ abstract class _$$_FacilityCopyWith<$Res> implements $FacilityCopyWith<$Res> {
       String address,
       int downloadSpeed,
       int uploadSpeed,
-      @TimestampConverter() DateTime createdAt,
-      @TimestampConverter() DateTime updatedAt,
+      @unionTimestampConverter UnionTimestamp createdAt,
+      @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
       int hasPowerSource,
       int noPowerSource,
       int hasWorkSpace,
       int noWorkSpace,
       List<String> powerSourceSpots,
       @DocumentReferenceConverter() DocumentReference<Object?> docRef});
+
+  @override
+  $UnionTimestampCopyWith<$Res> get createdAt;
+  @override
+  $UnionTimestampCopyWith<$Res> get updatedAt;
 }
 
 /// @nodoc
@@ -275,11 +299,11 @@ class __$$_FacilityCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as UnionTimestamp,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as UnionTimestamp,
       hasPowerSource: null == hasPowerSource
           ? _value.hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
@@ -319,14 +343,17 @@ class _$_Facility extends _Facility {
       required this.address,
       required this.downloadSpeed,
       required this.uploadSpeed,
-      @TimestampConverter() required this.createdAt,
-      @TimestampConverter() required this.updatedAt,
+      @unionTimestampConverter
+          this.createdAt = const UnionTimestamp.serverTimestamp(),
+      @alwaysUseServerTimestampUnionTimestampConverter
+          this.updatedAt = const UnionTimestamp.serverTimestamp(),
       this.hasPowerSource = 0,
       this.noPowerSource = 0,
       this.hasWorkSpace = 0,
       this.noWorkSpace = 0,
       final List<String> powerSourceSpots = const <String>[],
-      @DocumentReferenceConverter() required this.docRef})
+      @DocumentReferenceConverter()
+          required this.docRef})
       : _powerSourceSpots = powerSourceSpots,
         super._();
 
@@ -363,13 +390,15 @@ class _$_Facility extends _Facility {
 
   /// 作成日
   @override
-  @TimestampConverter()
-  final DateTime createdAt;
+  @JsonKey()
+  @unionTimestampConverter
+  final UnionTimestamp createdAt;
 
   /// 更新日
   @override
-  @TimestampConverter()
-  final DateTime updatedAt;
+  @JsonKey()
+  @alwaysUseServerTimestampUnionTimestampConverter
+  final UnionTimestamp updatedAt;
 
   /// 電源あり報告
   @override
@@ -490,10 +519,10 @@ abstract class _Facility extends Facility {
       required final String address,
       required final int downloadSpeed,
       required final int uploadSpeed,
-      @TimestampConverter()
-          required final DateTime createdAt,
-      @TimestampConverter()
-          required final DateTime updatedAt,
+      @unionTimestampConverter
+          final UnionTimestamp createdAt,
+      @alwaysUseServerTimestampUnionTimestampConverter
+          final UnionTimestamp updatedAt,
       final int hasPowerSource,
       final int noPowerSource,
       final int hasWorkSpace,
@@ -536,13 +565,13 @@ abstract class _Facility extends Facility {
   @override
 
   /// 作成日
-  @TimestampConverter()
-  DateTime get createdAt;
+  @unionTimestampConverter
+  UnionTimestamp get createdAt;
   @override
 
   /// 更新日
-  @TimestampConverter()
-  DateTime get updatedAt;
+  @alwaysUseServerTimestampUnionTimestampConverter
+  UnionTimestamp get updatedAt;
   @override
 
   /// 電源あり報告
