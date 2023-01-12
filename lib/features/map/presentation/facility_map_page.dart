@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../facility/data/facility_repository.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -20,7 +21,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final _center = const LatLng(35.65896199999999, 139.7481391);
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -35,6 +36,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
@@ -43,6 +45,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
           children: [
             GoogleMap(
               onMapCreated: onMapCreated,
+              markers: facilities.map((facility) => facility.data().getMarker).toSet(),
               initialCameraPosition: CameraPosition(
                 target: _center,
                 zoom: 11,

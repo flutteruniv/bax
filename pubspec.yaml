@@ -25,6 +25,7 @@ dependencies:
   permission_handler: ^10.2.0
   freezed_annotation:
   json_annotation: ^4.7.0
+  cloud_firestore: ^4.3.1
 
 dev_dependencies:
   flutter_test:
