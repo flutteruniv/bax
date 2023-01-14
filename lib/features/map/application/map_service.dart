@@ -19,6 +19,6 @@ class MapService {
     // Todo: Validationチェック。
     // 無駄なリクエストを避けるため無意味な記号などが来たらアラートを出したい。
 
-    return ref.watch(mapRepositoryProvider).searchFacilities('word');
+    return ref.watch(mapRepositoryProvider).searchFacilities(word);
   }
 }
