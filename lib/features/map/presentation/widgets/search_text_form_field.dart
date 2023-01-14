@@ -1,4 +1,6 @@
+import 'package:bax/features/map/application/map_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchTextFormField extends ConsumerWidget {
@@ -23,6 +25,9 @@ class SearchTextFormField extends ConsumerWidget {
         decoration: const InputDecoration.collapsed(hintText: 'ここで検索').copyWith(
           icon: const Icon(Icons.search),
         ),
+        inputFormatters: [LengthLimitingTextInputFormatter(60)], // 一旦60文字で制限
+        enableInteractiveSelection: true, // コピペ可
+        onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value),
       ),
     );
   }
