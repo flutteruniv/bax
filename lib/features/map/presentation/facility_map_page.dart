@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../facility/data/facility_repository.dart';
+import '../data/map_repository.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -37,6 +38,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
+    final predictionResults = ref.watch(predictionResultStreamProvider).valueOrNull ?? [];
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
@@ -54,8 +56,30 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SearchTextFormField(
-                  controller: controller,
+                child: Column(
+                  children: [
+                    SearchTextFormField(
+                      controller: controller,
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 400,
+                      color: predictionResults.isNotEmpty ? Colors.white : Colors.transparent,
+                      child: ListView.builder(
+                        itemCount: predictionResults.length,
+                        itemBuilder: (context, index) {
+                          final predictionResult = predictionResults[index];
+                          return ListTile(
+                            title: Text(predictionResult.resultFormatting.name),
+                            subtitle: Text(predictionResult.resultFormatting.address),
+                            onTap: () {
+                              /// 結果画面へ遷移
+                            },
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             )

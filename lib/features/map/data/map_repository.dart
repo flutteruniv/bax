@@ -5,7 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../configs/secrets.dart';
+import '../domain/facility_prediction_result.dart';
 import '../domain/facility_prediction_results.dart';
+
+final predictionResultStreamProvider = StreamProvider(
+  (ref) {
+    return ref.watch(mapRepositoryProvider).predictionResultStream();
+  },
+);
 
 final mapRepositoryProvider = Provider(
   (ref) => MapRepository(),
@@ -13,6 +20,12 @@ final mapRepositoryProvider = Provider(
 
 class MapRepository {
   MapRepository();
+
+  final _predictionResultController = StreamController<List<FacilityPredictionResult>>();
+
+  Stream<List<FacilityPredictionResult>> predictionResultStream() {
+    return _predictionResultController.stream;
+  }
 
   Future<void> searchFacilities(String word) async {
     // ToDo ちゃんとClient設計したい
@@ -28,5 +41,6 @@ class MapRepository {
     final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
     final results = FacilityPredictionResults.fromJson(jsonResponse);
     print('results: ${results}');
+    _predictionResultController.add(results.predictions);
   }
 }
