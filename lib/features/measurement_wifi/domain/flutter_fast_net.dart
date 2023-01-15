@@ -1,8 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'fast_net_result.dart';
+
+final flutterFastNetProvider = Provider((_) => FlutterFastNet());
+
+final speedTestProvider = StreamProvider.autoDispose(
+  (ref) => ref.read(flutterFastNetProvider).analyzeSpeed(),
+);
 
 class FlutterFastNet {
   static const _testServer = 'https://fast.com/#';
@@ -11,7 +18,7 @@ class FlutterFastNet {
     return HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: Uri.parse(_testServer)),
       onLoadStop: (controller, url) async {
-        await speedTest(controller, streamController);
+        await _speedTest(controller, streamController);
       },
     );
   }
@@ -28,7 +35,7 @@ class FlutterFastNet {
     return streamController.stream;
   }
 
-  Future<void> speedTest(
+  Future<void> _speedTest(
     InAppWebViewController inAppWebViewController,
     StreamController<FastNetResult> streamController,
   ) async {
@@ -69,10 +76,10 @@ class FlutterFastNet {
     try {
       final res = await controller.evaluateJavascript(
         source: _source,
-      ) as Map<String, dynamic>;
+      ) as Map;
 
       return FastNetResult.fromJson(
-        res,
+        Map<String, dynamic>.from(res),
       );
     } catch (_) {}
     return null;

@@ -199,7 +199,7 @@ class __$$_FastNetResultCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_FastNetResult implements _FastNetResult {
+class _$_FastNetResult extends _FastNetResult {
   const _$_FastNetResult(
       {@StringDoubleConverter() this.downloadSpeedValue = 0.0,
       @StringDoubleConverter() this.uploadSpeedValue = 0.0,
@@ -208,7 +208,8 @@ class _$_FastNetResult implements _FastNetResult {
       this.usrISP = '',
       this.downloadSpeedUnit = '',
       this.uploadSpeedUnit = '',
-      this.isDone = false});
+      this.isDone = false})
+      : super._();
 
   factory _$_FastNetResult.fromJson(Map<String, dynamic> json) =>
       _$$_FastNetResultFromJson(json);
@@ -301,7 +302,7 @@ class _$_FastNetResult implements _FastNetResult {
   }
 }
 
-abstract class _FastNetResult implements FastNetResult {
+abstract class _FastNetResult extends FastNetResult {
   const factory _FastNetResult(
       {@StringDoubleConverter() final double downloadSpeedValue,
       @StringDoubleConverter() final double uploadSpeedValue,
@@ -311,6 +312,7 @@ abstract class _FastNetResult implements FastNetResult {
       final String downloadSpeedUnit,
       final String uploadSpeedUnit,
       final bool isDone}) = _$_FastNetResult;
+  const _FastNetResult._() : super._();
 
   factory _FastNetResult.fromJson(Map<String, dynamic> json) =
       _$_FastNetResult.fromJson;
