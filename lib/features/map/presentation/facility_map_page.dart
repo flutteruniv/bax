@@ -61,24 +61,27 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                     SearchTextFormField(
                       controller: controller,
                     ),
-                    const SizedBox(height: 12),
-                    Container(
-                      height: 400,
-                      color: predictionResults.isNotEmpty ? Colors.white : Colors.transparent,
-                      child: ListView.builder(
-                        itemCount: predictionResults.length,
-                        itemBuilder: (context, index) {
-                          final predictionResult = predictionResults[index];
-                          return ListTile(
-                            title: Text(predictionResult.resultFormatting.name),
-                            subtitle: Text(predictionResult.resultFormatting.address),
-                            onTap: () {
-                              /// 結果画面へ遷移
+                    if (predictionResults.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Container(
+                          height: 400,
+                          color: Colors.white,
+                          child: ListView.builder(
+                            itemCount: predictionResults.length,
+                            itemBuilder: (context, index) {
+                              final predictionResult = predictionResults[index];
+                              return ListTile(
+                                title: Text(predictionResult.resultFormatting.name),
+                                subtitle: Text(predictionResult.resultFormatting.address),
+                                onTap: () {
+                                  /// 結果画面へ遷移
+                                },
+                              );
                             },
-                          );
-                        },
+                          ),
+                        ),
                       ),
-                    )
                   ],
                 ),
               ),
