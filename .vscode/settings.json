@@ -1,4 +1,11 @@
 {
   "dart.lineLength": 120,
-  "cSpell.words": ["Mbps", "nodoc", "Notosans", "SSID"]
+  "cSpell.words": [
+    "bufferbloat",
+    "Mbps",
+    "nodoc",
+    "Notosans",
+    "SSID",
+    "unawaited"
+  ]
 }

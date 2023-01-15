@@ -27,3 +27,21 @@ class DocumentReferenceConverter implements JsonConverter<DocumentReference, Doc
   @override
   DocumentReference toJson(DocumentReference docRef) => docRef;
 }
+
+class StringDoubleConverter implements JsonConverter<double, String> {
+  const StringDoubleConverter();
+  @override
+  double fromJson(String value) => double.tryParse(value) ?? 0.0;
+
+  @override
+  String toJson(double value) => '$value';
+}
+
+class StringIntConverter implements JsonConverter<int, String> {
+  const StringIntConverter();
+  @override
+  int fromJson(String value) => int.tryParse(value) ?? 0;
+
+  @override
+  String toJson(int value) => '$value';
+}
