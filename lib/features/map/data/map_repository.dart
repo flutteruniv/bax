@@ -27,13 +27,13 @@ class MapRepository {
     return _predictionResultController.stream;
   }
 
-  Future<void> searchFacilities(String word) async {
+  Future<void> searchFacilities(String word, String localeLanguage) async {
     // ToDo ちゃんとClient設計したい
     final response = await http.get(
       Uri.https(
         'maps.googleapis.com',
         '/maps/api/place/autocomplete/json',
-        {'input': word, 'types': 'lodging', 'key': googleMapAPIKey, 'language': 'ja'},
+        {'input': word, 'types': 'lodging', 'key': googleMapAPIKey, 'language': localeLanguage},
 
         /// Todo: languageにOSの言語を設定したい。jaを設定しないと住所だけ英語で返ってくる
       ),

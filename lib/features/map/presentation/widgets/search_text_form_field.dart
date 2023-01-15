@@ -13,6 +13,7 @@ class SearchTextFormField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final localeLanguage = Localizations.localeOf(context).languageCode;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: const BoxDecoration(
@@ -27,7 +28,7 @@ class SearchTextFormField extends ConsumerWidget {
         ),
         inputFormatters: [LengthLimitingTextInputFormatter(60)], // 一旦60文字で制限
         enableInteractiveSelection: true, // コピペ可
-        onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value),
+        onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value, localeLanguage),
       ),
     );
   }
