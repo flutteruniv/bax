@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../facility/data/facility_repository.dart';
+import '../application/map_service.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -38,6 +39,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
+    final isTyping = ref.watch(isTypingStreamProvider).value ?? false;
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
@@ -60,10 +62,11 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                     SearchTextFormField(
                       controller: controller,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: PredicationResultList(),
-                    ),
+                    if (isTyping)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: PredicationResultList(),
+                      ),
                   ],
                 ),
               ),
