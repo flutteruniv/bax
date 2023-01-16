@@ -7,9 +7,11 @@ class SearchTextFormField extends ConsumerWidget {
   const SearchTextFormField({
     super.key,
     required this.controller,
+    required this.focusNode,
   });
 
   final TextEditingController controller;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,6 +25,8 @@ class SearchTextFormField extends ConsumerWidget {
         ),
       ),
       child: TextFormField(
+        controller: controller,
+        focusNode: focusNode,
         decoration: const InputDecoration.collapsed(hintText: 'ここで検索').copyWith(
           icon: const Icon(Icons.search),
         ),

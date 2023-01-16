@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../facility/data/facility_repository.dart';
-import '../application/map_service.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -19,9 +18,9 @@ class FacilityMapPage extends ConsumerStatefulWidget {
 }
 
 class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
-  final controller = TextEditingController();
-
   late GoogleMapController mapController;
+
+  final searchTextEditingController = TextEditingController();
 
   final _center = const LatLng(35.65896199999999, 139.7481391);
 
@@ -29,19 +28,36 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
     mapController = controller;
   }
 
+  bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
+
+  @override
+  void initState() {
+    searchTextEditingController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
-    controller.dispose();
+    searchTextEditingController.dispose();
     mapController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
+
+  late final focusNode = FocusNode()
+    ..addListener(() {
+      setState(() {});
+    });
 
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
-    final isTyping = ref.watch(isTypingStreamProvider).value ?? false;
     return GestureDetector(
-      onTap: () => primaryFocus?.unfocus(),
+      onTap: () {
+        primaryFocus?.unfocus();
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -54,23 +70,30 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                 zoom: 11,
               ),
             ),
+
+            /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
+            ///
+            /// そのため、入力中は透明なContainerを表示させることでいったんお茶を濁す。
+            if (focusNode.hasFocus)
+              // ignore: use_colored_box
+              Container(
+                color: Colors.transparent,
+              ),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     SearchTextFormField(
-                      controller: controller,
+                      controller: searchTextEditingController,
+                      focusNode: focusNode,
                     ),
-                    if (isTyping)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: PredicationResultList(),
-                      ),
+                    const SizedBox(height: 8),
+                    if (shouldShowPredicationResultList) const PredicationResultList(),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(

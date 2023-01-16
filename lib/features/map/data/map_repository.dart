@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bax/configs/http.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_result.dart';
@@ -39,8 +37,8 @@ class MapRepository {
       responseBuilder: (data) {
         final results = FacilityPredictionResults.fromJson(data);
 
-        /// Todo: ロガーを使う
-        print('results: ${results}');
+        /// TODO: ロガーを使う
+        print('results: $results');
         _predictionResultController.add(results.predictions);
       },
     );

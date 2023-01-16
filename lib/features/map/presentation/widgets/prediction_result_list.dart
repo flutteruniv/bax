@@ -14,10 +14,10 @@ class PredicationResultList extends ConsumerWidget {
     return ref.watch(predictionResultStreamProvider).when(
       data: (predictionResults) {
         if (predictionResults.isNotEmpty) {
-          return Container(
-            height: 400,
+          return ColoredBox(
             color: Colors.white,
             child: ListView.builder(
+              shrinkWrap: true,
               itemCount: predictionResults.length,
               itemBuilder: (context, index) {
                 final predictionResult = predictionResults[index];
@@ -25,7 +25,7 @@ class PredicationResultList extends ConsumerWidget {
                   title: Text(predictionResult.resultFormatting.name),
                   subtitle: Text(predictionResult.resultFormatting.address),
                   onTap: () {
-                    /// Todo Firestoreで検索
+                    /// TODO: Firestoreで検索
                   },
                 );
               },
