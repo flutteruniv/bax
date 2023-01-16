@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bax/configs/http.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,19 +29,19 @@ class MapRepository {
   }
 
   Future<void> searchFacilities(String word, String localeLanguage) async {
-    // ToDo ちゃんとClient設計したい
-    final response = await http.get(
-      Uri.https(
+    await httpGet(
+      uri: Uri.https(
         'maps.googleapis.com',
         '/maps/api/place/autocomplete/json',
         {'input': word, 'types': 'lodging', 'key': googleMapAPIKey, 'language': localeLanguage},
-
-        /// Todo: languageにOSの言語を設定したい。jaを設定しないと住所だけ英語で返ってくる
       ),
+      responseBuilder: (data) {
+        final results = FacilityPredictionResults.fromJson(data);
+
+        /// Todo: ロガーを使う
+        print('results: ${results}');
+        _predictionResultController.add(results.predictions);
+      },
     );
-    final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
-    final results = FacilityPredictionResults.fromJson(jsonResponse);
-    print('results: ${results}');
-    _predictionResultController.add(results.predictions);
   }
 }
