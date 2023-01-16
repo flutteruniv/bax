@@ -9,6 +9,7 @@ import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_result.dart';
 import '../domain/facility_prediction_results.dart';
 
+/// searchFacilitiesが実行される度に予測結果が更新されるStreamProvider
 final predictionResultStreamProvider = StreamProvider(
   (ref) {
     return ref.watch(mapRepositoryProvider).predictionResultStream();
