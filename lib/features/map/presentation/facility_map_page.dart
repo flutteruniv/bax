@@ -1,3 +1,4 @@
+import 'package:bax/features/map/presentation/widgets/prediction_result_list.dart';
 import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +18,9 @@ class FacilityMapPage extends ConsumerStatefulWidget {
 }
 
 class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
-  final controller = TextEditingController();
-
   late GoogleMapController mapController;
+
+  final searchTextEditingController = TextEditingController();
 
   final _center = const LatLng(35.65896199999999, 139.7481391);
 
@@ -27,18 +28,36 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
     mapController = controller;
   }
 
+  bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
+
+  @override
+  void initState() {
+    searchTextEditingController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
-    controller.dispose();
+    searchTextEditingController.dispose();
     mapController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
+
+  late final focusNode = FocusNode()
+    ..addListener(() {
+      setState(() {});
+    });
 
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     return GestureDetector(
-      onTap: () => primaryFocus?.unfocus(),
+      onTap: () {
+        primaryFocus?.unfocus();
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -51,14 +70,30 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                 zoom: 11,
               ),
             ),
+
+            /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
+            ///
+            /// そのため、入力中は透明なContainerを表示させることでいったんお茶を濁す。
+            if (focusNode.hasFocus)
+              // ignore: use_colored_box
+              Container(
+                color: Colors.transparent,
+              ),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: SearchTextFormField(
-                  controller: controller,
+                child: Column(
+                  children: [
+                    SearchTextFormField(
+                      controller: searchTextEditingController,
+                      focusNode: focusNode,
+                    ),
+                    const SizedBox(height: 8),
+                    if (shouldShowPredicationResultList) const PredicationResultList(),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
