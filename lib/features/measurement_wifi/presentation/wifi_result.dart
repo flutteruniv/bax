@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../domain/wifi_measurement_result.dart';
 
@@ -85,6 +86,13 @@ class WiFiResultDialog extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+          ),
+          Align(
+            child: SvgPicture.asset(
+              'assets/images/push-pin02.svg',
+              height: 70,
+              color: Colors.red,
             ),
           ),
         ],);
