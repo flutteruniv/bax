@@ -61,12 +61,6 @@ class Facility with _$Facility {
 
   factory Facility.fromJson(Map<String, dynamic> json) => _$FacilityFromJson(json);
 
-  Marker get getMarker => Marker(
-        markerId: MarkerId(id),
-        position: LatLng(geo.latitude, geo.longitude),
-        icon: BitmapDescriptor.defaultMarkerWithHue(markerColor),
-      );
-
   // ダウンロード速度速度に応じて3段階評価
   double get markerColor {
     if (downloadSpeed < 30) {

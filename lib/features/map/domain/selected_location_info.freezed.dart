@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SelectedLocationInfo {
   String get facilityId => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   LatLng get latLng => throw _privateConstructorUsedError;
   bool get hasMeasurementResult => throw _privateConstructorUsedError;
 
@@ -31,7 +32,11 @@ abstract class $SelectedLocationInfoCopyWith<$Res> {
           $Res Function(SelectedLocationInfo) then) =
       _$SelectedLocationInfoCopyWithImpl<$Res, SelectedLocationInfo>;
   @useResult
-  $Res call({String facilityId, LatLng latLng, bool hasMeasurementResult});
+  $Res call(
+      {String facilityId,
+      String name,
+      LatLng latLng,
+      bool hasMeasurementResult});
 }
 
 /// @nodoc
@@ -49,6 +54,7 @@ class _$SelectedLocationInfoCopyWithImpl<$Res,
   @override
   $Res call({
     Object? facilityId = null,
+    Object? name = null,
     Object? latLng = null,
     Object? hasMeasurementResult = null,
   }) {
@@ -56,6 +62,10 @@ class _$SelectedLocationInfoCopyWithImpl<$Res,
       facilityId: null == facilityId
           ? _value.facilityId
           : facilityId // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       latLng: null == latLng
           ? _value.latLng
@@ -77,7 +87,11 @@ abstract class _$$_SelectedLocationInfoCopyWith<$Res>
       __$$_SelectedLocationInfoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String facilityId, LatLng latLng, bool hasMeasurementResult});
+  $Res call(
+      {String facilityId,
+      String name,
+      LatLng latLng,
+      bool hasMeasurementResult});
 }
 
 /// @nodoc
@@ -92,6 +106,7 @@ class __$$_SelectedLocationInfoCopyWithImpl<$Res>
   @override
   $Res call({
     Object? facilityId = null,
+    Object? name = null,
     Object? latLng = null,
     Object? hasMeasurementResult = null,
   }) {
@@ -99,6 +114,10 @@ class __$$_SelectedLocationInfoCopyWithImpl<$Res>
       facilityId: null == facilityId
           ? _value.facilityId
           : facilityId // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       latLng: null == latLng
           ? _value.latLng
@@ -117,11 +136,14 @@ class __$$_SelectedLocationInfoCopyWithImpl<$Res>
 class _$_SelectedLocationInfo implements _SelectedLocationInfo {
   const _$_SelectedLocationInfo(
       {required this.facilityId,
+      required this.name,
       required this.latLng,
       required this.hasMeasurementResult});
 
   @override
   final String facilityId;
+  @override
+  final String name;
   @override
   final LatLng latLng;
   @override
@@ -129,7 +151,7 @@ class _$_SelectedLocationInfo implements _SelectedLocationInfo {
 
   @override
   String toString() {
-    return 'SelectedLocationInfo(facilityId: $facilityId, latLng: $latLng, hasMeasurementResult: $hasMeasurementResult)';
+    return 'SelectedLocationInfo(facilityId: $facilityId, name: $name, latLng: $latLng, hasMeasurementResult: $hasMeasurementResult)';
   }
 
   @override
@@ -139,6 +161,7 @@ class _$_SelectedLocationInfo implements _SelectedLocationInfo {
             other is _$_SelectedLocationInfo &&
             (identical(other.facilityId, facilityId) ||
                 other.facilityId == facilityId) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.latLng, latLng) || other.latLng == latLng) &&
             (identical(other.hasMeasurementResult, hasMeasurementResult) ||
                 other.hasMeasurementResult == hasMeasurementResult));
@@ -146,7 +169,7 @@ class _$_SelectedLocationInfo implements _SelectedLocationInfo {
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, facilityId, latLng, hasMeasurementResult);
+      Object.hash(runtimeType, facilityId, name, latLng, hasMeasurementResult);
 
   @JsonKey(ignore: true)
   @override
@@ -159,11 +182,14 @@ class _$_SelectedLocationInfo implements _SelectedLocationInfo {
 abstract class _SelectedLocationInfo implements SelectedLocationInfo {
   const factory _SelectedLocationInfo(
       {required final String facilityId,
+      required final String name,
       required final LatLng latLng,
       required final bool hasMeasurementResult}) = _$_SelectedLocationInfo;
 
   @override
   String get facilityId;
+  @override
+  String get name;
   @override
   LatLng get latLng;
   @override

@@ -47,12 +47,13 @@ class MapService {
     });
   }
 
-  Future<void> geocoding(String facilityId) async {
+  Future<void> geocoding(String facilityId, String name) async {
     final locationFromFirestore = await ref.watch(facilityRepositoryProvider).fetchLocation(facilityId);
     if (locationFromFirestore != null) {
       _mapCenterLocationController.add(
         SelectedLocationInfo(
           facilityId: facilityId,
+          name: name,
           latLng: LatLng(locationFromFirestore.latitude, locationFromFirestore.longitude),
           hasMeasurementResult: true,
         ),
@@ -63,6 +64,7 @@ class MapService {
     _mapCenterLocationController.add(
       SelectedLocationInfo(
         facilityId: facilityId,
+        name: name,
         latLng: LatLng(locationFromApi.latitude, locationFromApi.longitude),
         hasMeasurementResult: false,
       ),

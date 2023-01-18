@@ -26,7 +26,9 @@ class PredicationResultList extends ConsumerWidget {
                   title: Text(predictionResult.resultFormatting.name),
                   subtitle: Text(predictionResult.resultFormatting.address),
                   onTap: () async {
-                    await ref.read(mapServiceProvider).geocoding(predictionResult.placeId);
+                    await ref
+                        .read(mapServiceProvider)
+                        .geocoding(predictionResult.placeId, predictionResult.resultFormatting.name);
                   },
                 );
               },

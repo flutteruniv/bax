@@ -31,6 +31,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
 
+  final Set<Marker> markers = {};
+
   @override
   void initState() {
     searchTextEditingController.addListener(() {
@@ -56,19 +58,48 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
 
-    ref.listen(mapCenterLocationStreamProvider, (previous, next) async {
-      final location = next.value;
-      if (location != null) {
-        // マップの中心位置を移動する
-        await mapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(target: location.latLng, zoom: 14),
-          ),
+    markers.addAll(
+      facilities.map((facility) {
+        final data = facility.data();
+        return Marker(
+          markerId: MarkerId(data.id),
+          position: LatLng(data.geo.latitude, data.geo.longitude),
+          icon: BitmapDescriptor.defaultMarkerWithHue(data.markerColor),
+          infoWindow: InfoWindow(title: data.name, snippet: 'Wifiダウンロード速度: ${data.downloadSpeed}Mbps'),
         );
-        // 検索クリアー
-        searchTextEditingController.text = '';
-        primaryFocus?.unfocus();
+      }).toSet(),
+    );
+
+    ref.listen(mapCenterLocationStreamProvider, (previous, next) async {
+      final locationInfo = next.value;
+      if (locationInfo == null) {
+        return;
       }
+
+      // マップの中心位置を移動する
+      await mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: locationInfo.latLng, zoom: 14),
+        ),
+      );
+      // 検索クリアー
+      searchTextEditingController.text = '';
+      primaryFocus?.unfocus();
+
+      if (!locationInfo.hasMeasurementResult) {
+        final marker = Marker(
+          markerId: MarkerId(locationInfo.facilityId),
+          position: locationInfo.latLng,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+          infoWindow: InfoWindow(title: locationInfo.name, snippet: 'Wifiダウンロード速度: 未測定'),
+        );
+        markers.add(marker);
+      }
+
+      // 追加したMarkerが描画されるのを一瞬待ってからMarkerInfoを表示する
+      Future.delayed(const Duration(milliseconds: 100), () async {
+        await mapController.showMarkerInfoWindow(MarkerId(locationInfo.facilityId));
+      });
     });
 
     return GestureDetector(
@@ -81,7 +112,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
           children: [
             GoogleMap(
               onMapCreated: onMapCreated,
-              markers: facilities.map((facility) => facility.data().getMarker).toSet(),
+              markers: markers,
               initialCameraPosition: CameraPosition(
                 target: _center,
                 zoom: 11,
