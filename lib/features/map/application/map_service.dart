@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bax/features/facility/data/facility_repository.dart';
 import 'package:bax/features/map/data/map_repository.dart';
-import 'package:bax/features/map/domain/geometry/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../domain/selected_location_info.dart';
 
 /// Mapの中心となる緯度軽度を返すProvider
 final mapCenterLocationStreamProvider = StreamProvider(
@@ -24,9 +26,9 @@ class MapService {
   /// 保留中の検索文字列
   String? _holdQuery;
 
-  final _mapCenterLocationController = StreamController<Location>();
+  final _mapCenterLocationController = StreamController<SelectedLocationInfo>();
 
-  Stream<Location> mapCenterLocationStream() {
+  Stream<SelectedLocationInfo> mapCenterLocationStream() {
     return _mapCenterLocationController.stream;
   }
 
@@ -48,10 +50,22 @@ class MapService {
   Future<void> geocoding(String facilityId) async {
     final locationFromFirestore = await ref.watch(facilityRepositoryProvider).fetchLocation(facilityId);
     if (locationFromFirestore != null) {
-      _mapCenterLocationController.add(locationFromFirestore);
+      _mapCenterLocationController.add(
+        SelectedLocationInfo(
+          facilityId: facilityId,
+          latLng: LatLng(locationFromFirestore.latitude, locationFromFirestore.longitude),
+          hasMeasurementResult: true,
+        ),
+      );
       return;
     }
     final locationFromApi = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
-    _mapCenterLocationController.add(locationFromApi);
+    _mapCenterLocationController.add(
+      SelectedLocationInfo(
+        facilityId: facilityId,
+        latLng: LatLng(locationFromApi.latitude, locationFromApi.longitude),
+        hasMeasurementResult: false,
+      ),
+    );
   }
 }
