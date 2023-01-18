@@ -25,10 +25,10 @@ class Facility with _$Facility {
     required String address,
 
     /// ダウンロード速度
-    required int downloadSpeed,
+    required double downloadSpeed,
 
     /// アップロード速度
-    required int uploadSpeed,
+    required double uploadSpeed,
 
     /// 作成日
     @unionTimestampConverter @Default(UnionTimestamp.serverTimestamp()) UnionTimestamp createdAt,

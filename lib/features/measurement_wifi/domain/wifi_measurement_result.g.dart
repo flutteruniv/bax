@@ -15,6 +15,8 @@ _$_WifiMeasurementResult _$$_WifiMeasurementResultFromJson(
       latencyValue: json['latencyValue'] as int,
       bufferbloatValue: json['bufferbloatValue'] as int,
       usrISP: json['usrISP'] as String? ?? '',
+      terminalTime:
+          unionTimestampConverter.fromJson(json['terminalTime'] as Object),
       createdAt: json['createdAt'] == null
           ? const UnionTimestamp.serverTimestamp()
           : unionTimestampConverter.fromJson(json['createdAt'] as Object),
@@ -31,6 +33,7 @@ Map<String, dynamic> _$$_WifiMeasurementResultToJson(
       'latencyValue': instance.latencyValue,
       'bufferbloatValue': instance.bufferbloatValue,
       'usrISP': instance.usrISP,
+      'terminalTime': unionTimestampConverter.toJson(instance.terminalTime),
       'createdAt': unionTimestampConverter.toJson(instance.createdAt),
       'placeId': instance.placeId,
       'uid': instance.uid,

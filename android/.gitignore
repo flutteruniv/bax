@@ -16,3 +16,4 @@ key.properties
 
 /app/src/main/res/mipmap**
 /app/google-services.json
+release.properties

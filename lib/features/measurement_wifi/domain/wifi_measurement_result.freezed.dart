@@ -39,6 +39,10 @@ mixin _$WifiMeasurementResult {
   /// internet provider
   String get usrISP => throw _privateConstructorUsedError;
 
+  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  @unionTimestampConverter
+  UnionTimestamp get terminalTime => throw _privateConstructorUsedError;
+
   /// 作成日
   @unionTimestampConverter
   UnionTimestamp get createdAt => throw _privateConstructorUsedError;
@@ -68,10 +72,12 @@ abstract class $WifiMeasurementResultCopyWith<$Res> {
       int latencyValue,
       int bufferbloatValue,
       String usrISP,
+      @unionTimestampConverter UnionTimestamp terminalTime,
       @unionTimestampConverter UnionTimestamp createdAt,
       String placeId,
       String uid});
 
+  $UnionTimestampCopyWith<$Res> get terminalTime;
   $UnionTimestampCopyWith<$Res> get createdAt;
 }
 
@@ -95,6 +101,7 @@ class _$WifiMeasurementResultCopyWithImpl<$Res,
     Object? latencyValue = null,
     Object? bufferbloatValue = null,
     Object? usrISP = null,
+    Object? terminalTime = null,
     Object? createdAt = null,
     Object? placeId = null,
     Object? uid = null,
@@ -124,6 +131,10 @@ class _$WifiMeasurementResultCopyWithImpl<$Res,
           ? _value.usrISP
           : usrISP // ignore: cast_nullable_to_non_nullable
               as String,
+      terminalTime: null == terminalTime
+          ? _value.terminalTime
+          : terminalTime // ignore: cast_nullable_to_non_nullable
+              as UnionTimestamp,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -137,6 +148,14 @@ class _$WifiMeasurementResultCopyWithImpl<$Res,
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UnionTimestampCopyWith<$Res> get terminalTime {
+    return $UnionTimestampCopyWith<$Res>(_value.terminalTime, (value) {
+      return _then(_value.copyWith(terminalTime: value) as $Val);
+    });
   }
 
   @override
@@ -163,10 +182,13 @@ abstract class _$$_WifiMeasurementResultCopyWith<$Res>
       int latencyValue,
       int bufferbloatValue,
       String usrISP,
+      @unionTimestampConverter UnionTimestamp terminalTime,
       @unionTimestampConverter UnionTimestamp createdAt,
       String placeId,
       String uid});
 
+  @override
+  $UnionTimestampCopyWith<$Res> get terminalTime;
   @override
   $UnionTimestampCopyWith<$Res> get createdAt;
 }
@@ -188,6 +210,7 @@ class __$$_WifiMeasurementResultCopyWithImpl<$Res>
     Object? latencyValue = null,
     Object? bufferbloatValue = null,
     Object? usrISP = null,
+    Object? terminalTime = null,
     Object? createdAt = null,
     Object? placeId = null,
     Object? uid = null,
@@ -217,6 +240,10 @@ class __$$_WifiMeasurementResultCopyWithImpl<$Res>
           ? _value.usrISP
           : usrISP // ignore: cast_nullable_to_non_nullable
               as String,
+      terminalTime: null == terminalTime
+          ? _value.terminalTime
+          : terminalTime // ignore: cast_nullable_to_non_nullable
+              as UnionTimestamp,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -243,6 +270,8 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
       required this.latencyValue,
       required this.bufferbloatValue,
       this.usrISP = '',
+      @unionTimestampConverter
+          required this.terminalTime,
       @unionTimestampConverter
           this.createdAt = const UnionTimestamp.serverTimestamp(),
       required this.placeId,
@@ -276,6 +305,11 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
   @JsonKey()
   final String usrISP;
 
+  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  @override
+  @unionTimestampConverter
+  final UnionTimestamp terminalTime;
+
   /// 作成日
   @override
   @JsonKey()
@@ -292,7 +326,7 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
 
   @override
   String toString() {
-    return 'WifiMeasurementResult(ssid: $ssid, downloadSpeedMbps: $downloadSpeedMbps, uploadSpeedMbps: $uploadSpeedMbps, latencyValue: $latencyValue, bufferbloatValue: $bufferbloatValue, usrISP: $usrISP, createdAt: $createdAt, placeId: $placeId, uid: $uid)';
+    return 'WifiMeasurementResult(ssid: $ssid, downloadSpeedMbps: $downloadSpeedMbps, uploadSpeedMbps: $uploadSpeedMbps, latencyValue: $latencyValue, bufferbloatValue: $bufferbloatValue, usrISP: $usrISP, terminalTime: $terminalTime, createdAt: $createdAt, placeId: $placeId, uid: $uid)';
   }
 
   @override
@@ -310,6 +344,8 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
             (identical(other.bufferbloatValue, bufferbloatValue) ||
                 other.bufferbloatValue == bufferbloatValue) &&
             (identical(other.usrISP, usrISP) || other.usrISP == usrISP) &&
+            (identical(other.terminalTime, terminalTime) ||
+                other.terminalTime == terminalTime) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
@@ -326,6 +362,7 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
       latencyValue,
       bufferbloatValue,
       usrISP,
+      terminalTime,
       createdAt,
       placeId,
       uid);
@@ -353,6 +390,7 @@ abstract class _WifiMeasurementResult implements WifiMeasurementResult {
       required final int latencyValue,
       required final int bufferbloatValue,
       final String usrISP,
+      @unionTimestampConverter required final UnionTimestamp terminalTime,
       @unionTimestampConverter final UnionTimestamp createdAt,
       required final String placeId,
       required final String uid}) = _$_WifiMeasurementResult;
@@ -384,6 +422,11 @@ abstract class _WifiMeasurementResult implements WifiMeasurementResult {
 
   /// internet provider
   String get usrISP;
+  @override
+
+  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  @unionTimestampConverter
+  UnionTimestamp get terminalTime;
   @override
 
   /// 作成日
