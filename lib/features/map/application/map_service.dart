@@ -18,7 +18,7 @@ class MapService {
   Future<void> searchFacilities(String query, String localeLanguage) async {
     _holdQuery = query;
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (_holdQuery == query) {
         // TODO: Validationチェック。
         // 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
