@@ -56,19 +56,20 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
 
-    ref.watch(mapCenterLocationStreamProvider).whenData(
-      (location) async {
+    ref.listen(mapCenterLocationStreamProvider, (previous, next) async {
+      final location = next.value;
+      if (location != null) {
         // マップの中心位置を移動する
         await mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(target: LatLng(location.latitude, location.longitude), zoom: 14),
           ),
         );
+        // 検索クリアー
         searchTextEditingController.text = '';
-
-        /// FIXME: キーボードを閉じたいがここで primaryFocus?.unfocus();をすると、以降キーボードが開かなくなる
-      },
-    );
+        primaryFocus?.unfocus();
+      }
+    });
 
     return GestureDetector(
       onTap: () {
