@@ -70,7 +70,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       }).toSet(),
     );
 
-    ref.listen(mapCenterLocationStreamProvider, (previous, next) async {
+    ref.listen(selectedLocationInfoStreamProvider, (previous, next) async {
       final locationInfo = next.value;
       if (locationInfo == null) {
         return;
@@ -87,6 +87,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       primaryFocus?.unfocus();
 
       if (!locationInfo.hasMeasurementResult) {
+        // 未測定の場合はMarkerがないので未測定Markerを設置する
         final marker = Marker(
           markerId: MarkerId(locationInfo.facilityId),
           position: locationInfo.latLng,

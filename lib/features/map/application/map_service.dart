@@ -7,10 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../domain/selected_location_info.dart';
 
-/// Mapの中心となる緯度軽度を返すProvider
-final mapCenterLocationStreamProvider = StreamProvider(
+/// ユーザーが予測結果から選択したロケーション情報を返すProvider
+final selectedLocationInfoStreamProvider = StreamProvider(
   (ref) {
-    return ref.watch(mapServiceProvider).mapCenterLocationStream();
+    return ref.watch(mapServiceProvider).locationInfoStream();
   },
 );
 
@@ -26,10 +26,10 @@ class MapService {
   /// 保留中の検索文字列
   String? _holdQuery;
 
-  final _mapCenterLocationController = StreamController<SelectedLocationInfo>();
+  final _locationInfoController = StreamController<SelectedLocationInfo>();
 
-  Stream<SelectedLocationInfo> mapCenterLocationStream() {
-    return _mapCenterLocationController.stream;
+  Stream<SelectedLocationInfo> locationInfoStream() {
+    return _locationInfoController.stream;
   }
 
   Future<void> searchFacilities(String query, String localeLanguage) async {
@@ -50,7 +50,7 @@ class MapService {
   Future<void> geocoding(String facilityId, String name) async {
     final locationFromFirestore = await ref.watch(facilityRepositoryProvider).fetchLocation(facilityId);
     if (locationFromFirestore != null) {
-      _mapCenterLocationController.add(
+      _locationInfoController.add(
         SelectedLocationInfo(
           facilityId: facilityId,
           name: name,
@@ -61,7 +61,7 @@ class MapService {
       return;
     }
     final locationFromApi = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
-    _mapCenterLocationController.add(
+    _locationInfoController.add(
       SelectedLocationInfo(
         facilityId: facilityId,
         name: name,
