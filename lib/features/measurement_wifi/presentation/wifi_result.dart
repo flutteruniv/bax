@@ -20,7 +20,6 @@ class WiFiResultDialog extends StatelessWidget {
             width: size.width * 0.8,
             height: size.height * 0.6,
             decoration: BoxDecoration(
-              // ボタンのスタイルに合わせて角を切ってもいいかも
               borderRadius: BorderRadius.circular(16),
               image: const DecorationImage(
                 image: AssetImage('assets/images/map.png'),
@@ -30,7 +29,6 @@ class WiFiResultDialog extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: ElevatedButton.icon(
-                // もっといいアイコンありそう
                 icon: const Icon(Icons.share),
                 onPressed: () {},
                 label: const Text('結果をシェア'),
@@ -50,11 +48,21 @@ class WiFiResultDialog extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Image.asset('assets/images/balloon.png'),
-              Column(
-                children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: Row(
+              Material(
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: Text(
+                        '東京スカイツリー東京スカイツリー東京スカイツリー東京スカイツリー',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12,),
+                      ),
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -63,6 +71,7 @@ class WiFiResultDialog extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 48,
                             fontWeight: FontWeight.bold,
+                            height: 1,
                           ),
                         ),
                         const SizedBox(
@@ -70,28 +79,29 @@ class WiFiResultDialog extends StatelessWidget {
                         ),
                         const Text(
                           'Mbps',
-                          style: TextStyle(fontSize: 16, height: 4),
+                          style: TextStyle(fontSize: 16, height: 3),
                         )
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: Image.asset(
-                          'assets/images/star.png',
-                          width: 32,
-                        ),
-                      );
-                    }),
-                  )
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Image.asset(
+                            'assets/images/star.png',
+                            width: 32,
+                          ),
+                        );
+                      }),
+                    )
+                  ],
+                ),
               ),
             ],
           ),
         ),
+        // ピン
         Align(
           child: SvgPicture.asset(
             'assets/images/push-pin02.svg',
