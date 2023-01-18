@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bax/configs/firebase.dart';
 import 'package:bax/features/facility/domain/facility.dart';
+import 'package:bax/features/map/domain/geometry/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,9 +27,21 @@ class FacilityRepository {
     return _facilityCollectionReference.snapshots().map((event) => event.docs);
   }
 
+  Future<Location?> fetchLocation(String facilityId) async {
+    final query = _facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
+    final snapshot = await query.get();
+
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
+    final data = snapshot.docs.first.data();
+    return Location(latitude: data.latitude, longitude: data.longitude);
+  }
+
   final FirebaseFirestore firestore;
 
   static const facilityCollectionName = 'facility';
+  static const facilityFieldId = 'id';
 
   CollectionReference<Facility> get _facilityCollectionReference =>
       firestore.collection(facilityCollectionName).withConverter<Facility>(
