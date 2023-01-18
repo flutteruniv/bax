@@ -50,3 +50,7 @@ flutter:
         - asset: fonts/NotoSansJP-Medium.otf
         - asset: fonts/NotoSansJP-Bold.otf
         - asset: fonts/NotoSansJP-Black.otf
+  
+  assets:
+    - assets/images/
+    - assets/launcher_icon/

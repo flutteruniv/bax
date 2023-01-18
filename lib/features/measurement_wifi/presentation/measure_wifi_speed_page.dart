@@ -1,6 +1,7 @@
 import 'package:bax/features/load/application/loading_notifier.dart';
 import 'package:bax/features/measurement_wifi/domain/wifi_measurement_result.dart';
 import 'package:bax/features/measurement_wifi/domain/wifi_scanner.dart';
+import 'package:bax/features/measurement_wifi/presentation/wifi_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -104,6 +105,11 @@ class WiFiMeasureButton extends ConsumerWidget {
                 final wifiMeasurementResult = await data.measureInternetSpeed();
                 ref.read(loadingProvider.notifier).hide();
                 onComplete(wifiMeasurementResult);
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return WiFiResultDialog(wifiMeasurementResult: wifiMeasurementResult);
+                    });
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
