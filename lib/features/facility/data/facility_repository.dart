@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:bax/configs/firebase.dart';
-import 'package:bax/features/facility/domain/facility.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../configs/firebase.dart';
+import '../domain/facility.dart';
 
 final facilityRepositoryProvider = Provider(
   (ref) => FacilityRepository(

@@ -1,9 +1,9 @@
-import 'package:bax/configs/converter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../configs/converter.dart';
 import '../../../configs/union_timestamp.dart';
 
 part 'facility.freezed.dart';

@@ -1,5 +1,6 @@
-import 'package:bax/features/map/domain/geocoding_results/geocoding_result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'geocoding_result.dart';
 
 part 'geocoding_results.freezed.dart';
 part 'geocoding_results.g.dart';

@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:bax/features/map/data/map_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../data/map_repository.dart';
 
 final mapServiceProvider = Provider((ref) {
   return MapService(ref);

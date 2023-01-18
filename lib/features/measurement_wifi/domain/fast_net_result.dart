@@ -1,5 +1,6 @@
-import 'package:bax/configs/converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../configs/converter.dart';
 
 part 'fast_net_result.freezed.dart';
 part 'fast_net_result.g.dart';

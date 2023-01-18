@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:bax/features/map/data/map_repository.dart';
-import 'package:bax/features/measurement_wifi/domain/fast_net_result.dart';
-import 'package:bax/features/measurement_wifi/domain/flutter_fast_net.dart';
-import 'package:bax/features/measurement_wifi/domain/wifi_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../map/data/map_repository.dart';
+import '../domain/fast_net_result.dart';
+import '../domain/flutter_fast_net.dart';
+import '../domain/wifi_scanner.dart';
 import 'wifi_result.dart';
 
 class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
