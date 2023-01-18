@@ -66,6 +66,9 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
           position: LatLng(data.geo.latitude, data.geo.longitude),
           icon: BitmapDescriptor.defaultMarkerWithHue(data.markerColor),
           infoWindow: InfoWindow(title: data.name, snippet: 'Wifiダウンロード速度: ${data.downloadSpeed}Mbps'),
+          onTap: () {
+            /// TODO: 施設詳細画面に遷移する
+          },
         );
       }).toSet(),
     );

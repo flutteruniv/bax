@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../domain/selected_location_info.dart';
 
-/// ユーザーが予測結果から選択したロケーション情報を返すProvider
+/// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]
 final selectedLocationInfoStreamProvider = StreamProvider(
   (ref) {
     return ref.watch(mapServiceProvider).locationInfoStream();
