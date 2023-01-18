@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'geometry.dart';
+import '../geometry/geometry.dart';
 
 part 'nearby_search_result.freezed.dart';
 part 'nearby_search_result.g.dart';
