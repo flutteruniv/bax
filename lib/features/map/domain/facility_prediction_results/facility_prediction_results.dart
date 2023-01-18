@@ -1,5 +1,6 @@
-import 'package:bax/features/map/domain/facility_prediction_result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'facility_prediction_result.dart';
 
 part 'facility_prediction_results.freezed.dart';
 part 'facility_prediction_results.g.dart';

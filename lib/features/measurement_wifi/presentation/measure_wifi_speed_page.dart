@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:bax/features/map/data/map_repository.dart';
 import 'package:bax/features/measurement_wifi/domain/fast_net_result.dart';
 import 'package:bax/features/measurement_wifi/domain/flutter_fast_net.dart';
 import 'package:bax/features/measurement_wifi/domain/wifi_scanner.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,11 +54,27 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
     );
   }
 
+  Future<void> fetchNearByFacility() async {
+    final res = await ref.read(mapRepositoryProvider).fetchNearByFacility(
+          const GeoPoint(
+            35.65896199999999,
+            139.7481391,
+          ),
+        );
+    log(res.toString());
+  }
+
   void stopSpeedTest() {
     setState(() {
       isProcessing = false;
     });
     sub?.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNearByFacility();
   }
 
   @override

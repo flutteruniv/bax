@@ -22,13 +22,13 @@ class FacilityRepository {
     required this.firestore,
   });
 
-  final FirebaseFirestore firestore;
-
-  static const facilityCollectionName = 'facility';
-
   Stream<List<QueryDocumentSnapshot<Facility>>> facilitiesStream() {
     return _facilityCollectionReference.snapshots().map((event) => event.docs);
   }
+
+  final FirebaseFirestore firestore;
+
+  static const facilityCollectionName = 'facility';
 
   CollectionReference<Facility> get _facilityCollectionReference =>
       firestore.collection(facilityCollectionName).withConverter<Facility>(
