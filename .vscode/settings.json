@@ -1,4 +1,16 @@
 {
   "dart.lineLength": 120,
-  "cSpell.words": ["Mbps", "nodoc", "Notosans", "SSID"]
+  "cSpell.words": [
+    "bufferbloat",
+    "geoflutterfire",
+    "geopoint",
+    "googleapis",
+    "inappwebview",
+    "Mbps",
+    "nearbysearch",
+    "nodoc",
+    "Notosans",
+    "SSID",
+    "unawaited"
+  ]
 }

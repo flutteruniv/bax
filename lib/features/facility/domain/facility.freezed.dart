@@ -26,11 +26,9 @@ mixin _$Facility {
   /// 施設の名前
   String get name => throw _privateConstructorUsedError;
 
-  /// 緯度
-  double get latitude => throw _privateConstructorUsedError;
-
-  /// 軽度
-  double get longitude => throw _privateConstructorUsedError;
+  /// geoHashを含んだ
+  @GeoFirePointConverter()
+  GeoFirePoint get geo => throw _privateConstructorUsedError;
 
   /// 住所
   String get address => throw _privateConstructorUsedError;
@@ -82,8 +80,7 @@ abstract class $FacilityCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
-      double latitude,
-      double longitude,
+      @GeoFirePointConverter() GeoFirePoint geo,
       String address,
       int downloadSpeed,
       int uploadSpeed,
@@ -115,8 +112,7 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? geo = null,
     Object? address = null,
     Object? downloadSpeed = null,
     Object? uploadSpeed = null,
@@ -138,14 +134,10 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
+      geo: null == geo
+          ? _value.geo
+          : geo // ignore: cast_nullable_to_non_nullable
+              as GeoFirePoint,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -220,8 +212,7 @@ abstract class _$$_FacilityCopyWith<$Res> implements $FacilityCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
-      double latitude,
-      double longitude,
+      @GeoFirePointConverter() GeoFirePoint geo,
       String address,
       int downloadSpeed,
       int uploadSpeed,
@@ -253,8 +244,7 @@ class __$$_FacilityCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? geo = null,
     Object? address = null,
     Object? downloadSpeed = null,
     Object? uploadSpeed = null,
@@ -276,14 +266,10 @@ class __$$_FacilityCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
+      geo: null == geo
+          ? _value.geo
+          : geo // ignore: cast_nullable_to_non_nullable
+              as GeoFirePoint,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -338,8 +324,8 @@ class _$_Facility extends _Facility {
   const _$_Facility(
       {required this.id,
       required this.name,
-      required this.latitude,
-      required this.longitude,
+      @GeoFirePointConverter()
+          required this.geo,
       required this.address,
       required this.downloadSpeed,
       required this.uploadSpeed,
@@ -368,13 +354,10 @@ class _$_Facility extends _Facility {
   @override
   final String name;
 
-  /// 緯度
+  /// geoHashを含んだ
   @override
-  final double latitude;
-
-  /// 軽度
-  @override
-  final double longitude;
+  @GeoFirePointConverter()
+  final GeoFirePoint geo;
 
   /// 住所
   @override
@@ -440,7 +423,7 @@ class _$_Facility extends _Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, name: $name, latitude: $latitude, longitude: $longitude, address: $address, downloadSpeed: $downloadSpeed, uploadSpeed: $uploadSpeed, createdAt: $createdAt, updatedAt: $updatedAt, hasPowerSource: $hasPowerSource, noPowerSource: $noPowerSource, hasWorkSpace: $hasWorkSpace, noWorkSpace: $noWorkSpace, powerSourceSpots: $powerSourceSpots, docRef: $docRef)';
+    return 'Facility(id: $id, name: $name, geo: $geo, address: $address, downloadSpeed: $downloadSpeed, uploadSpeed: $uploadSpeed, createdAt: $createdAt, updatedAt: $updatedAt, hasPowerSource: $hasPowerSource, noPowerSource: $noPowerSource, hasWorkSpace: $hasWorkSpace, noWorkSpace: $noWorkSpace, powerSourceSpots: $powerSourceSpots, docRef: $docRef)';
   }
 
   @override
@@ -450,10 +433,7 @@ class _$_Facility extends _Facility {
             other is _$_Facility &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.latitude, latitude) ||
-                other.latitude == latitude) &&
-            (identical(other.longitude, longitude) ||
-                other.longitude == longitude) &&
+            (identical(other.geo, geo) || other.geo == geo) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.downloadSpeed, downloadSpeed) ||
                 other.downloadSpeed == downloadSpeed) &&
@@ -482,8 +462,7 @@ class _$_Facility extends _Facility {
       runtimeType,
       id,
       name,
-      latitude,
-      longitude,
+      geo,
       address,
       downloadSpeed,
       uploadSpeed,
@@ -514,8 +493,8 @@ abstract class _Facility extends Facility {
   const factory _Facility(
       {required final String id,
       required final String name,
-      required final double latitude,
-      required final double longitude,
+      @GeoFirePointConverter()
+          required final GeoFirePoint geo,
       required final String address,
       required final int downloadSpeed,
       required final int uploadSpeed,
@@ -544,12 +523,9 @@ abstract class _Facility extends Facility {
   String get name;
   @override
 
-  /// 緯度
-  double get latitude;
-  @override
-
-  /// 軽度
-  double get longitude;
+  /// geoHashを含んだ
+  @GeoFirePointConverter()
+  GeoFirePoint get geo;
   @override
 
   /// 住所

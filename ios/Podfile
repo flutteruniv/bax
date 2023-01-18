@@ -37,6 +37,8 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+
     # Start of the permission_handler configuration
     target.build_configurations.each do |config|
 
@@ -92,7 +94,8 @@ post_install do |installer|
         ## dart: PermissionGroup.criticalAlerts
         # 'PERMISSION_CRITICAL_ALERTS=1'
       ]
-
+      config.build_settings['SWIFT_VERSION'] = '5.0'  # required by simple_permission
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
     end 
     # End of the permission_handler configuration
   end
