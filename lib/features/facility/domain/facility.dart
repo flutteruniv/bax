@@ -1,6 +1,7 @@
 import 'package:bax/configs/converter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../configs/union_timestamp.dart';
@@ -17,11 +18,8 @@ class Facility with _$Facility {
     /// 施設の名前
     required String name,
 
-    /// 緯度
-    required double latitude,
-
-    /// 軽度
-    required double longitude,
+    /// geoHashを含んだ
+    @GeoFirePointConverter() required GeoFirePoint geo,
 
     /// 住所
     required String address,
@@ -65,7 +63,7 @@ class Facility with _$Facility {
 
   Marker get getMarker => Marker(
         markerId: MarkerId(id),
-        position: LatLng(latitude, longitude),
+        position: LatLng(geo.latitude, geo.longitude),
         icon: BitmapDescriptor.defaultMarkerWithHue(markerColor),
       );
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 class TimestampConverter implements JsonConverter<DateTime, Object> {
   const TimestampConverter();
@@ -44,4 +45,17 @@ class StringIntConverter implements JsonConverter<int, String> {
 
   @override
   String toJson(int value) => '$value';
+}
+
+class GeoFirePointConverter implements JsonConverter<GeoFirePoint, Map<String, dynamic>> {
+  const GeoFirePointConverter();
+
+  @override
+  GeoFirePoint fromJson(Map<String, dynamic> value) {
+    final geoPoint = value['geopoint'] as GeoPoint;
+    return GeoFirePoint(geoPoint.latitude, geoPoint.longitude);
+  }
+
+  @override
+  Map<String, dynamic> toJson(GeoFirePoint value) => value.data;
 }
