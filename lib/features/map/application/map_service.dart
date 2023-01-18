@@ -12,13 +12,21 @@ class MapService {
 
   final Ref ref;
 
-  Future<void> searchFacilities(String word, String localeLanguage) async {
-    // TODO: 連続リクエストの制御
-    // ○秒後のwordと一致していた場合のみリクエストしたい。
+  /// 保留中の検索文字列
+  String? _holdQuery;
 
-    // TODO: Validationチェック。
-    // 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
+  Future<void> searchFacilities(String query, String localeLanguage) async {
+    _holdQuery = query;
+    // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
+    Future.delayed(const Duration(milliseconds: 600), () {
+      if (_holdQuery == query) {
+        // TODO: Validationチェック。
+        // 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
 
-    return ref.watch(mapRepositoryProvider).searchFacilities(word, localeLanguage);
+        /// TODO: loggerに置き換え
+        print('検索Query: $query');
+        return ref.watch(mapRepositoryProvider).searchFacilities(query, localeLanguage);
+      }
+    });
   }
 }
