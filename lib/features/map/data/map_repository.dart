@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bax/configs/http.dart';
+import 'package:bax/features/map/domain/geocoding_results/geocoding_result.dart';
 import 'package:bax/features/map/domain/nearby_search_results/nearby_search_results.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
+import '../domain/geocoding_results/geocoding_results.dart';
 
 /// searchFacilitiesが実行される度に予測結果が更新される[StreamProvider]
 final predictionResultStreamProvider = StreamProvider(
@@ -68,6 +70,23 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         return NearbySearchResults.fromJson(data);
+      },
+    );
+  }
+
+  /// APIReference: https://developers.google.com/maps/documentation/geocoding/requests-geocoding
+  Future<void> geocoding(String facilityId) async {
+    await httpGet(
+      uri: Uri.https(
+        'maps.googleapis.com',
+        '/maps/api/geocode/json',
+        {'place_id': facilityId, 'key': googleMapAPIKey},
+      ),
+      responseBuilder: (data) {
+        final results = GeocodingResults.fromJson(data);
+
+        /// TODO: ロガーを使う
+        print('geocoding: $results');
       },
     );
   }

@@ -29,4 +29,8 @@ class MapService {
       }
     });
   }
+
+  Future<void> geocoding(String facilityId) async {
+    return ref.watch(mapRepositoryProvider).geocoding(facilityId);
+  }
 }
