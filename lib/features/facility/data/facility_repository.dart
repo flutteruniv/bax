@@ -35,7 +35,7 @@ class FacilityRepository {
       return null;
     }
     final data = snapshot.docs.first.data();
-    return Location(latitude: data.latitude, longitude: data.longitude);
+    return Location(latitude: data.geo.latitude, longitude: data.geo.longitude);
   }
 
   final FirebaseFirestore firestore;
