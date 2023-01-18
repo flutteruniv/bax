@@ -26,16 +26,13 @@ dependencies:
   freezed_annotation:
   json_annotation: ^4.7.0
   cloud_firestore: ^4.3.1
-<<<<<<< HEAD
   flutter_svg: ^1.1.6
-=======
   http: ^0.13.5
   flutter_inappwebview: ^5.7.2+3
   location: ^4.4.0
   geoflutterfire_plus:
     git:
       url: https://github.com/KosukeSaigusa/geoflutterfire_plus
->>>>>>> 5499d45d7fb91fc59aa82edc3a65f35156cc81f3
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +57,7 @@ flutter:
         - asset: fonts/NotoSansJP-Medium.otf
         - asset: fonts/NotoSansJP-Bold.otf
         - asset: fonts/NotoSansJP-Black.otf
-  
+
   assets:
     - assets/images/
     - assets/launcher_icon/
