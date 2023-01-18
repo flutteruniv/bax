@@ -9,8 +9,8 @@ part of 'facility.dart';
 _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
       id: json['id'] as String,
       name: json['name'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      geo: const GeoFirePointConverter()
+          .fromJson(json['geo'] as Map<String, dynamic>),
       address: json['address'] as String,
       downloadSpeed: json['downloadSpeed'] as int,
       uploadSpeed: json['uploadSpeed'] as int,
@@ -37,8 +37,7 @@ Map<String, dynamic> _$$_FacilityToJson(_$_Facility instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
+      'geo': const GeoFirePointConverter().toJson(instance.geo),
       'address': instance.address,
       'downloadSpeed': instance.downloadSpeed,
       'uploadSpeed': instance.uploadSpeed,

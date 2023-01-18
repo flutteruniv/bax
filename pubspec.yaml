@@ -28,6 +28,10 @@ dependencies:
   cloud_firestore: ^4.3.1
   http: ^0.13.5
   flutter_inappwebview: ^5.7.2+3
+  location: ^4.4.0
+  geoflutterfire_plus:
+    git:
+      url: https://github.com/KosukeSaigusa/geoflutterfire_plus
 
 dev_dependencies:
   flutter_test:
