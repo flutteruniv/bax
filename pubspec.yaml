@@ -26,6 +26,7 @@ dependencies:
   freezed_annotation:
   json_annotation: ^4.7.0
   cloud_firestore: ^4.3.1
+  flutter_svg: ^1.1.6
   http: ^0.13.5
   flutter_inappwebview: ^5.7.2+3
   location: ^4.4.0
@@ -56,3 +57,7 @@ flutter:
         - asset: fonts/NotoSansJP-Medium.otf
         - asset: fonts/NotoSansJP-Bold.otf
         - asset: fonts/NotoSansJP-Black.otf
+
+  assets:
+    - assets/images/
+    - assets/launcher_icon/

@@ -9,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'wifi_result.dart';
+
 class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
   const MeasureWiFiSpeedPage({super.key});
 
@@ -50,6 +52,17 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             isProcessing = false;
           });
         });
+        final fastNetResult = this.fastNetResult;
+        if (fastNetResult == null) {
+          return;
+        }
+
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return WiFiResultDialog(fastNetResult: fastNetResult);
+          },
+        );
       },
     );
   }
