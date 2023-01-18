@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bax/configs/http.dart';
 import 'package:bax/features/map/domain/geocoding_results/geocoding_result.dart';
+import 'package:bax/features/map/domain/geometry/location.dart';
 import 'package:bax/features/map/domain/nearby_search_results/nearby_search_results.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,8 +76,8 @@ class MapRepository {
   }
 
   /// APIReference: https://developers.google.com/maps/documentation/geocoding/requests-geocoding
-  Future<void> geocoding(String facilityId) async {
-    await httpGet(
+  Future<Location> geocoding(String facilityId) async {
+    return await httpGet(
       uri: Uri.https(
         'maps.googleapis.com',
         '/maps/api/geocode/json',
@@ -87,6 +88,7 @@ class MapRepository {
 
         /// TODO: ロガーを使う
         print('geocoding: $results');
+        return results.results.first.geometry.location;
       },
     );
   }

@@ -1,7 +1,16 @@
 import 'dart:async';
 
+import 'package:bax/features/facility/data/facility_repository.dart';
 import 'package:bax/features/map/data/map_repository.dart';
+import 'package:bax/features/map/domain/geometry/location.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// Mapの中心となる緯度軽度を返すProvider
+final mapCenterLocationStreamProvider = StreamProvider(
+  (ref) {
+    return ref.watch(mapServiceProvider).mapCenterLocationStream();
+  },
+);
 
 final mapServiceProvider = Provider((ref) {
   return MapService(ref);
@@ -14,6 +23,12 @@ class MapService {
 
   /// 保留中の検索文字列
   String? _holdQuery;
+
+  final _mapCenterLocationController = StreamController<Location>();
+
+  Stream<Location> mapCenterLocationStream() {
+    return _mapCenterLocationController.stream;
+  }
 
   Future<void> searchFacilities(String query, String localeLanguage) async {
     _holdQuery = query;
@@ -31,6 +46,12 @@ class MapService {
   }
 
   Future<void> geocoding(String facilityId) async {
-    return ref.watch(mapRepositoryProvider).geocoding(facilityId);
+    final locationFromFirestore = await ref.watch(facilityRepositoryProvider).fetchLocation(facilityId);
+    if (locationFromFirestore != null) {
+      _mapCenterLocationController.add(locationFromFirestore);
+      return;
+    }
+    final locationFromApi = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
+    _mapCenterLocationController.add(locationFromApi);
   }
 }

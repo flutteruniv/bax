@@ -1,3 +1,4 @@
+import 'package:bax/features/map/application/map_service.dart';
 import 'package:bax/features/map/presentation/widgets/prediction_result_list.dart';
 import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,21 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
+
+    ref.watch(mapCenterLocationStreamProvider).whenData(
+      (location) async {
+        // マップの中心位置を移動する
+        await mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(target: LatLng(location.latitude, location.longitude), zoom: 14),
+          ),
+        );
+        searchTextEditingController.text = '';
+
+        /// FIXME: キーボードを閉じたいがここで primaryFocus?.unfocus();をすると、以降キーボードが開かなくなる
+      },
+    );
+
     return GestureDetector(
       onTap: () {
         primaryFocus?.unfocus();
