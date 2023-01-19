@@ -7,6 +7,8 @@ import '../../../configs/http.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
+import '../domain/geocoding_results/geocoding_results.dart';
+import '../domain/geometry/location.dart';
 import '../domain/nearby_search_results/nearby_search_results.dart';
 
 /// searchFacilitiesが実行される度に予測結果が更新される[StreamProvider]
@@ -68,6 +70,24 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         return NearbySearchResults.fromJson(data);
+      },
+    );
+  }
+
+  /// APIReference: https://developers.google.com/maps/documentation/geocoding/requests-geocoding
+  Future<Location> geocoding(String facilityId) async {
+    return await httpGet(
+      uri: Uri.https(
+        'maps.googleapis.com',
+        '/maps/api/geocode/json',
+        {'place_id': facilityId, 'key': googleMapAPIKey},
+      ),
+      responseBuilder: (data) {
+        final results = GeocodingResults.fromJson(data);
+
+        /// TODO: ロガーを使う
+        print('geocoding: $results');
+        return results.results.first.geometry.location;
       },
     );
   }

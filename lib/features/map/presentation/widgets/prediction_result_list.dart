@@ -1,3 +1,4 @@
+import 'package:bax/features/map/application/map_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,8 +25,10 @@ class PredicationResultList extends ConsumerWidget {
                 return ListTile(
                   title: Text(predictionResult.resultFormatting.name),
                   subtitle: Text(predictionResult.resultFormatting.address),
-                  onTap: () {
-                    /// TODO: Firestoreで検索
+                  onTap: () async {
+                    await ref
+                        .read(mapServiceProvider)
+                        .geocoding(predictionResult.placeId, predictionResult.resultFormatting.name);
                   },
                 );
               },

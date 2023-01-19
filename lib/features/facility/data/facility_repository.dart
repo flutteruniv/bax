@@ -27,9 +27,21 @@ class FacilityRepository {
     return _facilityCollectionReference.snapshots().map((event) => event.docs);
   }
 
+  Future<Facility?> fetchFacility(String facilityId) async {
+    final query = _facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
+    final snapshot = await query.get();
+
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
+
+    return snapshot.docs.first.data();
+  }
+
   final FirebaseFirestore firestore;
 
   static const facilityCollectionName = 'facility';
+  static const facilityFieldId = 'id';
 
   CollectionReference<Facility> get _facilityCollectionReference =>
       firestore.collection(facilityCollectionName).withConverter<Facility>(
