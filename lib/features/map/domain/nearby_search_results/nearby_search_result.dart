@@ -10,6 +10,7 @@ class NearbySearchResult with _$NearbySearchResult {
   const factory NearbySearchResult({
     required Geometry geometry,
     required String name,
+    required List<String> types,
     @JsonKey(name: 'place_id') required String placeId,
     required String vicinity,
   }) = _NearbySearchResult;

@@ -16,9 +16,16 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SelectedLocationInfo {
+  /// 施設ID
   String get facilityId => throw _privateConstructorUsedError;
+
+  /// 施設名
   String get name => throw _privateConstructorUsedError;
+
+  /// 緯度経度
   LatLng get latLng => throw _privateConstructorUsedError;
+
+  /// 測定結果があるか
   bool get hasMeasurementResult => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -140,12 +147,19 @@ class _$_SelectedLocationInfo implements _SelectedLocationInfo {
       required this.latLng,
       required this.hasMeasurementResult});
 
+  /// 施設ID
   @override
   final String facilityId;
+
+  /// 施設名
   @override
   final String name;
+
+  /// 緯度経度
   @override
   final LatLng latLng;
+
+  /// 測定結果があるか
   @override
   final bool hasMeasurementResult;
 
@@ -187,12 +201,20 @@ abstract class _SelectedLocationInfo implements SelectedLocationInfo {
       required final bool hasMeasurementResult}) = _$_SelectedLocationInfo;
 
   @override
+
+  /// 施設ID
   String get facilityId;
   @override
+
+  /// 施設名
   String get name;
   @override
+
+  /// 緯度経度
   LatLng get latLng;
   @override
+
+  /// 測定結果があるか
   bool get hasMeasurementResult;
   @override
   @JsonKey(ignore: true)

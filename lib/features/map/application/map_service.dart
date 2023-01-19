@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
+import '../domain/nearby_search_results/nearby_search_results.dart';
 import '../domain/selected_location_info.dart';
 
 /// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]
@@ -27,12 +28,13 @@ final myNearbyFacilityProvider = FutureProvider.autoDispose(
     if (position == null) {
       return null;
     }
-    return ref.watch(mapRepositoryProvider).fetchNearByFacility(
+    final res = await ref.watch(mapRepositoryProvider).fetchNearByFacility(
           GeoPoint(
             position.latitude,
             position.longitude,
           ),
         );
+    return NearbySearchResults(results: res.results.where((element) => !element.types.contains('locality')).toList());
   },
   dependencies: [
     initLocationProvider,

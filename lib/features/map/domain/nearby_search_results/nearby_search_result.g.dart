@@ -11,6 +11,7 @@ _$_NearbySearchResult _$$_NearbySearchResultFromJson(
     _$_NearbySearchResult(
       geometry: Geometry.fromJson(json['geometry'] as Map<String, dynamic>),
       name: json['name'] as String,
+      types: (json['types'] as List<dynamic>).map((e) => e as String).toList(),
       placeId: json['place_id'] as String,
       vicinity: json['vicinity'] as String,
     );
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$_NearbySearchResultToJson(
     <String, dynamic>{
       'geometry': instance.geometry,
       'name': instance.name,
+      'types': instance.types,
       'place_id': instance.placeId,
       'vicinity': instance.vicinity,
     };

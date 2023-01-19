@@ -15,6 +15,7 @@ class NearbySearchResultsDialog extends StatelessWidget {
     return AlertDialog(
       content: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: nearbySearchResults.results.map((e) {
             return InkWell(

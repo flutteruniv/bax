@@ -130,11 +130,12 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             ),
             Row(
               children: [
-                Text(
-                  nearbySearchResult?.name ?? '',
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Text(
+                    nearbySearchResult?.name ?? '',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
-                const Spacer(),
                 OutlinedButton(
                   onPressed: selectFacility,
                   child: const Text('選び直す'),

@@ -22,6 +22,7 @@ NearbySearchResult _$NearbySearchResultFromJson(Map<String, dynamic> json) {
 mixin _$NearbySearchResult {
   Geometry get geometry => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  List<String> get types => throw _privateConstructorUsedError;
   @JsonKey(name: 'place_id')
   String get placeId => throw _privateConstructorUsedError;
   String get vicinity => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $NearbySearchResultCopyWith<$Res> {
   $Res call(
       {Geometry geometry,
       String name,
+      List<String> types,
       @JsonKey(name: 'place_id') String placeId,
       String vicinity});
 
@@ -62,6 +64,7 @@ class _$NearbySearchResultCopyWithImpl<$Res, $Val extends NearbySearchResult>
   $Res call({
     Object? geometry = null,
     Object? name = null,
+    Object? types = null,
     Object? placeId = null,
     Object? vicinity = null,
   }) {
@@ -74,6 +77,10 @@ class _$NearbySearchResultCopyWithImpl<$Res, $Val extends NearbySearchResult>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      types: null == types
+          ? _value.types
+          : types // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
@@ -105,6 +112,7 @@ abstract class _$$_NearbySearchResultCopyWith<$Res>
   $Res call(
       {Geometry geometry,
       String name,
+      List<String> types,
       @JsonKey(name: 'place_id') String placeId,
       String vicinity});
 
@@ -125,6 +133,7 @@ class __$$_NearbySearchResultCopyWithImpl<$Res>
   $Res call({
     Object? geometry = null,
     Object? name = null,
+    Object? types = null,
     Object? placeId = null,
     Object? vicinity = null,
   }) {
@@ -137,6 +146,10 @@ class __$$_NearbySearchResultCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      types: null == types
+          ? _value._types
+          : types // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
@@ -155,9 +168,11 @@ class _$_NearbySearchResult extends _NearbySearchResult {
   const _$_NearbySearchResult(
       {required this.geometry,
       required this.name,
+      required final List<String> types,
       @JsonKey(name: 'place_id') required this.placeId,
       required this.vicinity})
-      : super._();
+      : _types = types,
+        super._();
 
   factory _$_NearbySearchResult.fromJson(Map<String, dynamic> json) =>
       _$$_NearbySearchResultFromJson(json);
@@ -166,6 +181,14 @@ class _$_NearbySearchResult extends _NearbySearchResult {
   final Geometry geometry;
   @override
   final String name;
+  final List<String> _types;
+  @override
+  List<String> get types {
+    if (_types is EqualUnmodifiableListView) return _types;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_types);
+  }
+
   @override
   @JsonKey(name: 'place_id')
   final String placeId;
@@ -174,7 +197,7 @@ class _$_NearbySearchResult extends _NearbySearchResult {
 
   @override
   String toString() {
-    return 'NearbySearchResult(geometry: $geometry, name: $name, placeId: $placeId, vicinity: $vicinity)';
+    return 'NearbySearchResult(geometry: $geometry, name: $name, types: $types, placeId: $placeId, vicinity: $vicinity)';
   }
 
   @override
@@ -185,6 +208,7 @@ class _$_NearbySearchResult extends _NearbySearchResult {
             (identical(other.geometry, geometry) ||
                 other.geometry == geometry) &&
             (identical(other.name, name) || other.name == name) &&
+            const DeepCollectionEquality().equals(other._types, _types) &&
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
             (identical(other.vicinity, vicinity) ||
                 other.vicinity == vicinity));
@@ -192,8 +216,8 @@ class _$_NearbySearchResult extends _NearbySearchResult {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, geometry, name, placeId, vicinity);
+  int get hashCode => Object.hash(runtimeType, geometry, name,
+      const DeepCollectionEquality().hash(_types), placeId, vicinity);
 
   @JsonKey(ignore: true)
   @override
@@ -214,6 +238,7 @@ abstract class _NearbySearchResult extends NearbySearchResult {
   const factory _NearbySearchResult(
       {required final Geometry geometry,
       required final String name,
+      required final List<String> types,
       @JsonKey(name: 'place_id') required final String placeId,
       required final String vicinity}) = _$_NearbySearchResult;
   const _NearbySearchResult._() : super._();
@@ -225,6 +250,8 @@ abstract class _NearbySearchResult extends NearbySearchResult {
   Geometry get geometry;
   @override
   String get name;
+  @override
+  List<String> get types;
   @override
   @JsonKey(name: 'place_id')
   String get placeId;
