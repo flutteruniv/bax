@@ -48,24 +48,26 @@ class MapService {
   }
 
   Future<void> geocoding(String facilityId, String name) async {
-    final locationFromFirestore = await ref.watch(facilityRepositoryProvider).fetchLocation(facilityId);
-    if (locationFromFirestore != null) {
+    final facility = await ref.watch(facilityRepositoryProvider).fetchFacility(facilityId);
+    if (facility != null) {
       _locationInfoController.add(
         SelectedLocationInfo(
           facilityId: facilityId,
           name: name,
-          latLng: LatLng(locationFromFirestore.latitude, locationFromFirestore.longitude),
+          latLng: LatLng(facility.geo.latitude, facility.geo.longitude),
           hasMeasurementResult: true,
         ),
       );
       return;
     }
-    final locationFromApi = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
+
+    /// Firestoreに該当のデータがない場合はApiから取得する
+    final location = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
     _locationInfoController.add(
       SelectedLocationInfo(
         facilityId: facilityId,
         name: name,
-        latLng: LatLng(locationFromApi.latitude, locationFromApi.longitude),
+        latLng: LatLng(location.latitude, location.longitude),
         hasMeasurementResult: false,
       ),
     );

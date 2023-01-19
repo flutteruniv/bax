@@ -27,15 +27,15 @@ class FacilityRepository {
     return _facilityCollectionReference.snapshots().map((event) => event.docs);
   }
 
-  Future<Location?> fetchLocation(String facilityId) async {
+  Future<Facility?> fetchFacility(String facilityId) async {
     final query = _facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
     final snapshot = await query.get();
 
     if (snapshot.docs.isEmpty) {
       return null;
     }
-    final data = snapshot.docs.first.data();
-    return Location(latitude: data.geo.latitude, longitude: data.geo.longitude);
+
+    return snapshot.docs.first.data();
   }
 
   final FirebaseFirestore firestore;
