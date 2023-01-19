@@ -1,12 +1,34 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
 
 final mapServiceProvider = Provider((ref) {
   return MapService(ref);
 });
+
+/// 自分の現在位置の近くの施設を検索して結果を返す[FutureProvider]
+final myNearbyFacilityProvider = FutureProvider.autoDispose(
+  (ref) async {
+    final position = await ref.read(initLocationProvider.future);
+    if (position == null) {
+      return null;
+    }
+    return ref.watch(mapRepositoryProvider).fetchNearByFacility(
+          GeoPoint(
+            position.latitude,
+            position.longitude,
+          ),
+        );
+  },
+  dependencies: [
+    initLocationProvider,
+    mapRepositoryProvider,
+  ],
+);
 
 class MapService {
   MapService(this.ref);

@@ -59,7 +59,7 @@ class MapRepository {
         '/maps/api/place/nearbysearch/json',
         {
           'location': '${geoPoint.latitude} ${geoPoint.longitude}',
-          'radius': '10',
+          'radius': '20',
           // TODO(kenta-wakasa): 多言語対応のとき注意
           'language': 'ja',
           // TODO(kenta-wakasa): typeで絞り込みかけた方がいいかも

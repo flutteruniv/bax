@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../map/data/map_repository.dart';
+import '../../map/application/map_service.dart';
+import '../../map/domain/nearby_search_results/nearby_search_result.dart';
+import '../../map/domain/nearby_search_results/nearby_search_results.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
 import '../domain/wifi_scanner.dart';
+import 'nearby_search_results_dialog.dart';
 import 'wifi_result.dart';
 
 class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
@@ -25,14 +26,41 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
   StreamSubscription<FastNetResult>? sub;
 
+  NearbySearchResults? nearbySearchResults;
+  NearbySearchResult? nearbySearchResult;
+
   bool isProcessing = false;
+
+  Future<void> fetchNearByFacility() async {
+    nearbySearchResults = await ref.read(myNearbyFacilityProvider.future);
+    nearbySearchResult = nearbySearchResults!.results.first;
+    setState(() {});
+  }
+
+  Future<void> selectFacility() async {
+    final nearbySearchResults = this.nearbySearchResults;
+    if (nearbySearchResults == null) {
+      return;
+    }
+    final res = await showDialog<NearbySearchResult>(
+      context: context,
+      builder: (context) {
+        return NearbySearchResultsDialog(nearbySearchResults: nearbySearchResults);
+      },
+    );
+    if (res == null) {
+      return;
+    }
+    nearbySearchResult = res;
+    setState(() {});
+  }
 
   Future<void> startSpeedTest() async {
     ref.invalidate(ssidProvider);
 
     final ssid = await ref.read(ssidProvider.future);
     if (ssid == null) {
-      // TODO(kenta-wakasa): WiFiとの接続状況を確認してください。
+      // TODO(kenta-wakasa): WiFiとの接続状況を確認してください。のエラーダイアログを出す。
       return;
     }
     setState(() {
@@ -65,16 +93,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         );
       },
     );
-  }
-
-  Future<void> fetchNearByFacility() async {
-    final res = await ref.read(mapRepositoryProvider).fetchNearByFacility(
-          const GeoPoint(
-            35.65896199999999,
-            139.7481391,
-          ),
-        );
-    log(res.toString());
   }
 
   void stopSpeedTest() {
@@ -113,13 +131,12 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             Row(
               children: [
                 Text(
-                  'Flutter別荘',
+                  nearbySearchResult?.name ?? '',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
                 OutlinedButton(
-                  // TODO(kenta-wakasa): 半径10m以内の10件の施設を出す
-                  onPressed: () {},
+                  onPressed: selectFacility,
                   child: const Text('選び直す'),
                 ),
               ],

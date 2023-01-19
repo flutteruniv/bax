@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -19,44 +22,54 @@ class FacilityMapPage extends ConsumerStatefulWidget {
 }
 
 class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
-  late GoogleMapController mapController;
+  final mapControllerCompleter = Completer<GoogleMapController>();
 
   final searchTextEditingController = TextEditingController();
 
-  // final _center = const LatLng(35.65896199999999, 139.7481391);
-
-  void onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  Position? position;
 
   bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
-
-  @override
-  void initState() {
-    searchTextEditingController.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    searchTextEditingController.dispose();
-    mapController.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
 
   late final focusNode = FocusNode()
     ..addListener(() {
       setState(() {});
     });
 
+  void onMapCreated(GoogleMapController controller) {
+    mapControllerCompleter.complete(controller);
+  }
+
+  Future<void> fetchLocationDataAndMoveCamera() async {
+    position = await ref.read(initLocationProvider.future);
+    final mapController = await mapControllerCompleter.future;
+    final latitude = position?.latitude;
+    final longitude = position?.longitude;
+    if (latitude == null || longitude == null) {
+      return;
+    }
+    await mapController.moveCamera(CameraUpdate.newLatLng(LatLng(latitude, longitude)));
+  }
+
+  @override
+  void initState() {
+    searchTextEditingController.addListener(() {
+      setState(() {});
+    });
+    fetchLocationDataAndMoveCamera();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchTextEditingController.dispose();
+    mapControllerCompleter.future.then((value) => value.dispose());
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
-    final location = ref.watch(locationDataProvider).valueOrNull;
-
     return GestureDetector(
       onTap: () {
         primaryFocus?.unfocus();
@@ -65,18 +78,21 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            if (location != null)
-              GoogleMap(
-                onMapCreated: onMapCreated,
-                markers: facilities.map((facility) => facility.data().getMarker).toSet(),
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(location.latitude!, location.longitude!),
-                  zoom: 16,
+            GoogleMap(
+              onMapCreated: onMapCreated,
+              markers: facilities.map((facility) => facility.data().getMarker).toSet(),
+              initialCameraPosition: CameraPosition(
+                /// 初期値を東京駅にしています。
+                target: LatLng(
+                  position?.latitude ?? 35.6812362,
+                  position?.longitude ?? 139.7649361,
                 ),
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationEnabled: true,
+                zoom: 16,
               ),
+              mapToolbarEnabled: false,
+              zoomControlsEnabled: false,
+              myLocationEnabled: true,
+            ),
 
             /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
             ///
@@ -103,13 +119,25 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
-          },
-          child: const Icon(
-            Icons.network_check,
-          ),
+        floatingActionButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton(
+              onPressed: fetchLocationDataAndMoveCamera,
+              child: const Icon(
+                Icons.near_me,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () {
+                context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
+              },
+              child: const Icon(
+                Icons.network_check,
+              ),
+            ),
+          ],
         ),
       ),
     );
