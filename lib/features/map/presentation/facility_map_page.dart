@@ -1,12 +1,13 @@
-import 'package:bax/features/map/application/map_service.dart';
-import 'package:bax/features/map/presentation/widgets/prediction_result_list.dart';
-import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../facility/data/facility_repository.dart';
+import '../../location/domain/my_location.dart';
+import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
+import '../application/map_service.dart';
+import 'widgets/prediction_result_list.dart';
 import 'widgets/search_text_form_field.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
@@ -23,7 +24,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
   final searchTextEditingController = TextEditingController();
 
-  final _center = const LatLng(35.65896199999999, 139.7481391);
+  // final _center = const LatLng(35.65896199999999, 139.7481391);
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -106,6 +107,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       });
     });
 
+    final location = ref.watch(locationDataProvider).valueOrNull;
+
     return GestureDetector(
       onTap: () {
         primaryFocus?.unfocus();
@@ -114,14 +117,18 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            GoogleMap(
-              onMapCreated: onMapCreated,
-              markers: markers,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11,
+            if (location != null)
+              GoogleMap(
+                onMapCreated: onMapCreated,
+                markers: markers,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(location.latitude!, location.longitude!),
+                  zoom: 16,
+                ),
+                mapToolbarEnabled: false,
+                zoomControlsEnabled: false,
+                myLocationEnabled: true,
               ),
-            ),
 
             /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
             ///

@@ -1,10 +1,10 @@
-import 'package:bax/features/authentication/application/auth_service.dart';
-import 'package:bax/features/map/presentation/facility_map_page.dart';
-import 'package:bax/features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/authentication/application/auth_service.dart';
 import '../features/authentication/presentation/welcome_page.dart';
+import '../features/map/presentation/facility_map_page.dart';
+import '../features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 
 final routerProvider = Provider(
   (ref) {

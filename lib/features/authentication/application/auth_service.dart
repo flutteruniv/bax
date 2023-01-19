@@ -1,8 +1,8 @@
-import 'package:bax/features/authentication/data/firebase_auth.dart';
-import 'package:bax/features/load/application/loading_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../load/application/loading_notifier.dart';
 import '../../load/application/scaffold_manager_key.dart';
+import '../data/firebase_auth.dart';
 
 /// 読み込み中の場合はnull
 /// ログイン中であれば true そうでなければ false を返す

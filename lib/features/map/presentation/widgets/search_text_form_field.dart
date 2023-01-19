@@ -1,7 +1,8 @@
-import 'package:bax/features/map/application/map_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../application/map_service.dart';
 
 class SearchTextFormField extends ConsumerWidget {
   const SearchTextFormField({

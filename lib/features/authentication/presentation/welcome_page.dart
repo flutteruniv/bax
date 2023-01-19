@@ -1,6 +1,7 @@
-import 'package:bax/features/authentication/application/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../application/auth_service.dart';
 
 class WelComePage extends ConsumerWidget {
   const WelComePage({super.key});

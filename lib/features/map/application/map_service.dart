@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bax/features/facility/data/facility_repository.dart';
-import 'package:bax/features/map/data/map_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../facility/data/facility_repository.dart';
+import '../data/map_repository.dart';
 import '../domain/selected_location_info.dart';
 
 /// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]

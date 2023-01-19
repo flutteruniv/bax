@@ -1,6 +1,7 @@
-import 'package:bax/configs/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'colors.dart';
 
 final themeProvider = Provider((_) => baxTheme);
 

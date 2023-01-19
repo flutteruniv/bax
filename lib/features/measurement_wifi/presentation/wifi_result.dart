@@ -1,6 +1,7 @@
-import 'package:bax/features/measurement_wifi/domain/fast_net_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../domain/fast_net_result.dart';
 
 class WiFiResultDialog extends StatelessWidget {
   const WiFiResultDialog({super.key, required this.fastNetResult});

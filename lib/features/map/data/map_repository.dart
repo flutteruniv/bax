@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:bax/configs/http.dart';
-import 'package:bax/features/map/domain/geocoding_results/geocoding_result.dart';
-import 'package:bax/features/map/domain/geometry/location.dart';
-import 'package:bax/features/map/domain/nearby_search_results/nearby_search_results.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/http.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
 import '../domain/geocoding_results/geocoding_results.dart';
+import '../domain/geometry/location.dart';
+import '../domain/nearby_search_results/nearby_search_results.dart';
 
 /// searchFacilitiesが実行される度に予測結果が更新される[StreamProvider]
 final predictionResultStreamProvider = StreamProvider(
