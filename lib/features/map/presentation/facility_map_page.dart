@@ -83,7 +83,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       // マップの中心位置を移動する
       await mapController.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: locationInfo.latLng, zoom: 14),
+          CameraPosition(target: locationInfo.latLng, zoom: 16),
         ),
       );
       // 検索クリアー
