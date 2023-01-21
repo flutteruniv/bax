@@ -12,6 +12,13 @@ Future<T> httpGet<T>({
   try {
     final response = await http.get(uri);
 
+    if (response.statusCode != 200) {
+      logger.e(
+        'Get response: code = ${response.statusCode}, '
+        'reasonPhrase = ${response.reasonPhrase}',
+      );
+    }
+
     switch (response.statusCode) {
       case 200:
         final data = jsonDecode(response.body) as Map<String, dynamic>;
