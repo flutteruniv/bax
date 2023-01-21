@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../configs/logger.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
@@ -64,8 +65,7 @@ class MapService {
         // TODO: Validationチェック。
         // 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
 
-        /// TODO: loggerに置き換え
-        print('検索Query: $query');
+        logger.i('検索Query: $query');
         return ref.watch(mapRepositoryProvider).searchFacilities(query, localeLanguage);
       }
     });

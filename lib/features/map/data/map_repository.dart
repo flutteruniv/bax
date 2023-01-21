@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/http.dart';
+import '../../../configs/logger.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
@@ -45,9 +46,7 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         final results = FacilityPredictionResults.fromJson(data);
-
-        /// TODO: ロガーを使う
-        print('results: $results');
+        logger.i('FacilityPredictionResults: $results');
         _predictionResultController.add(results.predictions);
       },
     );
@@ -84,9 +83,7 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         final results = GeocodingResults.fromJson(data);
-
-        /// TODO: ロガーを使う
-        print('geocoding: $results');
+        logger.i('GeocodingResults: $results');
         return results.results.first.geometry.location;
       },
     );
