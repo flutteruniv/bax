@@ -88,8 +88,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         }
 
         ref.read(measurementWifiServiceProvider).postMeasurementResult(
-              nearbySearchResult.placeId,
-              nearbySearchResult.name,
+              nearbySearchResult,
               fastNetResult.downloadSpeedMbps,
               fastNetResult.uploadSpeedMbps,
             );
