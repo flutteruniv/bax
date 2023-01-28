@@ -9,5 +9,13 @@ service cloud.firestore {
       allow update: if false;
       allow delete: if false;
     }
+
+    // measurementHistory
+    match /measurementHistory/{id} {
+      allow read: if true;
+      allow create: if true;  // TODO: 課金したUserだけ許可する
+      allow update: if false;
+      allow delete: if false;
+    }
   }
 }
