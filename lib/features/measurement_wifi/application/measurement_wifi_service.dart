@@ -24,20 +24,35 @@ class MeasurementWifiService {
     final facilityRepository = ref.watch(facilityRepositoryProvider);
 
     try {
+      // 計測履歴を追加する
       await measurementWifiRepository.addHistory(
         nearbySearchResult.placeId,
         nearbySearchResult.name,
         downloadSpeed,
         uploadSpeed,
       );
+
+      // 計測履歴を取得して平均値スピードを算出する
+      final histories = await measurementWifiRepository.getHistories(nearbySearchResult.placeId);
+      var totalDownloadSpeed = 0.0;
+      var totalUploadSpeed = 0.0;
+      for (final history in histories) {
+        totalDownloadSpeed += history.downloadSpeed;
+        totalUploadSpeed += history.uploadSpeed;
+      }
+      // 平均値を算出して小数第二位で四捨五入
+      final averageDownloadSpeed = double.parse((totalDownloadSpeed / histories.length).toStringAsFixed(1));
+      final averageUploadSpeed = double.parse((totalUploadSpeed / histories.length).toStringAsFixed(1));
+
+      // 施設情報を追加 or 更新する
       await facilityRepository.saveFacility(
         nearbySearchResult.placeId,
         nearbySearchResult.name,
         nearbySearchResult.geometry.location.latitude,
         nearbySearchResult.geometry.location.longitude,
         nearbySearchResult.vicinity,
-        downloadSpeed,
-        uploadSpeed,
+        averageDownloadSpeed,
+        averageUploadSpeed,
       );
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {

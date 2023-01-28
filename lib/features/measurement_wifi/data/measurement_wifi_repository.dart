@@ -20,6 +20,8 @@ class MeasurementWifiRepository {
   final FirebaseFirestore firestore;
 
   static const measurementHistoryCollectionName = 'measurementHistory';
+  static const measurementHistoryFieldPlaceId = 'placeId';
+  static const measurementHistoryFieldCreatedAt = 'createdAt';
 
   Future<void> addHistory(String placeId, String facilityName, double downloadSpeed, double uploadSpeed) async {
     /// TODO: uid取得処理
@@ -40,5 +42,23 @@ class MeasurementWifiRepository {
       logger.e(e);
       rethrow;
     }
+  }
+
+  Future<List<MeasurementHistory>> getHistories(String placeId) async {
+    final collectionRef = firestore.collection(measurementHistoryCollectionName).withConverter<MeasurementHistory>(
+      fromFirestore: (snapshot, options) {
+        final json = snapshot.data();
+        return MeasurementHistory.fromJson(json!);
+      },
+      toFirestore: (snapshot, options) {
+        return snapshot.toJson();
+      },
+    );
+    final query = collectionRef
+        .where(measurementHistoryFieldPlaceId, isEqualTo: placeId)
+        .orderBy(measurementHistoryFieldCreatedAt, descending: true)
+        .limit(3);
+    final snapshot = await query.get();
+    return snapshot.docs.map((event) => event.data()).toList();
   }
 }
