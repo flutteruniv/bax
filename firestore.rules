@@ -5,15 +5,15 @@ service cloud.firestore {
     // facility
     match /facility/{id} {
       allow read: if true;
-      allow create: if false;
-      allow update: if false;
+      allow create: if true;  // TODO: 課金したUserだけ許可する
+      allow update: if true;  // TODO: 課金したUserだけ許可する
       allow delete: if false;
     }
 
     // measurementHistory
     match /measurementHistory/{id} {
       allow read: if true;
-      allow create: if true;  // TODO: 課金したUserだけ許可する
+      allow create: if true;  // TODO: 課金したUserだけ許可し、かつ同じ施設に対して、一日に一度の投稿しかできないようにする
       allow update: if false;
       allow delete: if false;
     }
