@@ -46,7 +46,6 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         final results = FacilityPredictionResults.fromJson(data);
-        logger.i('FacilityPredictionResults: $results');
         _predictionResultController.add(results.predictions);
       },
     );
@@ -83,7 +82,6 @@ class MapRepository {
       ),
       responseBuilder: (data) {
         final results = GeocodingResults.fromJson(data);
-        logger.i('GeocodingResults: $results');
         return results.results.first.geometry.location;
       },
     );
