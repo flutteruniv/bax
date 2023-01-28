@@ -59,6 +59,8 @@ class MeasurementWifiService {
         /// TODO: 同じ施設に対して、一日に一度の投稿しかできない旨を伝える
         logger.w('同じ施設に対して、一日に一度の投稿しかできません');
       }
+    } on Exception catch (_) {
+      /// TODO: 予期せぬエラーが起きた旨を伝える
     }
   }
 }
