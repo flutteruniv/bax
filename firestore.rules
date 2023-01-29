@@ -10,8 +10,8 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // measurementHistory
-    match /measurementHistory/{id} {
+    // wifiMeasurementResult
+    match /wifiMeasurementResult/{id} {
       allow read: if true;
       allow create: if true;  // TODO: 課金したUserだけ許可し、かつ同じ施設に対して、一日に一度の投稿しかできないようにする
       allow update: if false;

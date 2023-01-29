@@ -88,9 +88,9 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         }
 
         ref.read(measurementWifiServiceProvider).postMeasurementResult(
+              ssid,
+              fastNetResult,
               nearbySearchResult,
-              fastNetResult.downloadSpeedMbps,
-              fastNetResult.uploadSpeedMbps,
             );
 
         showDialog<void>(

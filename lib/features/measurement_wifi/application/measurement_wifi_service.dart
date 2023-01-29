@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/logger.dart';
+import '../../authentication/data/firebase_auth.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../data/measurement_wifi_repository.dart';
+import '../domain/fast_net_result.dart';
+import '../domain/wifi_measurement_result.dart';
 
 final measurementWifiServiceProvider = Provider((ref) {
   return MeasurementWifiService(ref);
@@ -16,44 +19,52 @@ class MeasurementWifiService {
   final Ref ref;
 
   Future<void> postMeasurementResult(
+    String ssid,
+    FastNetResult fastNetResult,
     NearbySearchResult nearbySearchResult,
-    double downloadSpeed,
-    double uploadSpeed,
   ) async {
+    final uid = ref.watch(firebaseAuthProvider).currentUser?.uid;
+    if (uid == null) {
+      return;
+    }
+    final wifiMeasurementResult = WifiMeasurementResult(
+      ssid: ssid,
+      downloadSpeedMbps: fastNetResult.downloadSpeedMbps,
+      uploadSpeedMbps: fastNetResult.uploadSpeedMbps,
+      latencyValue: fastNetResult.latencyValue,
+      bufferbloatValue: fastNetResult.bufferbloatValue,
+      usrISP: fastNetResult.usrISP,
+      placeId: nearbySearchResult.placeId,
+      uid: uid,
+    );
+
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
-    final facilityRepository = ref.watch(facilityRepositoryProvider);
-
     try {
-      // 計測履歴を追加する
-      await measurementWifiRepository.addHistory(
-        nearbySearchResult.placeId,
-        nearbySearchResult.name,
-        downloadSpeed,
-        uploadSpeed,
-      );
+      // 計測結果を追加する
+      await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
 
-      // 計測履歴を取得して平均値スピードを算出する
-      final histories = await measurementWifiRepository.getHistories(nearbySearchResult.placeId);
+      // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
+      final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
       var totalDownloadSpeed = 0.0;
       var totalUploadSpeed = 0.0;
-      for (final history in histories) {
-        totalDownloadSpeed += history.downloadSpeed;
-        totalUploadSpeed += history.uploadSpeed;
+      for (final result in results) {
+        totalDownloadSpeed += result.downloadSpeedMbps;
+        totalUploadSpeed += result.uploadSpeedMbps;
       }
       // 平均値を算出して小数第二位で四捨五入
-      final averageDownloadSpeed = double.parse((totalDownloadSpeed / histories.length).toStringAsFixed(1));
-      final averageUploadSpeed = double.parse((totalUploadSpeed / histories.length).toStringAsFixed(1));
+      final averageDownloadSpeed = double.parse((totalDownloadSpeed / results.length).toStringAsFixed(1));
+      final averageUploadSpeed = double.parse((totalUploadSpeed / results.length).toStringAsFixed(1));
 
       // 施設情報を追加 or 更新する
-      await facilityRepository.saveFacility(
-        nearbySearchResult.placeId,
-        nearbySearchResult.name,
-        nearbySearchResult.geometry.location.latitude,
-        nearbySearchResult.geometry.location.longitude,
-        nearbySearchResult.vicinity,
-        averageDownloadSpeed,
-        averageUploadSpeed,
-      );
+      await ref.watch(facilityRepositoryProvider).saveFacility(
+            nearbySearchResult.placeId,
+            nearbySearchResult.name,
+            nearbySearchResult.geometry.location.latitude,
+            nearbySearchResult.geometry.location.longitude,
+            nearbySearchResult.vicinity,
+            averageDownloadSpeed,
+            averageUploadSpeed,
+          );
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
         /// TODO: 同じ施設に対して、一日に一度の投稿しかできない旨を伝える

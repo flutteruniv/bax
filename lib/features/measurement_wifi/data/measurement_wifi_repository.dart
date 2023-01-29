@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
-import '../domain/measurement_history.dart';
+import '../domain/wifi_measurement_result.dart';
 
 final measurementWifiRepositoryProvider = Provider(
   (ref) => MeasurementWifiRepository(
@@ -19,24 +19,17 @@ class MeasurementWifiRepository {
 
   final FirebaseFirestore firestore;
 
-  static const measurementHistoryCollectionName = 'measurementHistory';
-  static const measurementHistoryFieldPlaceId = 'placeId';
-  static const measurementHistoryFieldCreatedAt = 'createdAt';
+  static const wifiMeasurementResultCollectionName = 'wifiMeasurementResult';
+  static const wifiMeasurementResultFieldPlaceId = 'placeId';
+  static const wifiMeasurementResultFieldCreatedAt = 'createdAt';
 
-  Future<void> addHistory(String placeId, String facilityName, double downloadSpeed, double uploadSpeed) async {
-    /// TODO: uid取得処理
-    const uid = 'uid';
+  Future<void> addWifiMeasurementResult(WifiMeasurementResult result) async {
     final now = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final docId = '$now-$uid-$placeId';
-    final docRef = firestore.collection(measurementHistoryCollectionName).doc(docId);
+    final docId = '$now-${result.uid}-${result.placeId}';
+    final docRef = firestore.collection(wifiMeasurementResultCollectionName).doc(docId);
     try {
       await docRef.set(
-        MeasurementHistory(
-          placeId: placeId,
-          facilityName: facilityName,
-          downloadSpeed: downloadSpeed,
-          uploadSpeed: uploadSpeed,
-        ).toJson(),
+        result.toJson(),
       );
     } on Exception catch (e) {
       logger.e(e);
@@ -44,19 +37,20 @@ class MeasurementWifiRepository {
     }
   }
 
-  Future<List<MeasurementHistory>> getHistories(String placeId) async {
-    final collectionRef = firestore.collection(measurementHistoryCollectionName).withConverter<MeasurementHistory>(
+  Future<List<WifiMeasurementResult>> getWifiMeasurementResults(String placeId) async {
+    final collectionRef =
+        firestore.collection(wifiMeasurementResultCollectionName).withConverter<WifiMeasurementResult>(
       fromFirestore: (snapshot, options) {
         final json = snapshot.data();
-        return MeasurementHistory.fromJson(json!);
+        return WifiMeasurementResult.fromJson(json!);
       },
       toFirestore: (snapshot, options) {
         return snapshot.toJson();
       },
     );
     final query = collectionRef
-        .where(measurementHistoryFieldPlaceId, isEqualTo: placeId)
-        .orderBy(measurementHistoryFieldCreatedAt, descending: true)
+        .where(wifiMeasurementResultFieldPlaceId, isEqualTo: placeId)
+        .orderBy(wifiMeasurementResultFieldCreatedAt, descending: true)
         .limit(3);
     final snapshot = await query.get();
     return snapshot.docs.map((event) => event.data()).toList();
