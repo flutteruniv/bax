@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/logger.dart';
+import '../../../configs/union_timestamp.dart';
 import '../../authentication/data/firebase_auth.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
@@ -36,6 +37,7 @@ class MeasurementWifiService {
       usrISP: fastNetResult.usrISP,
       placeId: nearbySearchResult.placeId,
       uid: uid,
+      terminalTime: UnionTimestamp.dateTime(DateTime.now().toUtc()), // ユーザーがタイムゾーンを変更して日にちをずらして投稿するという不正を防ぐため、Utcにする
     );
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);

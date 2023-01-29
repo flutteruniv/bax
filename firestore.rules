@@ -1,7 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
+    // Wifi測定時刻の認証    
+    function validMeasurementTime(result) {
+      // 誤差1分以内であれば許可する
+      return request.time >= (result.terminalTime - duration.time(0, 1, 0, 0))
+      && request.time <= (result.terminalTime + duration.time(0, 1, 0, 0));
+    }
+
     // facility
     match /facility/{id} {
       allow read: if true;
@@ -13,7 +20,7 @@ service cloud.firestore {
     // wifiMeasurementResult
     match /wifiMeasurementResult/{id} {
       allow read: if true;
-      allow create: if true;  // TODO: 課金したUserだけ許可し、かつ同じ施設に対して、一日に一度の投稿しかできないようにする
+      allow create: if validMeasurementTime(request.resource.data);  // TODO: 課金したUserだけ許可する
       allow update: if false;
       allow delete: if false;
     }

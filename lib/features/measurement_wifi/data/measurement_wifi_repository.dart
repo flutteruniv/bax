@@ -24,8 +24,12 @@ class MeasurementWifiRepository {
   static const wifiMeasurementResultFieldCreatedAt = 'createdAt';
 
   Future<void> addWifiMeasurementResult(WifiMeasurementResult result) async {
-    final now = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final docId = '$now-${result.uid}-${result.placeId}';
+    final terminalDateTime = result.terminalTime.dateTime;
+    if (terminalDateTime == null) {
+      return;
+    }
+    final today = DateFormat('yyyy-MM-dd').format(terminalDateTime);
+    final docId = '$today-${result.uid}-${result.placeId}';
     final docRef = firestore.collection(wifiMeasurementResultCollectionName).doc(docId);
     try {
       await docRef.set(

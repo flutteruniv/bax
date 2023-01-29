@@ -26,6 +26,9 @@ class WifiMeasurementResult with _$WifiMeasurementResult {
     /// internet provider
     @Default('') String usrISP,
 
+    /// User端末から取得した時間(端末の時間を変更して不正をしていないかfirestore.rulesで確認するために使う)
+    @unionTimestampConverter required UnionTimestamp terminalTime,
+
     /// 作成日
     @unionTimestampConverter @Default(UnionTimestamp.serverTimestamp()) UnionTimestamp createdAt,
 
