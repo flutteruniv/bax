@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "bax-wifi-dev",
+    "prod": "bax-wifi",
+    "dev": "bax-wifi-dev"
+  },
+  "targets": {},
+  "etags": {}
+}

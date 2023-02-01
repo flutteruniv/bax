@@ -13,5 +13,6 @@
     "Notosans",
     "SSID",
     "unawaited"
-  ]
+  ],
+  "eslint.workingDirectories": ["./functions"],
 }
