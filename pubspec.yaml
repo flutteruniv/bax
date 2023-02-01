@@ -34,6 +34,7 @@ dependencies:
     git:
       url: https://github.com/KosukeSaigusa/geoflutterfire_plus
   geolocator: ^9.0.2
+  share_plus: ^6.3.0
 
 dev_dependencies:
   flutter_test:
