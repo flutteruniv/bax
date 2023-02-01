@@ -12,8 +12,8 @@ _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
       geo: const GeoFirePointConverter()
           .fromJson(json['geo'] as Map<String, dynamic>),
       address: json['address'] as String,
-      downloadSpeed: json['downloadSpeed'] as int,
-      uploadSpeed: json['uploadSpeed'] as int,
+      downloadSpeed: (json['downloadSpeed'] as num).toDouble(),
+      uploadSpeed: (json['uploadSpeed'] as num).toDouble(),
       createdAt: json['createdAt'] == null
           ? const UnionTimestamp.serverTimestamp()
           : unionTimestampConverter.fromJson(json['createdAt'] as Object),

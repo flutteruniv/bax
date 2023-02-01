@@ -34,10 +34,10 @@ mixin _$Facility {
   String get address => throw _privateConstructorUsedError;
 
   /// ダウンロード速度
-  int get downloadSpeed => throw _privateConstructorUsedError;
+  double get downloadSpeed => throw _privateConstructorUsedError;
 
   /// アップロード速度
-  int get uploadSpeed => throw _privateConstructorUsedError;
+  double get uploadSpeed => throw _privateConstructorUsedError;
 
   /// 作成日
   @unionTimestampConverter
@@ -82,8 +82,8 @@ abstract class $FacilityCopyWith<$Res> {
       String name,
       @GeoFirePointConverter() GeoFirePoint geo,
       String address,
-      int downloadSpeed,
-      int uploadSpeed,
+      double downloadSpeed,
+      double uploadSpeed,
       @unionTimestampConverter UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
       int hasPowerSource,
@@ -145,11 +145,11 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
       downloadSpeed: null == downloadSpeed
           ? _value.downloadSpeed
           : downloadSpeed // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       uploadSpeed: null == uploadSpeed
           ? _value.uploadSpeed
           : uploadSpeed // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -214,8 +214,8 @@ abstract class _$$_FacilityCopyWith<$Res> implements $FacilityCopyWith<$Res> {
       String name,
       @GeoFirePointConverter() GeoFirePoint geo,
       String address,
-      int downloadSpeed,
-      int uploadSpeed,
+      double downloadSpeed,
+      double uploadSpeed,
       @unionTimestampConverter UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
       int hasPowerSource,
@@ -277,11 +277,11 @@ class __$$_FacilityCopyWithImpl<$Res>
       downloadSpeed: null == downloadSpeed
           ? _value.downloadSpeed
           : downloadSpeed // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       uploadSpeed: null == uploadSpeed
           ? _value.uploadSpeed
           : uploadSpeed // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -365,11 +365,11 @@ class _$_Facility extends _Facility {
 
   /// ダウンロード速度
   @override
-  final int downloadSpeed;
+  final double downloadSpeed;
 
   /// アップロード速度
   @override
-  final int uploadSpeed;
+  final double uploadSpeed;
 
   /// 作成日
   @override
@@ -496,8 +496,8 @@ abstract class _Facility extends Facility {
       @GeoFirePointConverter()
           required final GeoFirePoint geo,
       required final String address,
-      required final int downloadSpeed,
-      required final int uploadSpeed,
+      required final double downloadSpeed,
+      required final double uploadSpeed,
       @unionTimestampConverter
           final UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter
@@ -533,11 +533,11 @@ abstract class _Facility extends Facility {
   @override
 
   /// ダウンロード速度
-  int get downloadSpeed;
+  double get downloadSpeed;
   @override
 
   /// アップロード速度
-  int get uploadSpeed;
+  double get uploadSpeed;
   @override
 
   /// 作成日
