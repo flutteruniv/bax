@@ -22,6 +22,7 @@ Future<T> httpGet<T>({
     switch (response.statusCode) {
       case 200:
         final data = jsonDecode(response.body) as Map<String, dynamic>;
+        logger.i(data);
         return responseBuilder(data);
 
       /// Todo 必要に応じてエラーパターンを増やしていく
