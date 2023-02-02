@@ -31,14 +31,17 @@ class WiFiResultDialog extends StatelessWidget {
       if (bytes == null) {
         return null;
       }
-      final file = File.fromRawPath(bytes);
-      File newFile = await file.renameSync('widget_image.png');
-      // return XFile.fromData(
-      //   bytes,
-      //   name: 'wifi-result-image.png',
-      //   mimeType: 'image/png',
-      // );
-      return XFile(newFile.path);
+      // pathをうまく設定できず...
+      // final file = File.fromRawPath(bytes);
+      // final newPath = '${file.path}/widget_image.png';
+      // print(newPath);
+      // File newFile = await file.renameSync(newPath);
+      // return XFile(newFile.path);
+      return XFile.fromData(
+        bytes,
+        name: 'wifi-result-image.png',
+        mimeType: 'image/png',
+      );
     }
 
     return RepaintBoundary(
