@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -55,6 +56,38 @@ class MapService {
 
   Stream<SelectedLocationInfo> selectedLocationInfoStream() {
     return _selectedLocationInfoController.stream;
+  }
+
+  Future<void> auth() async {
+    final actionCodeSettings = ActionCodeSettings(
+      // メールに埋め込むディープリンク。端末にアプリがインストールされていない場合にこのURLにリダイレクトされる
+      url: 'https://com.flutteruniv.bax.dev',
+      handleCodeInApp: true, // リンクがモバイルで開かれる場合はtrueを指定
+      iOSBundleId: 'com.flutteruniv.bax.dev',
+      androidPackageName: 'com.flutteruniv.bax.dev',
+      // アプリのインストールを自動的に促すかどうか
+      androidInstallApp: true,
+      androidMinimumVersion: '12',
+      // dynamicLinkDomain: 'flutterunivbaxdev.page.link',
+    );
+
+    var emailAuth = 'h.kuwabara1103@gmail.com';
+    await FirebaseAuth.instance
+        .sendSignInLinkToEmail(email: emailAuth, actionCodeSettings: actionCodeSettings)
+        .catchError((onError) => logger.e('Error sending email verification $onError'))
+        .then((value) => logger.i('Successfully sent email verification'));
+  }
+
+  Future<void> receive(String emailLink, String emailAuth) async {
+    // Confirm the link is a sign-in with email link.
+    if (FirebaseAuth.instance.isSignInWithEmailLink(emailLink)) {
+      final authCredential = EmailAuthProvider.credentialWithLink(email: emailAuth, emailLink: emailLink.toString());
+      try {
+        await FirebaseAuth.instance.currentUser?.linkWithCredential(authCredential);
+      } catch (error) {
+        print("Error linking emailLink credential.");
+      }
+    }
   }
 
   Future<void> searchFacilities(String query, String localeLanguage) async {
