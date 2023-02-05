@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../configs/logger.dart';
+import '../../authentication/application/auth_service.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
@@ -63,11 +62,9 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
     });
     fetchLocationDataAndMoveCamera();
 
-    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      logger.i(dynamicLinkData);
-      Navigator.pushNamed(context, dynamicLinkData.link.path);
-    }).onError((error) {
-      logger.e(error);
+    // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+      await ref.watch(authServiceProvider).authenticateMail(dynamicLinkData.link.toString());
     });
     super.initState();
   }
@@ -83,7 +80,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
-    ref.watch(mapServiceProvider).auth();
     markers.addAll(
       facilities.map((facility) {
         final data = facility.data();

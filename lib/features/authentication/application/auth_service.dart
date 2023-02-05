@@ -68,4 +68,20 @@ class AuthService {
       ref.read(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
     }
   }
+
+  /// アノニマスでログインしている現在のアカウントと、メールアドレスをリンクさせる
+  Future<void> authenticateMail(String emailLink) async {
+    final email = ''; // TODO: preferenceから取得
+    final authCredential = EmailAuthProvider.credentialWithLink(
+      email: email,
+      emailLink: emailLink,
+    );
+
+    try {
+      final user = await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
+      logger.i('${user?.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      logger.e('メール認証エラー: $e');
+    }
+  }
 }
