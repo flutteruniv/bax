@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../authentication/application/auth_service.dart';
+import '../../authentication/presentation/mail_authentication_page.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
@@ -195,6 +196,15 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
               },
               child: const Icon(
                 Icons.network_check,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () {
+                context.go(FacilityMapPage.route + MailAuthenticationPage.route);
+              },
+              child: const Icon(
+                Icons.mail,
               ),
             ),
           ],

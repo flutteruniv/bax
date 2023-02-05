@@ -22,7 +22,7 @@ class _MailAuthenticationState extends ConsumerState<MailAuthenticationPage> {
     return Scaffold(
       appBar: AppBar(),
       body: isSentMail
-          ? Text('送信完了')
+          ? Text('送信完了') // TODO: UI調整
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
