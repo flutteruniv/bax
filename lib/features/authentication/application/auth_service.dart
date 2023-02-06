@@ -105,4 +105,8 @@ class AuthService {
       }
     }
   }
+
+  void resetEmailSetting() {
+    _isSentMailController.add(false);
+  }
 }

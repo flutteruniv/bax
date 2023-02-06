@@ -1,3 +1,4 @@
+import 'package:bax/features/authentication/presentation/widgets/mail_send_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,11 +23,16 @@ class _MailAuthenticationState extends ConsumerState<MailAuthenticationPage> {
     return Scaffold(
       appBar: AppBar(),
       body: isSentMail
-          ? Text('送信完了') // TODO: UI調整
+          ? const MailSendComplete()
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
+                  const Text(
+                    '本人確認のため、メールアドレスの認証をお願いします',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     decoration: const InputDecoration.collapsed(hintText: 'メールアドレスを入力してください').copyWith(
                       icon: const Icon(Icons.mail),
