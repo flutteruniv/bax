@@ -96,6 +96,9 @@ class AuthService {
         case 'provider-already-linked':
           ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に認証済です');
           break;
+        case 'email-already-in-use':
+          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に他のアカウントで使用されています');
+          break;
         default:
           ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
           break;
