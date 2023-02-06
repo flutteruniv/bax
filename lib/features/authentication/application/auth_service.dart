@@ -82,8 +82,10 @@ class AuthService {
     try {
       await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
       await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
+      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
     } on FirebaseAuthException catch (e) {
       logger.e('メール認証エラー: $e');
+      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
     }
   }
 }
