@@ -67,7 +67,14 @@ class AuthService {
       _isSentMailController.add(true);
     } on FirebaseAuthException catch (e) {
       logger.e('メール送信エラー: $e');
-      ref.watch(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
+      switch (e.code) {
+        case 'invalid-email':
+          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスが無効です');
+          break;
+        default:
+          ref.watch(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
+          break;
+      }
     }
   }
 
@@ -85,7 +92,14 @@ class AuthService {
       ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
     } on FirebaseAuthException catch (e) {
       logger.e('メール認証エラー: $e');
-      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
+      switch (e.code) {
+        case 'provider-already-linked':
+          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に認証済です');
+          break;
+        default:
+          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
+          break;
+      }
     }
   }
 }
