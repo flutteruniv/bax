@@ -62,12 +62,12 @@ class AuthService {
   /// 指定のアドレスに認証メールを送る
   Future<void> sendMail(String email) async {
     try {
-      await ref.read(firebaseAuthProvider).sendSignInLinkToEmail(email: email, actionCodeSettings: actionCodeSettings);
+      await ref.watch(firebaseAuthProvider).sendSignInLinkToEmail(email: email, actionCodeSettings: actionCodeSettings);
       await ref.watch(preferencesProvider).setEmail(email);
       _isSentMailController.add(true);
     } on FirebaseAuthException catch (e) {
       logger.e('メール送信エラー: $e');
-      ref.read(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
+      ref.watch(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
     }
   }
 
