@@ -10,7 +10,7 @@ class Preferences {
 
   late SharedPreferences _pref;
 
-  static const keyEmail = 'mail';
+  static const keyEmail = 'email';
 
   Future<void> init() async {
     _pref = await SharedPreferences.getInstance();
