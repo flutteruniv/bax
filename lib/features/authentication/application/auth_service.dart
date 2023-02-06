@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/logger.dart';
+import '../../../configs/preferences.dart';
 import '../../load/application/loading_notifier.dart';
 import '../../load/application/scaffold_manager_key.dart';
 import '../data/firebase_auth.dart';
@@ -62,6 +63,7 @@ class AuthService {
   Future<void> sendMail(String email) async {
     try {
       await ref.read(firebaseAuthProvider).sendSignInLinkToEmail(email: email, actionCodeSettings: actionCodeSettings);
+      await ref.watch(preferencesProvider).setEmail(email);
       _isSentMailController.add(true);
     } on FirebaseAuthException catch (e) {
       logger.e('メール送信エラー: $e');
@@ -69,17 +71,17 @@ class AuthService {
     }
   }
 
-  /// アノニマスでログインしている現在のアカウントと、メールアドレスをリンクさせる
+  /// アノニマスでログインしている現在のアカウントと、メールアドレスを紐付けさせる
   Future<void> authenticateMail(String emailLink) async {
-    final email = ''; // TODO: preferenceから取得
+    final pref = ref.watch(preferencesProvider);
     final authCredential = EmailAuthProvider.credentialWithLink(
-      email: email,
+      email: pref.getEmail(),
       emailLink: emailLink,
     );
 
     try {
-      final user = await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
-      logger.i('${user?.user?.email}');
+      await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
+      await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
     } on FirebaseAuthException catch (e) {
       logger.e('メール認証エラー: $e');
     }
