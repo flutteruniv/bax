@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../configs/preferences.dart';
 import '../../application/auth_service.dart';
 
-class MailSendComplete extends ConsumerWidget {
-  const MailSendComplete({super.key});
+class EmailSendComplete extends ConsumerWidget {
+  const EmailSendComplete({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

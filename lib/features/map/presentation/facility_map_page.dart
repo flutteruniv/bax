@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../authentication/application/auth_service.dart';
-import '../../authentication/presentation/mail_authentication_page.dart';
+import '../../authentication/presentation/email_authentication_page.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
@@ -65,7 +65,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
 
     // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
-      await ref.watch(authServiceProvider).authenticateMail(dynamicLinkData.link.toString());
+      await ref.watch(authServiceProvider).authenticateEmail(dynamicLinkData.link.toString());
     });
     super.initState();
   }
@@ -201,7 +201,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
             const SizedBox(height: 16),
             FloatingActionButton(
               onPressed: () {
-                context.go(FacilityMapPage.route + MailAuthenticationPage.route);
+                context.go(FacilityMapPage.route + EmailAuthenticationPage.route);
               },
               child: const Icon(
                 Icons.mail,

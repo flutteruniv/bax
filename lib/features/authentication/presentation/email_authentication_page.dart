@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../application/auth_service.dart';
-import 'widgets/mail_send_complete.dart';
+import 'widgets/email_send_complete.dart';
 
-class MailAuthenticationPage extends ConsumerStatefulWidget {
-  const MailAuthenticationPage({super.key});
+class EmailAuthenticationPage extends ConsumerStatefulWidget {
+  const EmailAuthenticationPage({super.key});
 
-  static const route = 'mail_authentication';
+  static const route = 'email_authentication';
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MailAuthenticationState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _EmailAuthenticationState();
 }
 
-class _MailAuthenticationState extends ConsumerState<MailAuthenticationPage> {
+class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
   String _email = '';
 
   @override
   Widget build(BuildContext context) {
-    final isSentMail = ref.watch(isSentMailStreamProvider).valueOrNull ?? false;
+    final isSentEmail = ref.watch(isSentEmailStreamProvider).valueOrNull ?? false;
 
     return Scaffold(
       appBar: AppBar(),
-      body: isSentMail
-          ? const MailSendComplete()
+      body: isSentEmail
+          ? const EmailSendComplete()
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -46,7 +46,7 @@ class _MailAuthenticationState extends ConsumerState<MailAuthenticationPage> {
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () async {
-                      await ref.read(authServiceProvider).sendMail(_email);
+                      await ref.read(authServiceProvider).sendEmail(_email);
                     },
                     child: const Text(
                       '認証',

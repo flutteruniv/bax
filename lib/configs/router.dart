@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/authentication/application/auth_service.dart';
-import '../features/authentication/presentation/mail_authentication_page.dart';
+import '../features/authentication/presentation/email_authentication_page.dart';
 import '../features/authentication/presentation/welcome_page.dart';
 import '../features/map/presentation/facility_map_page.dart';
 import '../features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
@@ -28,8 +28,8 @@ final routerProvider = Provider(
               builder: (context, state) => const MeasureWiFiSpeedPage(),
             ),
             GoRoute(
-              path: MailAuthenticationPage.route,
-              builder: (context, state) => const MailAuthenticationPage(),
+              path: EmailAuthenticationPage.route,
+              builder: (context, state) => const EmailAuthenticationPage(),
             ),
           ],
         ),

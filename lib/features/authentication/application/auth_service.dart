@@ -22,8 +22,8 @@ final authStateChangesProvider = StreamProvider((ref) {
 });
 
 /// メール送信が完了済であるかどうかのフラグを返すStreamProvider
-final isSentMailStreamProvider = StreamProvider.autoDispose((ref) {
-  return ref.watch(authServiceProvider).isSentMailStream();
+final isSentEmailStreamProvider = StreamProvider.autoDispose((ref) {
+  return ref.watch(authServiceProvider).isSentEmailStream();
 });
 
 final authServiceProvider = Provider((ref) {
@@ -34,10 +34,10 @@ class AuthService {
   AuthService(this.ref);
   final Ref ref;
 
-  final _isSentMailController = StreamController<bool>();
+  final _isSentEmailController = StreamController<bool>();
 
-  Stream<bool> isSentMailStream() {
-    return _isSentMailController.stream;
+  Stream<bool> isSentEmailStream() {
+    return _isSentEmailController.stream;
   }
 
   final actionCodeSettings = ActionCodeSettings(
@@ -60,11 +60,12 @@ class AuthService {
   }
 
   /// 指定のアドレスに認証メールを送る
-  Future<void> sendMail(String email) async {
+  Future<void> sendEmail(String email) async {
     try {
+      /// TODO: 一定時間かかるのでローディング表示したい
       await ref.watch(firebaseAuthProvider).sendSignInLinkToEmail(email: email, actionCodeSettings: actionCodeSettings);
       await ref.watch(preferencesProvider).setEmail(email);
-      _isSentMailController.add(true);
+      _isSentEmailController.add(true);
     } on FirebaseAuthException catch (e) {
       logger.e('メール送信エラー: $e');
       switch (e.code) {
@@ -79,7 +80,7 @@ class AuthService {
   }
 
   /// アノニマスでログインしている現在のアカウントと、メールアドレスを紐付けさせる
-  Future<void> authenticateMail(String emailLink) async {
+  Future<void> authenticateEmail(String emailLink) async {
     final pref = ref.watch(preferencesProvider);
     final authCredential = EmailAuthProvider.credentialWithLink(
       email: pref.getEmail(),
@@ -107,6 +108,6 @@ class AuthService {
   }
 
   void resetEmailSetting() {
-    _isSentMailController.add(false);
+    _isSentEmailController.add(false);
   }
 }
