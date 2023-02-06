@@ -1,8 +1,8 @@
-import 'package:bax/features/authentication/presentation/widgets/mail_send_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../application/auth_service.dart';
+import 'widgets/mail_send_complete.dart';
 
 class MailAuthenticationPage extends ConsumerStatefulWidget {
   const MailAuthenticationPage({super.key});
@@ -34,10 +34,14 @@ class _MailAuthenticationState extends ConsumerState<MailAuthenticationPage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration.collapsed(hintText: 'メールアドレスを入力してください').copyWith(
                       icon: const Icon(Icons.mail),
                     ),
                     onChanged: (value) => _email = value,
+                    validator: (value) {
+                      /// TODO バリデーション
+                    },
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
