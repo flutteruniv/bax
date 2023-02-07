@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/logger.dart';
 import '../../../configs/preferences.dart';
+import '../../../configs/validators.dart';
 import '../../load/application/loading_notifier.dart';
 import '../../load/application/scaffold_manager_key.dart';
 import '../data/firebase_auth.dart';
@@ -61,6 +62,11 @@ class AuthService {
 
   /// 指定のアドレスに認証メールを送る
   Future<void> sendEmail(String email) async {
+    final isValidEmail = ref.watch(validatorsProvider).validEmail(email);
+    if (!isValidEmail) {
+      return;
+    }
+
     try {
       /// TODO: 一定時間かかるのでローディング表示したい
       await ref.watch(firebaseAuthProvider).sendSignInLinkToEmail(email: email, actionCodeSettings: actionCodeSettings);

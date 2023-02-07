@@ -19,6 +19,8 @@ class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     final isSentEmail = ref.watch(isSentEmailStreamProvider).valueOrNull ?? false;
+    // メール送信完了時点で空文字にする
+    _email = isSentEmail ? '' : _email;
 
     return Scaffold(
       appBar: AppBar(),
@@ -39,9 +41,6 @@ class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
                       icon: const Icon(Icons.mail),
                     ),
                     onChanged: (value) => _email = value,
-                    validator: (value) {
-                      /// TODO バリデーション
-                    },
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
