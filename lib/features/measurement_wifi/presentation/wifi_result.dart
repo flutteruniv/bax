@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../domain/fast_net_result.dart';
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'features/load/application/navigator_key.dart';
 import 'features/load/application/scaffold_manager_key.dart';
 import 'features/load/presentation/loading_page.dart';
 import 'features/location/domain/my_location.dart';
+import 'features/update/application/update_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +65,8 @@ class MyApp extends ConsumerWidget {
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       builder: (context, child) {
         final isLoading = ref.watch(loadingProvider);
+        // final minimumVersion = ref.watch(updateStreamProvider).valueOrNull;
+        final minimumVersion = ref.watch(updateStreamProvider);
 
         return Navigator(
           key: ref.watch(navigatorKeyProvider),
@@ -74,6 +78,18 @@ class MyApp extends ConsumerWidget {
                   child!,
                   // ローディングを表示する
                   if (isLoading) const LoadingWidget(),
+                  // バージョンのチェック
+                  minimumVersion.when(
+                    error: (e, stack) => Dialog(child: Text(e.toString())),
+                    loading: Container.new,
+                    data: (value) {
+                      final data = value.data();
+                      print(data);
+                      return Dialog(
+                        child: Text(data!['minimumSupportedVersion'].toString()),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
