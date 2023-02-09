@@ -86,7 +86,7 @@ class MyApp extends ConsumerWidget {
                       final data = value.data();
                       print(data);
                       return Dialog(
-                        child: Text(data!['minimumSupportedVersion'].toString()),
+                        child: Text(data!['minimumSupportedVersion'] as String),
                       );
                     },
                   )
