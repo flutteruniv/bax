@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'configs/preferences.dart';
 import 'configs/router.dart';
 import 'configs/theme.dart';
 import 'features/load/application/loading_notifier.dart';
@@ -44,6 +45,8 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(preferencesProvider); // Preferenceの初期化
+
     final theme = ref.watch(themeProvider);
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
