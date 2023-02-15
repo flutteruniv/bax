@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../authentication/application/auth_service.dart';
+import '../../authentication/presentation/email_authentication_page.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
@@ -59,6 +62,11 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       setState(() {});
     });
     fetchLocationDataAndMoveCamera();
+
+    // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+      await ref.watch(authServiceProvider).authenticateEmail(dynamicLinkData.link.toString());
+    });
     super.initState();
   }
 
@@ -73,7 +81,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
-
     markers.addAll(
       facilities.map((facility) {
         final data = facility.data();
@@ -189,6 +196,15 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
               },
               child: const Icon(
                 Icons.network_check,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () {
+                context.go(FacilityMapPage.route + EmailAuthenticationPage.route);
+              },
+              child: const Icon(
+                Icons.mail,
               ),
             ),
           ],

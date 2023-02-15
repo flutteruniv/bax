@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../domain/fast_net_result.dart';
+import '../domain/wifi_measurement_result.dart';
 
 class WiFiResultDialog extends StatelessWidget {
   const WiFiResultDialog({super.key, required this.fastNetResult});
@@ -12,6 +18,32 @@ class WiFiResultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final globalKey = GlobalKey();
+
+    Future<XFile?> widgetToImage() async {
+      Uint8List? bytes;
+      final boundary = globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) {
+        return null;
+      }
+      final image = await boundary.toImage();
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      bytes = byteData?.buffer.asUint8List();
+      if (bytes == null) {
+        return null;
+      }
+      // pathをうまく設定できず...
+      // final file = File.fromRawPath(bytes);
+      // final newPath = '${file.path}/widget_image.png';
+      // print(newPath);
+      // File newFile = await file.renameSync(newPath);
+      // return XFile(newFile.path);
+      return XFile.fromData(
+        bytes,
+        name: 'wifi-result-image.png',
+        mimeType: 'image/png',
+      );
+    }
 
     return Stack(
       children: [
