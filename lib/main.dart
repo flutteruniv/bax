@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'configs/preferences.dart';
 import 'configs/router.dart';
@@ -16,6 +15,8 @@ import 'features/load/application/scaffold_manager_key.dart';
 import 'features/load/presentation/loading_page.dart';
 import 'features/location/domain/my_location.dart';
 import 'features/update/application/update_notifier.dart';
+import 'features/update/application/version_check.dart';
+import 'features/update/presentation/widgets/update_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +71,7 @@ class MyApp extends ConsumerWidget {
       builder: (context, child) {
         final isLoading = ref.watch(loadingProvider);
         final minimumVersion = ref.watch(updateStreamProvider);
+        final nowVersion = ref.watch(nowVersionProvider);
 
         return Navigator(
           key: ref.watch(navigatorKeyProvider),
@@ -81,26 +83,25 @@ class MyApp extends ConsumerWidget {
                   child!,
                   // ローディングを表示する
                   if (isLoading) const LoadingWidget(),
+
                   // バージョンのチェック
                   minimumVersion.when(
-                    error: (e, stack) {
-                      print(e.toString());
-                      return Container();
-                    },
+                    error: (e, stack) => Container(),
                     loading: Container.new,
                     data: (value) {
-                      final data = value.data();
-                      final minimumVersion = data!['minimumSupportedVersion'] as String;
-                      if (await versionCheck(minimumVersion)) {
-                        // await が使えないので...
-                        // nowVersion も provider で持っておく？
-                        // この中でも await が使える方法を探す？
-                        // ConsumerStatefulWidget を使う？
-                        return Dialog(
-                          child: Text(data['minimumSupportedVersion'] as String),
-                        );
-                      }
-                      return Container();
+                      final minimumVersionData = value.data();
+                      final minimumVersion = minimumVersionData!['minimumSupportedVersion'] as String;
+
+                      return nowVersion.when(
+                        error: (error, stackTrace) => Container(),
+                        loading: Container.new,
+                        data: (nowVersion) {
+                          if (versionCheck(minimumVersion, nowVersion)) {
+                            return const UpdateDialog();
+                          }
+                          return Container();
+                        },
+                      );
                     },
                   )
                 ],
@@ -111,24 +112,4 @@ class MyApp extends ConsumerWidget {
       },
     );
   }
-}
-
-Future<bool> versionCheck(String minimumVersion) async {
-  // 現在のバージョンを取得
-  final packageInfo = await PackageInfo.fromPlatform();
-  final nowVersion = packageInfo.version;
-
-  // minimum と now をスプリットする
-  final minimumVersionArray = minimumVersion.split('.');
-  final nowVersionArray = nowVersion.split('.');
-
-  // minimumより小さかったら true を返す
-  for (var i = 0; i < minimumVersionArray.length; i++) {
-    final minimum = minimumVersionArray[i] as int;
-    final now = nowVersionArray[i] as int;
-    if (minimum > now) {
-      return true;
-    }
-  }
-  return false;
 }
