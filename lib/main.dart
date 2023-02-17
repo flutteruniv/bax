@@ -15,7 +15,6 @@ import 'features/load/application/scaffold_manager_key.dart';
 import 'features/load/presentation/loading_page.dart';
 import 'features/location/domain/my_location.dart';
 import 'features/update/application/update_notifier.dart';
-import 'features/update/application/version_check.dart';
 import 'features/update/presentation/widgets/update_dialog.dart';
 
 void main() async {
@@ -71,7 +70,7 @@ class MyApp extends ConsumerWidget {
       builder: (context, child) {
         final isLoading = ref.watch(loadingProvider);
         final minimumVersion = ref.watch(updateStreamProvider);
-        final nowVersion = ref.watch(nowVersionProvider);
+        final deviceVersion = ref.watch(nowVersionProvider);
 
         return Navigator(
           key: ref.watch(navigatorKeyProvider),
@@ -92,18 +91,12 @@ class MyApp extends ConsumerWidget {
                       final minimumVersionData = value.data();
                       final minimumVersion = minimumVersionData!['minimumSupportedVersion'] as String;
 
-                      return nowVersion.when(
+                      return deviceVersion.when(
                         error: (error, stackTrace) => Container(),
                         loading: Container.new,
-                        data: (nowVersion) {
-                          if (versionCheck(minimumVersion, nowVersion)) {
+                        data: (value) {
+                          if (UpdateDialog.versionCheck(minimumVersion, value)) {
                             return const UpdateDialog();
-                            // showDialog(
-                            //   barrierDismissible: false,
-                            //   context: context,
-                            //   builder: (context) {
-                                
-                            //   },);
                           }
                           return Container();
                         },
