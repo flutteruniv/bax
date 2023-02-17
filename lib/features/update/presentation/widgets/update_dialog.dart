@@ -7,17 +7,26 @@ class UpdateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
+    return Stack(
       children: [
-        const SimpleDialogOption(
-          child: Text('最新バージョンにアップデートしてください。'),
+        Container(
+          color: Colors.black.withOpacity(0.4),
         ),
-        SimpleDialogOption(
-          child: ElevatedButton(
-            child: const Text('アップデート'),
-            onPressed: () {},
-          ),
-        )
+        SimpleDialog(
+          children: [
+            const SimpleDialogOption(
+              child: Text('最新バージョンにアップデートしてください。'),
+            ),
+            SimpleDialogOption(
+              child: ElevatedButton(
+                child: const Text('アップデート'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ),
       ],
     );
   }

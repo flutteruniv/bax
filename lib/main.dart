@@ -98,6 +98,12 @@ class MyApp extends ConsumerWidget {
                         data: (nowVersion) {
                           if (versionCheck(minimumVersion, nowVersion)) {
                             return const UpdateDialog();
+                            // showDialog(
+                            //   barrierDismissible: false,
+                            //   context: context,
+                            //   builder: (context) {
+                                
+                            //   },);
                           }
                           return Container();
                         },
