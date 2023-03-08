@@ -2,13 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final preferencesProvider = Provider((ref) {
-  return Preferences()..init();
+  return Preferences();
 });
 
 class Preferences {
-  Preferences();
+  Preferences() {
+    init();
+  }
 
-  late SharedPreferences _pref;
+  late final SharedPreferences _pref;
 
   static const keyEmail = 'email';
 
