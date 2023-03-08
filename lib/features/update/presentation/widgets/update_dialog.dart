@@ -10,7 +10,6 @@ class UpdateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
         Container(
@@ -33,11 +32,12 @@ class UpdateDialog extends StatelessWidget {
     );
   }
 
+  // TODO(kenta-wakasa): ストア情報が未確定のため仮でおいてる。正式に決まったら差し替える。
   Future<void> _launchUrl() async {
     final appStoreURL = Uri.parse('https://apps.apple.com/jp/app/flutter%E5%A4%A7%E5%AD%A6/id1532391360');
     final playStoreURL = Uri.parse('https://play.google.com/store/apps/details?id=jp.kboy.kboyflutteruniv&hl=ja&gl=US');
 
-    if(Platform.isAndroid) {
+    if (Platform.isAndroid) {
       if (!await launchUrl(playStoreURL)) {
         throw Exception('Could not launch $playStoreURL');
       }
