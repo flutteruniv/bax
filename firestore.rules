@@ -17,6 +17,11 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // config
+    match /config/{id} {
+      allow read: if true;
+    }
+
     // wifiMeasurementResult
     match /wifiMeasurementResult/{id} {
       allow read: if true;
