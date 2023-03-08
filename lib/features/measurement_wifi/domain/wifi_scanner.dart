@@ -22,6 +22,8 @@ class WiFiScanner {
     if (status.isDenied) {
       return null;
     }
-    return ref.read(networkInfoProvider).getWifiName();
+    final wifiName = await ref.read(networkInfoProvider).getWifiName();
+    // NOTE: Android端末ではwifi名の両端に "" がついてしまうので、取り除く。
+    return wifiName?.replaceAll('"', '');
   }
 }
