@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// 強制アップデート促すダイアログ
 class UpdateDialog extends StatelessWidget {
   const UpdateDialog({
     super.key,
