@@ -34,6 +34,7 @@ class UpdateRepository {
   static const updateCollectionName = 'config';
   static const minimumVersionDocId = 'v1';
 
+  // TODO(kenta-wakasa): config クラス等を作って Map<String, dynamic> を変換したい
   Stream<DocumentSnapshot<Map<String, dynamic>>> updateStream() {
     return _updateCollectionReference.snapshots();
   }
