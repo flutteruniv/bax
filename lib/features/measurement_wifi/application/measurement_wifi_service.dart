@@ -37,7 +37,9 @@ class MeasurementWifiService {
       usrISP: fastNetResult.usrISP,
       placeId: nearbySearchResult.placeId,
       uid: uid,
-      terminalTime: UnionTimestamp.dateTime(DateTime.now().toUtc()), // ユーザーがタイムゾーンを変更して日にちをずらして投稿するという不正を防ぐため、Utcにする
+      terminalTime: UnionTimestamp.dateTime(
+        DateTime.now().toUtc(),
+      ), // ユーザーがタイムゾーンを変更して日にちをずらして投稿するという不正を防ぐため、Utcにする
     );
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
@@ -70,6 +72,7 @@ class MeasurementWifiService {
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
         /// TODO: 同じ施設に対して、一日に一度の投稿しかできない旨を伝える
+        // TODO(kenta-wakasa): そもそも一度測定していたら投稿できないようにしたい
         logger.w('同じ施設に対して、一日に一度の投稿しかできません');
       }
     } on Exception catch (_) {

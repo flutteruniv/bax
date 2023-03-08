@@ -63,7 +63,7 @@ class MapService {
     Future.delayed(const Duration(milliseconds: 600), () {
       if (_holdQuery == query) {
         // TODO: Validationチェック。
-        // 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
+        /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
 
         logger.i('検索Query: $query');
         return ref.watch(mapRepositoryProvider).searchFacilities(query, localeLanguage);
