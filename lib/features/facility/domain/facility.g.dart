@@ -21,10 +21,22 @@ _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
           ? const UnionTimestamp.serverTimestamp()
           : alwaysUseServerTimestampUnionTimestampConverter
               .fromJson(json['updatedAt'] as Object),
-      hasPowerSource: json['hasPowerSource'] as int? ?? 0,
-      noPowerSource: json['noPowerSource'] as int? ?? 0,
-      hasWorkSpace: json['hasWorkSpace'] as int? ?? 0,
-      noWorkSpace: json['noWorkSpace'] as int? ?? 0,
+      hasPowerSource: (json['hasPowerSource'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      noPowerSource: (json['noPowerSource'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      hasWorkSpace: (json['hasWorkSpace'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      noWorkSpace: (json['noWorkSpace'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
       powerSourceSpots: (json['powerSourceSpots'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

@@ -39,7 +39,7 @@ mixin _$WifiMeasurementResult {
   /// internet provider
   String get usrISP => throw _privateConstructorUsedError;
 
-  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  /// User端末から取得した時間(端末の時間を変更して不正をしていないかfirestore.rulesで確認するために使う)
   @unionTimestampConverter
   UnionTimestamp get terminalTime => throw _privateConstructorUsedError;
 
@@ -305,7 +305,7 @@ class _$_WifiMeasurementResult implements _WifiMeasurementResult {
   @JsonKey()
   final String usrISP;
 
-  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  /// User端末から取得した時間(端末の時間を変更して不正をしていないかfirestore.rulesで確認するために使う)
   @override
   @unionTimestampConverter
   final UnionTimestamp terminalTime;
@@ -424,7 +424,7 @@ abstract class _WifiMeasurementResult implements WifiMeasurementResult {
   String get usrISP;
   @override
 
-  /// User端末から取得した時間(端末の時刻を変更して不正をしていないかfirestore.rulesで確認するために使う)
+  /// User端末から取得した時間(端末の時間を変更して不正をしていないかfirestore.rulesで確認するために使う)
   @unionTimestampConverter
   UnionTimestamp get terminalTime;
   @override

@@ -39,16 +39,24 @@ class Facility with _$Facility {
         UnionTimestamp updatedAt,
 
     /// 電源あり報告
-    @Default(0) int hasPowerSource,
+    ///
+    /// 報告者のuidを追加する
+    @Default(<String>[]) List<String> hasPowerSource,
 
     /// 電源なし報告
-    @Default(0) int noPowerSource,
+    ///
+    /// 報告者のuidを追加する
+    @Default(<String>[]) List<String> noPowerSource,
 
     /// 作業スペースあり報告
-    @Default(0) int hasWorkSpace,
+    ///
+    /// 報告者のuidを追加する
+    @Default(<String>[]) List<String> hasWorkSpace,
 
     /// 作業スペースなし報告
-    @Default(0) int noWorkSpace,
+    ///
+    /// 報告者のuidを追加する
+    @Default(<String>[]) List<String> noWorkSpace,
 
     /// 電源スポットの写真
     @Default(<String>[]) List<String> powerSourceSpots,
