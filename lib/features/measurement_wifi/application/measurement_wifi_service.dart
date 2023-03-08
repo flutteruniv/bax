@@ -19,6 +19,7 @@ class MeasurementWifiService {
 
   final Ref ref;
 
+  /// wifiの測定結果を投稿する
   Future<void> postMeasurementResult(
     String ssid,
     FastNetResult fastNetResult,

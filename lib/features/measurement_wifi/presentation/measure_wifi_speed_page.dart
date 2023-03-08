@@ -87,6 +87,8 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
           return;
         }
 
+        // TODO(kenta-wakasa): 測定はしたいけど投稿はしたくないというタイミングがあるかもなので
+        /// ダイアログ表示の中に投稿ボタンを作った方がいいかもしれない。
         ref.read(measurementWifiServiceProvider).postMeasurementResult(
               ssid,
               fastNetResult,
@@ -134,7 +136,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             const SizedBox(height: 16),
             Text(
               '施設名',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Row(
               children: [
