@@ -48,6 +48,8 @@ class UpdateDialog extends StatelessWidget {
     }
   }
 
+  // TODO(kenta-wakasa):
+  /// 強制アップデートが必要かどうかを提供するproviderを用意してもいいかもしれない。
   static bool versionCheck(String minimumVersion, String nowVersion) {
     // minimum と now をスプリットする
     final minimumVersionArray = minimumVersion.split('.');
