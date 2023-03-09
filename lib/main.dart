@@ -13,6 +13,7 @@ import 'features/load/application/navigator_key.dart';
 import 'features/load/application/scaffold_manager_key.dart';
 import 'features/load/presentation/loading_page.dart';
 import 'features/location/domain/my_location.dart';
+import 'features/payment/repository/payment_repository.dart';
 import 'features/update/application/update_notifier.dart';
 import 'features/update/presentation/widgets/update_dialog.dart';
 
@@ -42,15 +43,27 @@ void main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(preferencesProvider); // Preferenceの初期化
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(paymentRepositoryProvider).initPlatformState();
+    // Preferenceの初期化
+    ref.read(preferencesProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     final router = ref.watch(routerProvider);
+
     return MaterialApp.router(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

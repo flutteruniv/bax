@@ -12,6 +12,7 @@ analyzer:
     - "**.g.dart"
     - "**.gr.dart"
     - "**/generated_plugin_registrant.dart"
-
+  plugins:
+    - custom_lint
   errors:
     invalid_annotation_target: ignore

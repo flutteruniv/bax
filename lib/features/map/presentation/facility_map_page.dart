@@ -12,6 +12,7 @@ import '../../authentication/presentation/email_authentication_page.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
+import '../../payment/repository/payment_repository.dart';
 import '../application/map_service.dart';
 import 'widgets/prediction_result_list.dart';
 import 'widgets/search_text_form_field.dart';
@@ -206,6 +207,13 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
               child: const Icon(
                 Icons.mail,
               ),
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () async {
+                await ref.read(paymentRepositoryProvider).purchaseSubscription();
+              },
+              child: const Icon(Icons.payment),
             ),
           ],
         ),
