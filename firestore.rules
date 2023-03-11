@@ -29,5 +29,13 @@ service cloud.firestore {
       allow update: if false;
       allow delete: if false;
     }
+
+    // bax
+    match /bax/{id} {
+      allow read: if false;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
   }
 }
