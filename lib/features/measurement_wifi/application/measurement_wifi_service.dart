@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/union_timestamp.dart';
 import '../../authentication/data/firebase_auth.dart';
-import '../../bax/data/bax_history_repository.dart';
+import '../../bax/data/bax_repository.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
-import '../../user/data/user_repository.dart';
 import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/wifi_measurement_result.dart';
@@ -48,22 +47,20 @@ class MeasurementWifiService {
     );
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
-    final baxHistoryRepository = ref.watch(baxHistoryRepositoryProvider);
-    final userRepository = ref.watch(userRepositoryProvider);
+    final baxRepository = ref.watch(baxRepositoryProvider);
     try {
       // 計測結果を追加する
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
 
-      /// TODO: 動的にする
+      /// TODO: bonusRateと付与ポイントを動的にする
       final bax = Bax(
         uid: uid,
         bonusRate: 1,
         baxReasons: [BaxReasons.measurementWifi],
       );
-      // BAX付与履歴に追加する
-      await baxHistoryRepository.addBax(uid, bax);
-      // userにBaxを付与する
-      await userRepository.giveBax(uid, bax);
+
+      /// BAX付与する
+      await baxRepository.giveBax(uid, bax);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
