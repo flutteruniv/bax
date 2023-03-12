@@ -49,6 +49,7 @@ class MeasurementWifiService {
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
     final baxRepository = ref.watch(baxRepositoryProvider);
+    final userRepository = ref.watch(userRepositoryProvider);
     try {
       // 計測結果を追加する
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
@@ -60,6 +61,8 @@ class MeasurementWifiService {
       );
       // BAX付与履歴に追加する
       await baxRepository.addBax(uid, bax);
+      // userにBaxを付与する
+      await userRepository.giveBax(uid, bax);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
