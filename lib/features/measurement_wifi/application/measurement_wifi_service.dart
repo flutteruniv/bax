@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/union_timestamp.dart';
 import '../../authentication/data/firebase_auth.dart';
-import '../../bax/data/bax_repository.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../facility/data/facility_repository.dart';
@@ -60,8 +59,11 @@ class MeasurementWifiService {
         baxReasons: [BaxReasons.measurementWifi],
       );
 
+      /// 現在のBaxPointを取得する
+      final currentBaxPoint = await userRepository.fetchBaxPoint(uid);
+
       /// BAX付与する
-      await userRepository.giveBax(uid, bax);
+      await userRepository.giveBax(uid, bax, currentBaxPoint);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);

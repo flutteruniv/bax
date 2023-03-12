@@ -40,10 +40,10 @@ class UserRepository {
   }
 
   /// BAXを付与する
-  Future<void> giveBax(String uid, Bax bax) async {
-    var totalBax = 0.0;
+  Future<void> giveBax(String uid, Bax bax, double currentBaxPoint) async {
+    var totalBaxPoint = currentBaxPoint;
     for (final baxReason in bax.baxReasons) {
-      totalBax = baxReason.point * bax.bonusRate;
+      totalBaxPoint += baxReason.point * bax.bonusRate;
     }
 
     final batch = firestore.batch();
@@ -54,7 +54,7 @@ class UserRepository {
       /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
       batch
         ..set(baxDocRef, bax.toJson())
-        ..set(userDocRef, User(uid: uid, totalBax: totalBax).toJson());
+        ..set(userDocRef, User(uid: uid, totalBax: totalBaxPoint).toJson());
       await batch.commit();
     } on Exception catch (e) {
       logger.e(e);
