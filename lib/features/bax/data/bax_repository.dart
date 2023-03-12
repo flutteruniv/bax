@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
 import '../domain/bax.dart';
-import '../domain/bax_reasons.dart';
 
 final baxRepositoryProvider = Provider(
   (ref) => BaxRepository(
@@ -21,16 +20,13 @@ class BaxRepository {
 
   static const baxCollectionName = 'bax';
 
-  Future<void> giveBax(String uid) async {
+  /// BAX付与履歴に追加する
+  Future<void> addBax(String uid, Bax bax) async {
     final docRef = firestore.collection(baxCollectionName).doc();
 
     try {
       await docRef.set(
-        Bax(
-          uid: uid,
-          bonusRate: 1,
-          baxReasons: [BaxReasons.measurementWifi],
-        ).toJson(),
+        bax.toJson(),
       );
     } on Exception catch (e) {
       logger.e(e);
