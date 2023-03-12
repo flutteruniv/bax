@@ -5,14 +5,14 @@ import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
 import '../domain/bax.dart';
 
-final baxRepositoryProvider = Provider(
-  (ref) => BaxRepository(
+final baxHistoryRepositoryProvider = Provider(
+  (ref) => BaxHistoryRepository(
     firestore: ref.watch(firebaseFirestoreProvider),
   ),
 );
 
-class BaxRepository {
-  BaxRepository({
+class BaxHistoryRepository {
+  BaxHistoryRepository({
     required this.firestore,
   });
 

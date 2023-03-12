@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/union_timestamp.dart';
 import '../../authentication/data/firebase_auth.dart';
-import '../../bax/data/bax_repository.dart';
+import '../../bax/data/bax_history_repository.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../facility/data/facility_repository.dart';
@@ -48,19 +48,20 @@ class MeasurementWifiService {
     );
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
-    final baxRepository = ref.watch(baxRepositoryProvider);
+    final baxHistoryRepository = ref.watch(baxHistoryRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
     try {
       // 計測結果を追加する
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
 
+      /// TODO: 動的にする
       final bax = Bax(
         uid: uid,
         bonusRate: 1,
         baxReasons: [BaxReasons.measurementWifi],
       );
       // BAX付与履歴に追加する
-      await baxRepository.addBax(uid, bax);
+      await baxHistoryRepository.addBax(uid, bax);
       // userにBaxを付与する
       await userRepository.giveBax(uid, bax);
 
