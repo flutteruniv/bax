@@ -34,12 +34,9 @@ class BaxRepository {
     final userDocRef = firestore.collection(userCollectionName).doc(uid);
 
     try {
+      /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
       batch
-
-        /// Bax付与履歴に追加
         ..set(baxDocRef, bax.toJson())
-
-        /// UserにBaxを付与
         ..set(userDocRef, User(uid: uid, totalBax: totalBax).toJson());
       await batch.commit();
     } on Exception catch (e) {
