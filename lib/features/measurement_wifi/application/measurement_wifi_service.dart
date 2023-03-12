@@ -9,6 +9,7 @@ import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
+import '../../user/data/user_repository.dart';
 import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/wifi_measurement_result.dart';
@@ -47,7 +48,7 @@ class MeasurementWifiService {
     );
 
     final measurementWifiRepository = ref.watch(measurementWifiRepositoryProvider);
-    final baxRepository = ref.watch(baxRepositoryProvider);
+    final userRepository = ref.watch(userRepositoryProvider);
     try {
       // 計測結果を追加する
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
@@ -60,7 +61,7 @@ class MeasurementWifiService {
       );
 
       /// BAX付与する
-      await baxRepository.giveBax(uid, bax);
+      await userRepository.giveBax(uid, bax);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
