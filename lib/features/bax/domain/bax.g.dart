@@ -22,5 +22,5 @@ Map<String, dynamic> _$$_BaxToJson(_$_Bax instance) => <String, dynamic>{
       'createdAt': unionTimestampConverter.toJson(instance.createdAt),
       'uid': instance.uid,
       'bonusRate': instance.bonusRate,
-      'baxReasons': instance.baxReasons,
+      'baxReasons': instance.baxReasons.map((e) => e.toJson()).toList(),
     };
