@@ -156,7 +156,8 @@ class __$$_BaxCopyWithImpl<$Res> extends _$BaxCopyWithImpl<$Res, _$_Bax>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Bax extends _Bax {
   const _$_Bax(
       {@unionTimestampConverter

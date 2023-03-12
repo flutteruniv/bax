@@ -8,6 +8,7 @@ part 'bax.g.dart';
 
 @freezed
 class Bax with _$Bax {
+  @JsonSerializable(explicitToJson: true)
   const factory Bax({
     /// 作成日
     @unionTimestampConverter @Default(UnionTimestamp.serverTimestamp()) UnionTimestamp createdAt,
