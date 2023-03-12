@@ -10,7 +10,7 @@ class User with _$User {
     required String uid,
 
     /// BAXの合計値
-    required double totalBax,
+    required double baxPoint,
   }) = _User;
 
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);

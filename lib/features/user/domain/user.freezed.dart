@@ -24,7 +24,7 @@ mixin _$User {
   String get uid => throw _privateConstructorUsedError;
 
   /// BAXの合計値
-  double get totalBax => throw _privateConstructorUsedError;
+  double get baxPoint => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +36,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String uid, double totalBax});
+  $Res call({String uid, double baxPoint});
 }
 
 /// @nodoc
@@ -53,16 +53,16 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? uid = null,
-    Object? totalBax = null,
+    Object? baxPoint = null,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      totalBax: null == totalBax
-          ? _value.totalBax
-          : totalBax // ignore: cast_nullable_to_non_nullable
+      baxPoint: null == baxPoint
+          ? _value.baxPoint
+          : baxPoint // ignore: cast_nullable_to_non_nullable
               as double,
     ) as $Val);
   }
@@ -74,7 +74,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uid, double totalBax});
+  $Res call({String uid, double baxPoint});
 }
 
 /// @nodoc
@@ -87,16 +87,16 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @override
   $Res call({
     Object? uid = null,
-    Object? totalBax = null,
+    Object? baxPoint = null,
   }) {
     return _then(_$_User(
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      totalBax: null == totalBax
-          ? _value.totalBax
-          : totalBax // ignore: cast_nullable_to_non_nullable
+      baxPoint: null == baxPoint
+          ? _value.baxPoint
+          : baxPoint // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
@@ -105,7 +105,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 /// @nodoc
 @JsonSerializable()
 class _$_User implements _User {
-  const _$_User({required this.uid, required this.totalBax});
+  const _$_User({required this.uid, required this.baxPoint});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -115,11 +115,11 @@ class _$_User implements _User {
 
   /// BAXの合計値
   @override
-  final double totalBax;
+  final double baxPoint;
 
   @override
   String toString() {
-    return 'User(uid: $uid, totalBax: $totalBax)';
+    return 'User(uid: $uid, baxPoint: $baxPoint)';
   }
 
   @override
@@ -128,13 +128,13 @@ class _$_User implements _User {
         (other.runtimeType == runtimeType &&
             other is _$_User &&
             (identical(other.uid, uid) || other.uid == uid) &&
-            (identical(other.totalBax, totalBax) ||
-                other.totalBax == totalBax));
+            (identical(other.baxPoint, baxPoint) ||
+                other.baxPoint == baxPoint));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, totalBax);
+  int get hashCode => Object.hash(runtimeType, uid, baxPoint);
 
   @JsonKey(ignore: true)
   @override
@@ -152,7 +152,7 @@ class _$_User implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String uid, required final double totalBax}) = _$_User;
+      {required final String uid, required final double baxPoint}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -163,7 +163,7 @@ abstract class _User implements User {
   @override
 
   /// BAXの合計値
-  double get totalBax;
+  double get baxPoint;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;

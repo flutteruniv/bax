@@ -36,7 +36,7 @@ class UserRepository {
       },
     );
     final snapshot = await query.get();
-    return snapshot.data()?.totalBax ?? 0.0;
+    return snapshot.data()?.baxPoint ?? 0.0;
   }
 
   /// BAXを付与する
@@ -54,7 +54,7 @@ class UserRepository {
       /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
       batch
         ..set(baxDocRef, bax.toJson())
-        ..set(userDocRef, User(uid: uid, totalBax: totalBaxPoint).toJson());
+        ..set(userDocRef, User(uid: uid, baxPoint: totalBaxPoint).toJson());
       await batch.commit();
     } on Exception catch (e) {
       logger.e(e);
