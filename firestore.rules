@@ -9,6 +9,14 @@ service cloud.firestore {
       && request.time <= (result.terminalTime + duration.time(0, 1, 0, 0));
     }
 
+    // user
+    match /user/{id} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if false;
+    }
+
     // facility
     match /facility/{id} {
       allow read: if true;
