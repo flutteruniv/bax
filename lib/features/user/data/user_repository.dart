@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
 import '../../bax/domain/bax.dart';
-import '../domain/user.dart';
 
 final userRepositoryProvider = Provider(
   (ref) => UserRepository(
@@ -20,28 +19,13 @@ class UserRepository {
   final FirebaseFirestore firestore;
 
   static const userCollectionName = 'user';
-  static const userFieldUid = 'uid';
+  static const userFieldTotalBax = 'totalBax';
 
   static const baxCollectionName = 'bax';
 
-  /// 現在のBaxを取得する
-  Future<double> fetchBaxPoint(String uid) async {
-    final query = firestore.collection(userCollectionName).doc(uid).withConverter<User>(
-      fromFirestore: (snapshot, options) {
-        final json = snapshot.data();
-        return User.fromJson(json!);
-      },
-      toFirestore: (snapshot, options) {
-        return snapshot.toJson();
-      },
-    );
-    final snapshot = await query.get();
-    return snapshot.data()?.baxPoint ?? 0.0;
-  }
-
   /// BAXを付与する
-  Future<void> giveBax(String uid, Bax bax, double currentBaxPoint) async {
-    var totalBaxPoint = currentBaxPoint;
+  Future<void> giveBax(String uid, Bax bax) async {
+    var totalBaxPoint = 0.0;
     for (final baxReason in bax.baxReasons) {
       totalBaxPoint += baxReason.point * bax.bonusRate;
     }
@@ -54,7 +38,7 @@ class UserRepository {
       /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
       batch
         ..set(baxDocRef, bax.toJson())
-        ..set(userDocRef, User(uid: uid, baxPoint: totalBaxPoint).toJson());
+        ..update(userDocRef, {userFieldTotalBax: FieldValue.increment(totalBaxPoint)});
       await batch.commit();
     } on Exception catch (e) {
       logger.e(e);

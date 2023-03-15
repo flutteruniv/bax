@@ -59,11 +59,8 @@ class MeasurementWifiService {
         baxReasons: [BaxReasons.measurementWifi],
       );
 
-      /// 現在のBaxPointを取得する
-      final currentBaxPoint = await userRepository.fetchBaxPoint(uid);
-
       /// BAX付与する
-      await userRepository.giveBax(uid, bax, currentBaxPoint);
+      await userRepository.giveBax(uid, bax);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
