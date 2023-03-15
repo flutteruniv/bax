@@ -9,6 +9,14 @@ service cloud.firestore {
       && request.time <= (result.terminalTime + duration.time(0, 1, 0, 0));
     }
 
+    // user
+    match /user/{id} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if false;
+    }
+
     // facility
     match /facility/{id} {
       allow read: if true;
@@ -26,6 +34,14 @@ service cloud.firestore {
     match /wifiMeasurementResult/{id} {
       allow read: if true;
       allow create: if validMeasurementTime(request.resource.data);  // TODO: 課金したUserだけ許可する
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // bax
+    match /bax/{id} {
+      allow read: if false;
+      allow create: if true;
       allow update: if false;
       allow delete: if false;
     }
