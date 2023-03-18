@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
 import '../../bax/domain/bax.dart';
+import '../domain/user.dart';
 
 final userRepositoryProvider = Provider(
   (ref) => UserRepository(
@@ -22,6 +23,21 @@ class UserRepository {
   static const userFieldTotalBax = 'totalBax';
 
   static const baxCollectionName = 'bax';
+
+  /// User情報を取得する
+  Future<User?> getUser(String uid) async {
+    final query = firestore.collection(userCollectionName).doc(uid).withConverter<User>(
+      fromFirestore: (snapshot, options) {
+        final json = snapshot.data();
+        return User.fromJson(json!);
+      },
+      toFirestore: (snapshot, options) {
+        return snapshot.toJson();
+      },
+    );
+    final snapshot = await query.get();
+    return snapshot.data();
+  }
 
   /// BAXを付与する
   Future<void> giveBax(String uid, Bax bax) async {
