@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common_widgets/bax_indicator.dart';
 import '../application/bax_service.dart';
@@ -24,8 +25,11 @@ class _BaxHistoryPageState extends ConsumerState<BaxHistoryPage> {
             itemCount: baxHistories.length,
             itemBuilder: (context, index) {
               final baxHistory = baxHistories[index];
+              final dateTime = baxHistory.createdAt.dateTime;
+              final createdAt = dateTime != null ? DateFormat('yyyy-MM-dd').format(dateTime) : '不明';
               return ListTile(
                 title: Text('付与ポイント: ${baxHistory.totalPoint}bax'),
+                subtitle: Text('付与日: $createdAt'),
               );
             },
           );
