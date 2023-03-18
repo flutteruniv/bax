@@ -23,9 +23,9 @@ class _BaxHistoryPageState extends ConsumerState<BaxHistoryPage> {
           return ListView.builder(
             itemCount: baxHistories.length,
             itemBuilder: (context, index) {
-              final history = baxHistories[index];
-              ListTile(
-                title: Text('付与ポイント: '),
+              final baxHistory = baxHistories[index];
+              return ListTile(
+                title: Text('付与ポイント: ${baxHistory.totalPoint}bax'),
               );
             },
           );

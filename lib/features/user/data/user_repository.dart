@@ -42,11 +42,6 @@ class UserRepository {
 
   /// BAXを付与する
   Future<void> giveBax(String uid, Bax bax) async {
-    var totalBaxPoint = 0.0;
-    for (final baxReason in bax.baxReasons) {
-      totalBaxPoint += baxReason.point * bax.bonusRate;
-    }
-
     final batch = firestore.batch();
     final baxDocRef = firestore.collection(baxCollectionName).doc();
     final userDocRef = firestore.collection(userCollectionName).doc(uid);
@@ -55,9 +50,9 @@ class UserRepository {
       /// UserにBax付与
       final userDocSnapshot = await userDocRef.get();
       if (userDocSnapshot.exists) {
-        batch.update(userDocRef, {userFieldBaxPoint: FieldValue.increment(totalBaxPoint)});
+        batch.update(userDocRef, {userFieldBaxPoint: FieldValue.increment(bax.totalPoint)});
       } else {
-        batch.set(userDocRef, User(uid: uid, baxPoint: totalBaxPoint).toJson());
+        batch.set(userDocRef, User(uid: uid, baxPoint: bax.totalPoint).toJson());
       }
 
       /// Bax付与履歴への追加

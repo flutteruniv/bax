@@ -31,4 +31,12 @@ class Bax with _$Bax {
   const Bax._();
 
   factory Bax.fromJson(Map<String, dynamic> json) => _$BaxFromJson(json);
+
+  double get totalPoint {
+    var totalBaxPoint = 0.0;
+    for (final baxReason in baxReasons) {
+      totalBaxPoint += baxReason.point * bonusRate;
+    }
+    return totalBaxPoint;
+  }
 }
