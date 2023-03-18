@@ -27,9 +27,27 @@ class _BaxHistoryPageState extends ConsumerState<BaxHistoryPage> {
               final baxHistory = baxHistories[index];
               final dateTime = baxHistory.createdAt.dateTime;
               final createdAt = dateTime != null ? DateFormat('yyyy-MM-dd').format(dateTime) : '不明';
-              return ListTile(
-                title: Text('付与ポイント: ${baxHistory.totalPoint}bax'),
-                subtitle: Text('付与日: $createdAt'),
+              return Column(
+                children: [
+                  baxHistory.totalPoint > 0
+                      ? ListTile(
+                          title: Text(
+                            '+${baxHistory.totalPoint}bax',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          subtitle: Text('付与日: $createdAt'),
+                        )
+                      : ListTile(
+                          title: Text(
+                            '${baxHistory.totalPoint}bax',
+                            style: const TextStyle(color: Colors.blue),
+                          ),
+                          subtitle: Text('利用日: $createdAt'),
+                        ),
+                  const Divider(
+                    height: 1,
+                  ),
+                ],
               );
             },
           );
