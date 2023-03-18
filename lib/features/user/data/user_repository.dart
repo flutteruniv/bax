@@ -21,7 +21,7 @@ class UserRepository {
 
   static const userCollectionName = 'user';
   static const userFieldUid = 'uid';
-  static const userFieldTotalBax = 'totalBax';
+  static const userFieldBaxPoint = 'baxPoint';
 
   static const baxCollectionName = 'bax';
 
@@ -55,7 +55,7 @@ class UserRepository {
       /// UserにBax付与
       final userDocSnapshot = await userDocRef.get();
       if (userDocSnapshot.exists) {
-        batch.update(userDocRef, {userFieldTotalBax: FieldValue.increment(totalBaxPoint)});
+        batch.update(userDocRef, {userFieldBaxPoint: FieldValue.increment(totalBaxPoint)});
       } else {
         batch.set(userDocRef, User(uid: uid, baxPoint: totalBaxPoint).toJson());
       }
