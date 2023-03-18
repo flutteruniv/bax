@@ -27,6 +27,6 @@ class BaxService {
       return [];
     }
     final baxRepository = ref.watch(baxRepositoryProvider);
-    return baxRepository.getBaxHistory(uid);
+    return baxRepository.getBaxHistories(uid);
   }
 }
