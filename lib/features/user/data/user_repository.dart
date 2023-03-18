@@ -27,13 +27,16 @@ class UserRepository {
 
   /// User情報を取得する
   Future<User?> getUser(String uid) async {
-    final query = firestore.collection(userCollectionName).doc(uid).withConverter<User>(
+    final query = firestore.collection(userCollectionName).doc(uid).withConverter<User?>(
       fromFirestore: (snapshot, options) {
         final json = snapshot.data();
-        return User.fromJson(json!);
+        if (json == null) {
+          return null;
+        }
+        return User.fromJson(json);
       },
       toFirestore: (snapshot, options) {
-        return snapshot.toJson();
+        return snapshot!.toJson();
       },
     );
     final snapshot = await query.get();
