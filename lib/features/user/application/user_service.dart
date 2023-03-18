@@ -4,7 +4,7 @@ import '../../authentication/data/firebase_auth.dart';
 import '../data/user_repository.dart';
 import '../domain/user.dart';
 
-final currentUserProvider = FutureProvider(
+final currentUserProvider = FutureProvider.autoDispose(
   (ref) async {
     return ref.watch(userServiceProvider).getUser();
   },
