@@ -221,7 +221,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
               onPressed: () {
                 context.go(FacilityMapPage.route + MyPage.route);
               },
-              child: const Icon(Icons.settings),
+              child: const Icon(Icons.person),
             ),
           ],
         ),
