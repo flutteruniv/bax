@@ -20,6 +20,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
+  /// 作成日
+  @unionTimestampConverter
+  UnionTimestamp get createdAt => throw _privateConstructorUsedError;
+
   /// FirebaseAuthのuid
   String get uid => throw _privateConstructorUsedError;
 
@@ -36,7 +40,12 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String uid, double baxPoint});
+  $Res call(
+      {@unionTimestampConverter UnionTimestamp createdAt,
+      String uid,
+      double baxPoint});
+
+  $UnionTimestampCopyWith<$Res> get createdAt;
 }
 
 /// @nodoc
@@ -52,10 +61,15 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? createdAt = null,
     Object? uid = null,
     Object? baxPoint = null,
   }) {
     return _then(_value.copyWith(
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as UnionTimestamp,
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -66,6 +80,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
               as double,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UnionTimestampCopyWith<$Res> get createdAt {
+    return $UnionTimestampCopyWith<$Res>(_value.createdAt, (value) {
+      return _then(_value.copyWith(createdAt: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -74,7 +96,13 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uid, double baxPoint});
+  $Res call(
+      {@unionTimestampConverter UnionTimestamp createdAt,
+      String uid,
+      double baxPoint});
+
+  @override
+  $UnionTimestampCopyWith<$Res> get createdAt;
 }
 
 /// @nodoc
@@ -86,10 +114,15 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? createdAt = null,
     Object? uid = null,
     Object? baxPoint = null,
   }) {
     return _then(_$_User(
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as UnionTimestamp,
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
@@ -105,9 +138,19 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 /// @nodoc
 @JsonSerializable()
 class _$_User implements _User {
-  const _$_User({required this.uid, required this.baxPoint});
+  const _$_User(
+      {@unionTimestampConverter
+          this.createdAt = const UnionTimestamp.serverTimestamp(),
+      required this.uid,
+      required this.baxPoint});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
+
+  /// 作成日
+  @override
+  @JsonKey()
+  @unionTimestampConverter
+  final UnionTimestamp createdAt;
 
   /// FirebaseAuthのuid
   @override
@@ -119,7 +162,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(uid: $uid, baxPoint: $baxPoint)';
+    return 'User(createdAt: $createdAt, uid: $uid, baxPoint: $baxPoint)';
   }
 
   @override
@@ -127,6 +170,8 @@ class _$_User implements _User {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_User &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.baxPoint, baxPoint) ||
                 other.baxPoint == baxPoint));
@@ -134,7 +179,7 @@ class _$_User implements _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, baxPoint);
+  int get hashCode => Object.hash(runtimeType, createdAt, uid, baxPoint);
 
   @JsonKey(ignore: true)
   @override
@@ -152,10 +197,17 @@ class _$_User implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String uid, required final double baxPoint}) = _$_User;
+      {@unionTimestampConverter final UnionTimestamp createdAt,
+      required final String uid,
+      required final double baxPoint}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
+  @override
+
+  /// 作成日
+  @unionTimestampConverter
+  UnionTimestamp get createdAt;
   @override
 
   /// FirebaseAuthのuid

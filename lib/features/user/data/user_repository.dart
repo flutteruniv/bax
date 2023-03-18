@@ -57,10 +57,7 @@ class UserRepository {
       if (userDocSnapshot.exists) {
         batch.update(userDocRef, {userFieldTotalBax: FieldValue.increment(totalBaxPoint)});
       } else {
-        batch.set(userDocRef, {
-          userFieldUid: uid,
-          userFieldTotalBax: totalBaxPoint,
-        });
+        batch.set(userDocRef, User(uid: uid, baxPoint: totalBaxPoint).toJson());
       }
 
       /// Bax付与履歴への追加
