@@ -20,6 +20,7 @@ class UserRepository {
   final FirebaseFirestore firestore;
 
   static const userCollectionName = 'user';
+  static const userFieldUid = 'uid';
   static const userFieldTotalBax = 'totalBax';
 
   static const baxCollectionName = 'bax';
@@ -51,10 +52,19 @@ class UserRepository {
     final userDocRef = firestore.collection(userCollectionName).doc(uid);
 
     try {
-      /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
-      batch
-        ..set(baxDocRef, bax.toJson())
-        ..update(userDocRef, {userFieldTotalBax: FieldValue.increment(totalBaxPoint)});
+      /// UserにBax付与
+      final userDocSnapshot = await userDocRef.get();
+      if (userDocSnapshot.exists) {
+        batch.update(userDocRef, {userFieldTotalBax: FieldValue.increment(totalBaxPoint)});
+      } else {
+        batch.set(userDocRef, {
+          userFieldUid: uid,
+          userFieldTotalBax: totalBaxPoint,
+        });
+      }
+
+      /// Bax付与履歴への追加
+      batch.set(baxDocRef, bax.toJson());
       await batch.commit();
     } on Exception catch (e) {
       logger.e(e);
