@@ -8,12 +8,6 @@ part 'user.g.dart';
 @freezed
 class User with _$User {
   const factory User({
-    /// 作成日
-    @unionTimestampConverter @Default(UnionTimestamp.serverTimestamp()) UnionTimestamp createdAt,
-
-    /// FirebaseAuthのuid
-    required String uid,
-
     /// BAXの合計値
     required double baxPoint,
   }) = _User;

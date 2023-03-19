@@ -23,24 +23,59 @@ class _MyPageState extends ConsumerState<MyPage> {
       appBar: AppBar(title: const Text('マイページ')),
       body: ref.watch(currentUserProvider).when(
         data: (user) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              children: [
-                ListTile(
-                  title: const Text('Bax履歴'),
-                  subtitle: user != null ? Text('残り: ${user.baxPoint}bax') : const Text('Baxが付与されておりません'),
-                  tileColor: Colors.white,
-                  onTap: user != null
-                      ? () {
-                          context.go('${FacilityMapPage.route}${MyPage.route}/${BaxHistoryPage.route}');
-                        }
-                      : null,
-                ),
-                const Divider(
-                  height: _dividerHeight,
-                ),
-              ],
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                children: [
+                  const SizedBox(height: 80),
+                  const Icon(
+                    Icons.account_circle,
+                    size: 80,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      context.go('${FacilityMapPage.route}${MyPage.route}/${BaxHistoryPage.route}');
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('合計獲得BAX'),
+                            Text(
+                              '${user?.baxPoint}',
+                              style: const TextStyle(
+                                fontSize: 50,
+                                height: 1.1,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Row(
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Icon(
+                                  Icons.navigate_next,
+                                  size: 40,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

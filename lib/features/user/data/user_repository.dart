@@ -55,7 +55,7 @@ class UserRepository {
         ..set(baxDocRef, bax.toJson())
         ..set(
           userDocRef,
-          {userFieldTotalBax: FieldValue.increment(totalBaxPoint)},
+          {userFieldBaxPoint: FieldValue.increment(bax.totalPoint)},
           SetOptions(merge: true),
         );
       await batch.commit();
