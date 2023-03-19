@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/http.dart';
-import '../../../configs/logger.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
@@ -37,12 +36,32 @@ class MapRepository {
     return _predictionResultController.stream;
   }
 
-  Future<void> searchFacilities(String word, String localeLanguage) async {
+  /// Reference: https://developers.google.com/maps/documentation/places/web-service/autocomplete?hl=ja
+  Future<void> searchFacilities(
+    String word,
+    String localeLanguage, {
+    GeoPoint? geoPoint,
+  }) async {
+    final queryParameters = {
+      'input': word,
+      'key': googleMapAPIKey,
+      'language': localeLanguage,
+    };
+
+    if (geoPoint != null) {
+      queryParameters.addAll(
+        {
+          'location': '${geoPoint.latitude} ${geoPoint.longitude}',
+          'radius': '500',
+        },
+      );
+    }
+
     await httpGet(
       uri: Uri.https(
         'maps.googleapis.com',
         '/maps/api/place/autocomplete/json',
-        {'input': word, 'types': 'lodging', 'key': googleMapAPIKey, 'language': localeLanguage},
+        queryParameters,
       ),
       responseBuilder: (data) {
         final results = FacilityPredictionResults.fromJson(data);
@@ -59,11 +78,14 @@ class MapRepository {
         '/maps/api/place/nearbysearch/json',
         {
           'location': '${geoPoint.latitude} ${geoPoint.longitude}',
-          'radius': '100',
+          // 'radius': '50',
           // TODO(kenta-wakasa): 多言語対応のとき注意
           'language': 'ja',
           // TODO(kenta-wakasa): typeで絞り込みをかけたいが OR 検索ができない問題
           'key': googleMapAPIKey,
+
+          'rankby': 'distance',
+          'opennow': 'true',
         },
       ),
       responseBuilder: (data) {

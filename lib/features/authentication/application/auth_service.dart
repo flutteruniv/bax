@@ -22,6 +22,8 @@ final authStateChangesProvider = StreamProvider((ref) {
   return firebaseAuth.authStateChanges();
 });
 
+final uidProvider = Provider((ref) => ref.watch(authStateChangesProvider).whenData((value) => value?.uid));
+
 /// メール送信が完了済であるかどうかのフラグを返すStreamProvider
 final isSentEmailStreamProvider = StreamProvider.autoDispose((ref) {
   return ref.watch(authServiceProvider).isSentEmailStream();

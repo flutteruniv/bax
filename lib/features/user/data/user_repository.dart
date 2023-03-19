@@ -50,16 +50,14 @@ class UserRepository {
     final userDocRef = firestore.collection(userCollectionName).doc(uid);
 
     try {
-      /// UserにBax付与
-      final userDocSnapshot = await userDocRef.get();
-      if (userDocSnapshot.exists) {
-        batch.update(userDocRef, {userFieldBaxPoint: FieldValue.increment(bax.totalPoint)});
-      } else {
-        batch.set(userDocRef, User(uid: uid, baxPoint: bax.totalPoint).toJson());
-      }
-
-      /// Bax付与履歴への追加
-      batch.set(baxDocRef, bax.toJson());
+      /// Bax付与履歴への追加とUserへのBax付与をBatch処理で行う
+      batch
+        ..set(baxDocRef, bax.toJson())
+        ..set(
+          userDocRef,
+          {userFieldTotalBax: FieldValue.increment(totalBaxPoint)},
+          SetOptions(merge: true),
+        );
       await batch.commit();
     } on Exception catch (e) {
       logger.e(e);

@@ -73,7 +73,7 @@ class Facility with _$Facility {
   double get markerColor {
     if (downloadSpeed < 30) {
       return BitmapDescriptor.hueRed;
-    } else if (downloadSpeed > 100) {
+    } else if (downloadSpeed < 100) {
       return BitmapDescriptor.hueGreen;
     } else {
       return BitmapDescriptor.hueBlue;

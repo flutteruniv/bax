@@ -23,14 +23,18 @@ class MeasurementWifiService {
   final Ref ref;
 
   /// wifiの測定結果を投稿する
-  Future<void> postMeasurementResult(
+  ///
+  /// 投稿にした場合はBAXをreturnする
+  ///
+  /// returnしたBAXはユーザーへのフィードバックに使用する
+  Future<Bax?> postMeasurementResult(
     String ssid,
     FastNetResult fastNetResult,
     NearbySearchResult nearbySearchResult,
   ) async {
     final uid = ref.watch(firebaseAuthProvider).currentUser?.uid;
     if (uid == null) {
-      return;
+      return null;
     }
     final wifiMeasurementResult = WifiMeasurementResult(
       ssid: ssid,
@@ -84,14 +88,17 @@ class MeasurementWifiService {
             averageDownloadSpeed,
             averageUploadSpeed,
           );
+      return bax;
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {
         /// TODO: 同じ施設に対して、一日に一度の投稿しかできない旨を伝える
         // TODO(kenta-wakasa): そもそも一度測定していたら投稿できないようにしたい
         logger.w('同じ施設に対して、一日に一度の投稿しかできません');
       }
-    } on Exception catch (_) {
-      /// TODO: 予期せぬエラーが起きた旨を伝える
+    } on Exception catch (e) {
+      logger.e(e);
+      rethrow;
     }
+    return null;
   }
 }
