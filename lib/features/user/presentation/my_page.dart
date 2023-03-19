@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../common_widgets/bax_indicator.dart';
+import '../../bax/presentation/bax_history_page.dart';
+import '../../map/presentation/facility_map_page.dart';
 import '../application/user_service.dart';
 
 class MyPage extends ConsumerStatefulWidget {
@@ -30,7 +33,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   tileColor: Colors.white,
                   onTap: user != null
                       ? () {
-                          /// TODO 履歴に遷移
+                          context.go('${FacilityMapPage.route}${MyPage.route}/${BaxHistoryPage.route}');
                         }
                       : null,
                 ),
