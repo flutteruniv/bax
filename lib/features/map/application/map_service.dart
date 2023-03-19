@@ -35,7 +35,9 @@ final myNearbyFacilityProvider = FutureProvider.autoDispose(
             position.longitude,
           ),
         );
-    return NearbySearchResults(results: res.results.where((element) => !element.types.contains('locality')).toList());
+    return NearbySearchResults(
+      results: res.results.where((element) => !element.types.contains('locality')).toList(),
+    );
   },
   dependencies: [
     initLocationProvider,
@@ -59,6 +61,8 @@ class MapService {
 
   Future<void> searchFacilities(String query, String localeLanguage) async {
     _holdQuery = query;
+
+    final location = await ref.read(initLocationProvider.future);
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
     Future.delayed(const Duration(milliseconds: 600), () {
       if (_holdQuery == query) {
@@ -66,7 +70,16 @@ class MapService {
         /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
 
         logger.i('検索Query: $query');
-        return ref.watch(mapRepositoryProvider).searchFacilities(query, localeLanguage);
+        return ref.watch(mapRepositoryProvider).searchFacilities(
+              query,
+              localeLanguage,
+              geoPoint: location == null
+                  ? null
+                  : GeoPoint(
+                      location.latitude,
+                      location.longitude,
+                    ),
+            );
       }
     });
   }

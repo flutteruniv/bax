@@ -23,13 +23,35 @@ class MeasurementWifiRepository {
   static const wifiMeasurementResultFieldPlaceId = 'placeId';
   static const wifiMeasurementResultFieldCreatedAt = 'createdAt';
 
+  String buildDocId({
+    required DateTime today,
+    required String uid,
+    required String placeId,
+  }) {
+    final formattedToday = DateFormat('yyyy-MM-dd').format(today);
+    return '$formattedToday-$uid-$placeId';
+  }
+
+  /// 本日のドキュメントが存在しているかどうかを取得する
+  ///
+  /// 施設への投稿は1日に1度しかできない
+  Future<bool> hasTodayData({
+    required String placeId,
+    required DateTime today,
+    required String uid,
+  }) async {
+    final docId = buildDocId(today: today.toUtc(), uid: uid, placeId: placeId);
+    final docRef = firestore.collection(wifiMeasurementResultCollectionName).doc(docId);
+    final ds = await docRef.get();
+    return !ds.exists;
+  }
+
   Future<void> addWifiMeasurementResult(WifiMeasurementResult result) async {
     final terminalDateTime = result.terminalTime.dateTime;
     if (terminalDateTime == null) {
       return;
     }
-    final today = DateFormat('yyyy-MM-dd').format(terminalDateTime);
-    final docId = '$today-${result.uid}-${result.placeId}';
+    final docId = buildDocId(today: terminalDateTime, uid: result.uid, placeId: result.placeId);
     final docRef = firestore.collection(wifiMeasurementResultCollectionName).doc(docId);
     try {
       await docRef.set(

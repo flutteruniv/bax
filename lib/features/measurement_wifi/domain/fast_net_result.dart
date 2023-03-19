@@ -50,4 +50,15 @@ class FastNetResult with _$FastNetResult {
 
     return uploadSpeedValue / 1000;
   }
+
+  // ダウンロード速度速度に応じて3段階評価
+  int get rank {
+    if (downloadSpeedMbps < 30) {
+      return 1;
+    } else if (downloadSpeedMbps < 100) {
+      return 2;
+    } else {
+      return 3;
+    }
+  }
 }

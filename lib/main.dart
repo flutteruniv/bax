@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'configs/preferences.dart';
 import 'configs/router.dart';
@@ -12,7 +10,6 @@ import 'features/load/application/loading_notifier.dart';
 import 'features/load/application/navigator_key.dart';
 import 'features/load/application/scaffold_manager_key.dart';
 import 'features/load/presentation/loading_page.dart';
-import 'features/location/domain/my_location.dart';
 import 'features/payment/repository/payment_repository.dart';
 import 'features/update/application/update_notifier.dart';
 import 'features/update/presentation/widgets/update_dialog.dart';
@@ -21,24 +18,24 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    ProviderScope(
+    const ProviderScope(
       overrides: [
         /// デバッグモードでビルド中は決められたポジションを現在位置とする
-        if (kDebugMode)
-          initLocationProvider.overrideWith(
-            (ref) => const Position(
-              latitude: 35.6590938,
-              longitude: 139.7482786,
-              timestamp: null,
-              accuracy: 0,
-              altitude: 0,
-              heading: 0,
-              speed: 0,
-              speedAccuracy: 0,
-            ),
-          ),
+        // if (kDebugMode)
+        //   initLocationProvider.overrideWith(
+        //     (ref) => const Position(
+        //       latitude: 35.6590938,
+        //       longitude: 139.7482786,
+        //       timestamp: null,
+        //       accuracy: 0,
+        //       altitude: 0,
+        //       heading: 0,
+        //       speed: 0,
+        //       speedAccuracy: 0,
+        //     ),
+        //   ),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }

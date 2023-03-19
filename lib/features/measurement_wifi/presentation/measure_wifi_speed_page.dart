@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../map/application/map_service.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../../map/domain/nearby_search_results/nearby_search_results.dart';
-import '../application/measurement_wifi_service.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
 import '../domain/wifi_scanner.dart';
@@ -89,16 +88,20 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
         // TODO(kenta-wakasa): 測定はしたいけど投稿はしたくないというタイミングがあるかもなので
         /// ダイアログ表示の中に投稿ボタンを作った方がいいかもしれない。
-        ref.read(measurementWifiServiceProvider).postMeasurementResult(
-              ssid,
-              fastNetResult,
-              nearbySearchResult,
-            );
+        // ref.read(measurementWifiServiceProvider).postMeasurementResult(
+        //       ssid,
+        //       fastNetResult,
+        //       nearbySearchResult,
+        //     );
 
         showDialog<void>(
           context: context,
           builder: (context) {
-            return WiFiResultDialog(fastNetResult: fastNetResult);
+            return WiFiResultDialog(
+              ssid: ssid,
+              fastNetResult: fastNetResult,
+              nearbySearchResult: nearbySearchResult,
+            );
           },
         );
       },
