@@ -23,24 +23,27 @@ final mapRepositoryProvider = Provider(
 );
 
 /// [GeoPoint]を引数として与え、近くの施設を検索して結果を返す[FutureProvider]
-final nearbyFacilityProvider = FutureProvider.autoDispose.family((ref, GeoPoint geoPoint) async {
-  final res = await ref.watch(mapRepositoryProvider).fetchNearByFacility(geoPoint);
+final nearbyFacilityProvider = StreamProvider.autoDispose.family((ref, GeoPoint geoPoint) async* {
+  final mapRepository = ref.read(mapRepositoryProvider);
+  final res = await mapRepository.fetchNearByFacility(geoPoint);
 
   if (res.nextPageToken == null) {
-    return res;
+    yield res;
   }
-  final nextPageRes = await ref.read(mapRepositoryProvider).fetchNearByFacility(
-        geoPoint,
-        nextPageToken: res.nextPageToken,
-      );
+  await Future<void>.delayed(const Duration(seconds: 1));
+  final nextPageRes = await mapRepository.fetchNearByFacility(
+    geoPoint,
+    nextPageToken: res.nextPageToken,
+  );
   if (nextPageRes.nextPageToken == null) {
-    return nextPageRes.copyWith(results: [...res.results, ...nextPageRes.results]);
+    yield nextPageRes.copyWith(results: [...res.results, ...nextPageRes.results]);
   }
-  final finalPageRes = await ref.read(mapRepositoryProvider).fetchNearByFacility(
-        geoPoint,
-        nextPageToken: nextPageRes.nextPageToken,
-      );
-  return finalPageRes.copyWith(
+  await Future<void>.delayed(const Duration(seconds: 1));
+  final finalPageRes = await mapRepository.fetchNearByFacility(
+    geoPoint,
+    nextPageToken: nextPageRes.nextPageToken,
+  );
+  yield finalPageRes.copyWith(
     results: [
       ...res.results,
       ...nextPageRes.results,
