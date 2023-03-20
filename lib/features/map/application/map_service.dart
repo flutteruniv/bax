@@ -21,25 +21,23 @@ final mapServiceProvider = Provider((ref) {
   return MapService(ref);
 });
 
-/// 自分の現在位置の近くの施設を検索して結果を返す[FutureProvider]
-final myNearbyFacilityProvider = FutureProvider.autoDispose(
-  (ref) async {
-    final position = await ref.read(initLocationProvider.future);
+/// 自分の現在位置の近くの施設を検索して結果を返す。
+final myNearbyFacilityProvider = Provider.autoDispose(
+  (ref) {
+    final position = ref.watch(initLocationProvider).valueOrNull;
     if (position == null) {
       return null;
     }
-    final res = await ref.read(
-      nearbyFacilityProvider(
-        GeoPoint(
-          position.latitude,
-          position.longitude,
-        ),
-      ).future,
-    );
-
-    return res.copyWith(
-      results: res.results.where((element) => !element.types.contains('locality')).toList(),
-    );
+    return ref
+        .watch(
+          nearbyFacilityProvider(
+            GeoPoint(
+              position.latitude,
+              position.longitude,
+            ),
+          ),
+        )
+        .valueOrNull;
   },
   dependencies: [
     initLocationProvider,

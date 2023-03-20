@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/nearby_search_results/nearby_search_results.dart';
+import '../application/map_service.dart';
 
-class NearbySearchResultsDialog extends StatelessWidget {
+class NearbySearchResultsDialog extends ConsumerWidget {
   const NearbySearchResultsDialog({
     super.key,
-    required this.nearbySearchResults,
   });
 
-  final NearbySearchResults nearbySearchResults;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return AlertDialog(
       title: const Center(child: Text('近くの施設')),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: nearbySearchResults.results.map((e) {
+          children: (nearbySearchResults?.results ?? []).map((e) {
             return Card(
               elevation: 1,
               child: InkWell(

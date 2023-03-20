@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,15 +28,13 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   StreamSubscription<FastNetResult>? sub;
 
   NearbySearchResults? nearbySearchResults;
-  NearbySearchResult? nearbySearchResult;
+  NearbySearchResult? get nearbySearchResult {
+    return selectedNearbySearchResult ?? nearbySearchResults?.results.firstOrNull;
+  }
+
+  NearbySearchResult? selectedNearbySearchResult;
 
   bool isProcessing = false;
-
-  Future<void> fetchNearByFacility() async {
-    nearbySearchResults = await ref.read(myNearbyFacilityProvider.future);
-    nearbySearchResult = nearbySearchResults!.results.first;
-    setState(() {});
-  }
 
   Future<void> selectFacility() async {
     final nearbySearchResults = this.nearbySearchResults;
@@ -45,13 +44,13 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
     final res = await showDialog<NearbySearchResult>(
       context: context,
       builder: (context) {
-        return NearbySearchResultsDialog(nearbySearchResults: nearbySearchResults);
+        return const NearbySearchResultsDialog();
       },
     );
     if (res == null) {
       return;
     }
-    nearbySearchResult = res;
+    selectedNearbySearchResult = res;
     setState(() {});
   }
 
@@ -86,14 +85,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
           return;
         }
 
-        // TODO(kenta-wakasa): 測定はしたいけど投稿はしたくないというタイミングがあるかもなので
-        /// ダイアログ表示の中に投稿ボタンを作った方がいいかもしれない。
-        // ref.read(measurementWifiServiceProvider).postMeasurementResult(
-        //       ssid,
-        //       fastNetResult,
-        //       nearbySearchResult,
-        //     );
-
         showDialog<void>(
           barrierDismissible: false,
           context: context,
@@ -117,12 +108,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    fetchNearByFacility();
-  }
-
-  @override
   void dispose() {
     sub?.cancel();
     super.dispose();
@@ -130,6 +115,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(

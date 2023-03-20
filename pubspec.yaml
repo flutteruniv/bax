@@ -40,6 +40,7 @@ dependencies:
   geoflutterfire_plus: ^0.0.3
   purchases_flutter: ^4.10.4
   flutter_riverpod: ^2.3.1
+  collection: ^1.17.0
 
 dev_dependencies:
   flutter_test:
