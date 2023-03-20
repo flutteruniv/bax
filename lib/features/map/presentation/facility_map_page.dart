@@ -27,7 +27,7 @@ class FacilityMapPage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _FacilityMapPageState();
 }
 
-class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
+class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsBindingObserver {
   final mapControllerCompleter = Completer<GoogleMapController>();
 
   final searchTextEditingController = TextEditingController();
@@ -48,7 +48,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   }
 
   Future<void> fetchLocationDataAndMoveCamera() async {
-    position = await ref.read(initLocationProvider.future);
+    final position = await ref.refresh(initLocationProvider.future);
     final mapController = await mapControllerCompleter.future;
     final latitude = position?.latitude;
     final longitude = position?.longitude;
@@ -59,7 +59,16 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (AppLifecycleState.resumed == state) {
+      fetchLocationDataAndMoveCamera();
+    }
+  }
+
+  @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     searchTextEditingController.addListener(() {
       setState(() {});
     });
@@ -69,11 +78,11 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
       await ref.watch(authServiceProvider).authenticateEmail(dynamicLinkData.link.toString());
     });
-    super.initState();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     searchTextEditingController.dispose();
     mapControllerCompleter.future.then((value) => value.dispose());
     focusNode.dispose();
