@@ -21,6 +21,7 @@ NearbySearchResults _$NearbySearchResultsFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$NearbySearchResults {
   List<NearbySearchResult> get results => throw _privateConstructorUsedError;
+  @JsonKey(name: 'next_page_token')
   String? get nextPageToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +36,9 @@ abstract class $NearbySearchResultsCopyWith<$Res> {
           NearbySearchResults value, $Res Function(NearbySearchResults) then) =
       _$NearbySearchResultsCopyWithImpl<$Res, NearbySearchResults>;
   @useResult
-  $Res call({List<NearbySearchResult> results, String? nextPageToken});
+  $Res call(
+      {List<NearbySearchResult> results,
+      @JsonKey(name: 'next_page_token') String? nextPageToken});
 }
 
 /// @nodoc
@@ -75,7 +78,9 @@ abstract class _$$_NearbySearchResultsCopyWith<$Res>
       __$$_NearbySearchResultsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<NearbySearchResult> results, String? nextPageToken});
+  $Res call(
+      {List<NearbySearchResult> results,
+      @JsonKey(name: 'next_page_token') String? nextPageToken});
 }
 
 /// @nodoc
@@ -110,7 +115,7 @@ class __$$_NearbySearchResultsCopyWithImpl<$Res>
 class _$_NearbySearchResults implements _NearbySearchResults {
   const _$_NearbySearchResults(
       {required final List<NearbySearchResult> results,
-      required this.nextPageToken})
+      @JsonKey(name: 'next_page_token') required this.nextPageToken})
       : _results = results;
 
   factory _$_NearbySearchResults.fromJson(Map<String, dynamic> json) =>
@@ -125,6 +130,7 @@ class _$_NearbySearchResults implements _NearbySearchResults {
   }
 
   @override
+  @JsonKey(name: 'next_page_token')
   final String? nextPageToken;
 
   @override
@@ -165,7 +171,8 @@ class _$_NearbySearchResults implements _NearbySearchResults {
 abstract class _NearbySearchResults implements NearbySearchResults {
   const factory _NearbySearchResults(
       {required final List<NearbySearchResult> results,
-      required final String? nextPageToken}) = _$_NearbySearchResults;
+      @JsonKey(name: 'next_page_token')
+          required final String? nextPageToken}) = _$_NearbySearchResults;
 
   factory _NearbySearchResults.fromJson(Map<String, dynamic> json) =
       _$_NearbySearchResults.fromJson;
@@ -173,6 +180,7 @@ abstract class _NearbySearchResults implements NearbySearchResults {
   @override
   List<NearbySearchResult> get results;
   @override
+  @JsonKey(name: 'next_page_token')
   String? get nextPageToken;
   @override
   @JsonKey(ignore: true)

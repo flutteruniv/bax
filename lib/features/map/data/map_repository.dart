@@ -29,11 +29,24 @@ final nearbyFacilityProvider = FutureProvider.autoDispose.family((ref, GeoPoint 
   if (res.nextPageToken == null) {
     return res;
   }
-  final nexPageRes = await ref.watch(mapRepositoryProvider).fetchNearByFacility(
+  final nextPageRes = await ref.read(mapRepositoryProvider).fetchNearByFacility(
         geoPoint,
         nextPageToken: res.nextPageToken,
       );
-  return nexPageRes.copyWith(results: [...res.results, ...nexPageRes.results]);
+  if (nextPageRes.nextPageToken == null) {
+    return nextPageRes.copyWith(results: [...res.results, ...nextPageRes.results]);
+  }
+  final finalPageRes = await ref.read(mapRepositoryProvider).fetchNearByFacility(
+        geoPoint,
+        nextPageToken: nextPageRes.nextPageToken,
+      );
+  return finalPageRes.copyWith(
+    results: [
+      ...res.results,
+      ...nextPageRes.results,
+      ...finalPageRes.results,
+    ],
+  );
 });
 
 class MapRepository {
@@ -93,12 +106,11 @@ class MapRepository {
           // 'radius': '50',
           // TODO(kenta-wakasa): 多言語対応のとき注意
           'language': 'ja',
-          // TODO(kenta-wakasa): typeで絞り込みをかけたいが OR 検索ができない問題
           'key': googleMapAPIKey,
 
           'rankby': 'distance',
-          'opennow': 'true',
-          if (nextPageToken != null) 'next_page_token': nextPageToken,
+          // 'opennow': 'true',
+          if (nextPageToken != null) 'pagetoken': nextPageToken,
         },
       ),
       responseBuilder: (data) {

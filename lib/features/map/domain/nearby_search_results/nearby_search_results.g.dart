@@ -12,12 +12,12 @@ _$_NearbySearchResults _$$_NearbySearchResultsFromJson(
       results: (json['results'] as List<dynamic>)
           .map((e) => NearbySearchResult.fromJson(e as Map<String, dynamic>))
           .toList(),
-      nextPageToken: json['nextPageToken'] as String?,
+      nextPageToken: json['next_page_token'] as String?,
     );
 
 Map<String, dynamic> _$$_NearbySearchResultsToJson(
         _$_NearbySearchResults instance) =>
     <String, dynamic>{
       'results': instance.results,
-      'nextPageToken': instance.nextPageToken,
+      'next_page_token': instance.nextPageToken,
     };

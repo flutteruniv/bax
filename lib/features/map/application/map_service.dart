@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../../configs/logger.dart';
 import '../../facility/data/facility_repository.dart';
+import '../../facility/domain/facility.dart';
 import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
-import '../domain/selected_location_info.dart';
 
 /// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]
 final selectedLocationInfoStreamProvider = StreamProvider(
@@ -28,7 +28,7 @@ final myNearbyFacilityProvider = FutureProvider.autoDispose(
     if (position == null) {
       return null;
     }
-    final res = await ref.watch(
+    final res = await ref.read(
       nearbyFacilityProvider(
         GeoPoint(
           position.latitude,
@@ -55,9 +55,9 @@ class MapService {
   /// 保留中の検索文字列
   String? _holdQuery;
 
-  final _selectedLocationInfoController = StreamController<SelectedLocationInfo>();
+  final _selectedLocationInfoController = StreamController<Facility>();
 
-  Stream<SelectedLocationInfo> selectedLocationInfoStream() {
+  Stream<Facility> selectedLocationInfoStream() {
     return _selectedLocationInfoController.stream;
   }
 
@@ -85,29 +85,31 @@ class MapService {
     }
   }
 
-  Future<void> geocoding(String facilityId, String name) async {
+  Future<void> geocoding(String facilityId, String name, String address) async {
     final facility = await ref.watch(facilityRepositoryProvider).fetchFacility(facilityId);
     if (facility != null) {
-      _selectedLocationInfoController.add(
-        SelectedLocationInfo(
-          facilityId: facilityId,
-          name: name,
-          latLng: LatLng(facility.geo.latitude, facility.geo.longitude),
-          hasMeasurementResult: true,
-        ),
-      );
+      _selectedLocationInfoController.add(facility);
       return;
     }
 
     /// Firestoreに該当のデータがない場合はApiから取得する
     final location = await ref.watch(mapRepositoryProvider).geocoding(facilityId);
-    _selectedLocationInfoController.add(
-      SelectedLocationInfo(
-        facilityId: facilityId,
-        name: name,
-        latLng: LatLng(location.latitude, location.longitude),
-        hasMeasurementResult: false,
+    final newFacility = Facility(
+      id: facilityId,
+      name: name,
+      geo: GeoFirePoint(
+        location.latitude,
+        location.longitude,
       ),
+      address: address,
+      downloadSpeed: 0,
+      uploadSpeed: 0,
+      docRef: ref.read(facilityRepositoryProvider).facilityCollectionReference.doc(facilityId),
     );
+    _selectedLocationInfoController.add(
+      newFacility,
+    );
+    // TODO(kenta-wakasa): firestoreに保存もしてしまう
+    await newFacility.docRef.set(newFacility);
   }
 }

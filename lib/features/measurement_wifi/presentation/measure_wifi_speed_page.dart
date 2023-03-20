@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../bax/domain/bax.dart';
-import '../../bax/domain/bax_reasons.dart';
-import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/application/map_service.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../../map/domain/nearby_search_results/nearby_search_results.dart';
@@ -148,10 +145,12 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    nearbySearchResult?.name ?? '',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  child: nearbySearchResult == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Text(
+                          nearbySearchResult?.name ?? '',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                 ),
                 OutlinedButton(
                   onPressed: selectFacility,
@@ -185,17 +184,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                           ],
                         )
                       : ElevatedButton(
-                          onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const BaxRewordDialog(
-                                  bax: Bax(uid: 'uid', baxReasons: [BaxReasons.findingNewWiFi]),
-                                );
-                              },
-                            );
-                            // await startSpeedTest();
-                          },
+                          onPressed: startSpeedTest,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [

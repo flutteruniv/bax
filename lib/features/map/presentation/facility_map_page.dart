@@ -108,37 +108,41 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     );
 
     ref.listen(selectedLocationInfoStreamProvider, (previous, next) async {
-      final locationInfo = next.value;
-      if (locationInfo == null) {
+      final facility = next.value;
+      if (facility == null) {
         return;
       }
+      final latlng = LatLng(facility.geo.latitude, facility.geo.longitude);
 
       final mapController = await mapControllerCompleter.future;
 
       // マップの中心位置を移動する
       await mapController.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: locationInfo.latLng, zoom: 16),
+          CameraPosition(
+            target: latlng,
+            zoom: 16,
+          ),
         ),
       );
       // 検索クリアー
       searchTextEditingController.text = '';
       primaryFocus?.unfocus();
 
-      if (!locationInfo.hasMeasurementResult) {
+      if (facility.downloadSpeed == 0) {
         // 未測定の場合はMarkerがないので未測定Markerを設置する
         final marker = Marker(
-          markerId: MarkerId(locationInfo.facilityId),
-          position: locationInfo.latLng,
+          markerId: MarkerId(facility.id),
+          position: latlng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          infoWindow: InfoWindow(title: locationInfo.name, snippet: 'Wifiダウンロード速度: 未測定'),
+          infoWindow: InfoWindow(title: facility.name, snippet: 'Wifiダウンロード速度: 未測定'),
         );
         markers.add(marker);
       }
 
       // 追加したMarkerが描画されるのを一瞬待ってからMarkerInfoを表示する
       Future.delayed(const Duration(milliseconds: 100), () async {
-        await mapController.showMarkerInfoWindow(MarkerId(locationInfo.facilityId));
+        await mapController.showMarkerInfoWindow(MarkerId(facility.id));
       });
     });
 

@@ -26,11 +26,11 @@ class FacilityRepository {
   });
 
   Stream<List<QueryDocumentSnapshot<Facility>>> facilitiesStream() {
-    return _facilityCollectionReference.snapshots().map((event) => event.docs);
+    return facilityCollectionReference.where('downloadSpeed', isNotEqualTo: 0).snapshots().map((event) => event.docs);
   }
 
   Future<Facility?> fetchFacility(String facilityId) async {
-    final query = _facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
+    final query = facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
     final snapshot = await query.get();
 
     if (snapshot.docs.isEmpty) {
@@ -45,7 +45,7 @@ class FacilityRepository {
   static const facilityCollectionName = 'facility';
   static const facilityFieldId = 'id';
 
-  CollectionReference<Facility> get _facilityCollectionReference =>
+  CollectionReference<Facility> get facilityCollectionReference =>
       firestore.collection(facilityCollectionName).withConverter<Facility>(
         fromFirestore: (snapshot, options) {
           final json = snapshot.data();

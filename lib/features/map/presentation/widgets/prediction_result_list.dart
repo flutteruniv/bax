@@ -1,8 +1,8 @@
-import 'package:bax/features/map/application/map_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common_widgets/bax_indicator.dart';
+import '../../application/map_service.dart';
 import '../../data/map_repository.dart';
 
 class PredicationResultList extends ConsumerWidget {
@@ -26,9 +26,11 @@ class PredicationResultList extends ConsumerWidget {
                   title: Text(predictionResult.resultFormatting.name),
                   subtitle: Text(predictionResult.resultFormatting.address),
                   onTap: () async {
-                    await ref
-                        .read(mapServiceProvider)
-                        .geocoding(predictionResult.placeId, predictionResult.resultFormatting.name);
+                    await ref.read(mapServiceProvider).geocoding(
+                          predictionResult.placeId,
+                          predictionResult.resultFormatting.name,
+                          predictionResult.resultFormatting.address,
+                        );
                   },
                 );
               },
