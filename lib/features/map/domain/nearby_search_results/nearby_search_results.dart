@@ -9,6 +9,7 @@ part 'nearby_search_results.g.dart';
 class NearbySearchResults with _$NearbySearchResults {
   const factory NearbySearchResults({
     required List<NearbySearchResult> results,
+    required String? nextPageToken,
   }) = _NearbySearchResults;
 
   factory NearbySearchResults.fromJson(Map<String, dynamic> json) => _$NearbySearchResultsFromJson(json);

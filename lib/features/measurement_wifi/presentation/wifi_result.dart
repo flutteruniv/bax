@@ -222,8 +222,17 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
           SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (canPostResult)
+              children: const [
+                SizedBox(height: 16),
+              ],
+            ),
+          ),
+          if (canPostResult)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   SizedBox(
                     width: 240,
                     height: 40,
@@ -254,20 +263,32 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
                       label: const Text('この結果を投稿する'),
                     ),
                   ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: 240,
-                  height: 40,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.share),
-                    onPressed: share,
-                    label: const Text('結果を共有'),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 240,
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      ),
+                      onPressed: Navigator.of(context).pop,
+                      child: const Text('またあとで'),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
+                  const SizedBox(height: 80),
+                  SizedBox(
+                    width: 240,
+                    height: 40,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.share),
+                      onPressed: share,
+                      label: const Text('結果を共有'),
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );

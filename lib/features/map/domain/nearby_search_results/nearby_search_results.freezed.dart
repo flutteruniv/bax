@@ -21,6 +21,7 @@ NearbySearchResults _$NearbySearchResultsFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$NearbySearchResults {
   List<NearbySearchResult> get results => throw _privateConstructorUsedError;
+  String? get nextPageToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ abstract class $NearbySearchResultsCopyWith<$Res> {
           NearbySearchResults value, $Res Function(NearbySearchResults) then) =
       _$NearbySearchResultsCopyWithImpl<$Res, NearbySearchResults>;
   @useResult
-  $Res call({List<NearbySearchResult> results});
+  $Res call({List<NearbySearchResult> results, String? nextPageToken});
 }
 
 /// @nodoc
@@ -51,12 +52,17 @@ class _$NearbySearchResultsCopyWithImpl<$Res, $Val extends NearbySearchResults>
   @override
   $Res call({
     Object? results = null,
+    Object? nextPageToken = freezed,
   }) {
     return _then(_value.copyWith(
       results: null == results
           ? _value.results
           : results // ignore: cast_nullable_to_non_nullable
               as List<NearbySearchResult>,
+      nextPageToken: freezed == nextPageToken
+          ? _value.nextPageToken
+          : nextPageToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -69,7 +75,7 @@ abstract class _$$_NearbySearchResultsCopyWith<$Res>
       __$$_NearbySearchResultsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<NearbySearchResult> results});
+  $Res call({List<NearbySearchResult> results, String? nextPageToken});
 }
 
 /// @nodoc
@@ -84,12 +90,17 @@ class __$$_NearbySearchResultsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? results = null,
+    Object? nextPageToken = freezed,
   }) {
     return _then(_$_NearbySearchResults(
       results: null == results
           ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as List<NearbySearchResult>,
+      nextPageToken: freezed == nextPageToken
+          ? _value.nextPageToken
+          : nextPageToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -98,7 +109,8 @@ class __$$_NearbySearchResultsCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_NearbySearchResults implements _NearbySearchResults {
   const _$_NearbySearchResults(
-      {required final List<NearbySearchResult> results})
+      {required final List<NearbySearchResult> results,
+      required this.nextPageToken})
       : _results = results;
 
   factory _$_NearbySearchResults.fromJson(Map<String, dynamic> json) =>
@@ -113,8 +125,11 @@ class _$_NearbySearchResults implements _NearbySearchResults {
   }
 
   @override
+  final String? nextPageToken;
+
+  @override
   String toString() {
-    return 'NearbySearchResults(results: $results)';
+    return 'NearbySearchResults(results: $results, nextPageToken: $nextPageToken)';
   }
 
   @override
@@ -122,13 +137,15 @@ class _$_NearbySearchResults implements _NearbySearchResults {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_NearbySearchResults &&
-            const DeepCollectionEquality().equals(other._results, _results));
+            const DeepCollectionEquality().equals(other._results, _results) &&
+            (identical(other.nextPageToken, nextPageToken) ||
+                other.nextPageToken == nextPageToken));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_results));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_results), nextPageToken);
 
   @JsonKey(ignore: true)
   @override
@@ -147,14 +164,16 @@ class _$_NearbySearchResults implements _NearbySearchResults {
 
 abstract class _NearbySearchResults implements NearbySearchResults {
   const factory _NearbySearchResults(
-          {required final List<NearbySearchResult> results}) =
-      _$_NearbySearchResults;
+      {required final List<NearbySearchResult> results,
+      required final String? nextPageToken}) = _$_NearbySearchResults;
 
   factory _NearbySearchResults.fromJson(Map<String, dynamic> json) =
       _$_NearbySearchResults.fromJson;
 
   @override
   List<NearbySearchResult> get results;
+  @override
+  String? get nextPageToken;
   @override
   @JsonKey(ignore: true)
   _$$_NearbySearchResultsCopyWith<_$_NearbySearchResults> get copyWith =>

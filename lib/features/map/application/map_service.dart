@@ -8,7 +8,6 @@ import '../../../configs/logger.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
-import '../domain/nearby_search_results/nearby_search_results.dart';
 import '../domain/selected_location_info.dart';
 
 /// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]
@@ -29,13 +28,16 @@ final myNearbyFacilityProvider = FutureProvider.autoDispose(
     if (position == null) {
       return null;
     }
-    final res = await ref.watch(mapRepositoryProvider).fetchNearByFacility(
-          GeoPoint(
-            position.latitude,
-            position.longitude,
-          ),
-        );
-    return NearbySearchResults(
+    final res = await ref.watch(
+      nearbyFacilityProvider(
+        GeoPoint(
+          position.latitude,
+          position.longitude,
+        ),
+      ).future,
+    );
+
+    return res.copyWith(
       results: res.results.where((element) => !element.types.contains('locality')).toList(),
     );
   },
@@ -64,24 +66,23 @@ class MapService {
 
     final location = await ref.read(initLocationProvider.future);
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
-    Future.delayed(const Duration(milliseconds: 600), () {
-      if (_holdQuery == query) {
-        // TODO: Validationチェック。
-        /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    if (_holdQuery == query) {
+      // TODO: Validationチェック。
+      /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
 
-        logger.i('検索Query: $query');
-        return ref.watch(mapRepositoryProvider).searchFacilities(
-              query,
-              localeLanguage,
-              geoPoint: location == null
-                  ? null
-                  : GeoPoint(
-                      location.latitude,
-                      location.longitude,
-                    ),
-            );
-      }
-    });
+      logger.i('検索Query: $query');
+      return ref.watch(mapRepositoryProvider).searchFacilities(
+            query,
+            localeLanguage,
+            geoPoint: location == null
+                ? null
+                : GeoPoint(
+                    location.latitude,
+                    location.longitude,
+                  ),
+          );
+    }
   }
 
   Future<void> geocoding(String facilityId, String name) async {

@@ -26,24 +26,45 @@ class _BaxRewordDialogState extends ConsumerState<BaxRewordDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ...widget.bax.baxReasons.map((e) => Text(e.text)),
-                // const SizedBox(
-                //   width: 16,
-                // ),
-                //           Container(
-                //             alignment: Alignment.bottomCenter,
-                //             width: 240,
-                //             height: 40,
-                //             child: Padding(
-                //               padding: const EdgeInsets.only(bottom: 16),
-                //               child: ElevatedButton.icon(
-                //                 icon: const Icon(Icons.share),
-                //                 // onPressed: share,
-                //                 onPressed: (){},
-                //                 label: const Text('結果をシェア'),
-                //               ),
-                //             ),
-                //           ),
+                ...widget.bax.baxReasons.map(
+                  (e) => Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          e.text,
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${e.point}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        '合計',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '${widget.bax.totalPoint}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

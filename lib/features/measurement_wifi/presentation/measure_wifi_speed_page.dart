@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../bax/domain/bax.dart';
+import '../../bax/domain/bax_reasons.dart';
+import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/application/map_service.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../../map/domain/nearby_search_results/nearby_search_results.dart';
+import '../../map/presentation/nearby_search_results_dialog.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
 import '../domain/wifi_scanner.dart';
-import 'nearby_search_results_dialog.dart';
 import 'wifi_result.dart';
 
 class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
@@ -95,6 +98,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         //     );
 
         showDialog<void>(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return WiFiResultDialog(
@@ -182,7 +186,15 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                         )
                       : ElevatedButton(
                           onPressed: () async {
-                            await startSpeedTest();
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const BaxRewordDialog(
+                                  bax: Bax(uid: 'uid', baxReasons: [BaxReasons.findingNewWiFi]),
+                                );
+                              },
+                            );
+                            // await startSpeedTest();
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

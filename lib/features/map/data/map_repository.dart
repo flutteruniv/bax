@@ -23,8 +23,17 @@ final mapRepositoryProvider = Provider(
 );
 
 /// [GeoPoint]を引数として与え、近くの施設を検索して結果を返す[FutureProvider]
-final nearbyFacilityProvider = FutureProvider.autoDispose.family((ref, GeoPoint geoPoint) {
-  return ref.watch(mapRepositoryProvider).fetchNearByFacility(geoPoint);
+final nearbyFacilityProvider = FutureProvider.autoDispose.family((ref, GeoPoint geoPoint) async {
+  final res = await ref.watch(mapRepositoryProvider).fetchNearByFacility(geoPoint);
+
+  if (res.nextPageToken == null) {
+    return res;
+  }
+  final nexPageRes = await ref.watch(mapRepositoryProvider).fetchNearByFacility(
+        geoPoint,
+        nextPageToken: res.nextPageToken,
+      );
+  return nexPageRes.copyWith(results: [...res.results, ...nexPageRes.results]);
 });
 
 class MapRepository {
@@ -71,7 +80,10 @@ class MapRepository {
   }
 
   /// APIReference：https://developers.google.com/maps/documentation/places/web-service/search-nearby
-  Future<NearbySearchResults> fetchNearByFacility(GeoPoint geoPoint) async {
+  Future<NearbySearchResults> fetchNearByFacility(
+    GeoPoint geoPoint, {
+    String? nextPageToken,
+  }) async {
     return httpGet<NearbySearchResults>(
       uri: Uri.https(
         'maps.googleapis.com',
@@ -86,6 +98,7 @@ class MapRepository {
 
           'rankby': 'distance',
           'opennow': 'true',
+          if (nextPageToken != null) 'next_page_token': nextPageToken,
         },
       ),
       responseBuilder: (data) {

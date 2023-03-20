@@ -19,22 +19,6 @@ void main() async {
   await Firebase.initializeApp();
   runApp(
     const ProviderScope(
-      overrides: [
-        /// デバッグモードでビルド中は決められたポジションを現在位置とする
-        // if (kDebugMode)
-        //   initLocationProvider.overrideWith(
-        //     (ref) => const Position(
-        //       latitude: 35.6590938,
-        //       longitude: 139.7482786,
-        //       timestamp: null,
-        //       accuracy: 0,
-        //       altitude: 0,
-        //       heading: 0,
-        //       speed: 0,
-        //       speedAccuracy: 0,
-        //     ),
-        //   ),
-      ],
       child: MyApp(),
     ),
   );
