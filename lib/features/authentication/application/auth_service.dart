@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/environment.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/preferences.dart';
 import '../../../configs/validators.dart';
@@ -45,10 +46,10 @@ class AuthService {
 
   final actionCodeSettings = ActionCodeSettings(
     // メールに埋め込むディープリンク。端末にアプリがインストールされていない場合にこのURLにリダイレクトされる
-    url: 'https://com.flutteruniv.bax.dev', // TODO: 適切なURLを設定する
+    url: isDevEnvironment() ? 'https://com.flutteruniv.bax.dev' : 'https://com.flutteruniv.bax', // TODO: 適切なURLを設定する
     handleCodeInApp: true, // リンクがモバイルで開かれる場合はtrueを指定
-    iOSBundleId: 'com.flutteruniv.bax.dev',
-    androidPackageName: 'com.flutteruniv.bax.dev',
+    iOSBundleId: isDevEnvironment() ? 'com.flutteruniv.bax.dev' : 'com.flutteruniv.bax',
+    androidPackageName: isDevEnvironment() ? 'com.flutteruniv.bax.dev' : 'com.flutteruniv.bax',
     // アプリのインストールを自動的に促すかどうか
     androidInstallApp: true,
     androidMinimumVersion: '5.1',
