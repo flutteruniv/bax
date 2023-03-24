@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="flutterunivbaxdev.page.link"
+                    android:host="${BuildConfig.FLUTTER_UNIV_BAX_HOST_NAME}"
                     android:scheme="https"/>
             </intent-filter>
         </activity>
