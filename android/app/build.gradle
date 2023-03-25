@@ -82,7 +82,9 @@ android {
         // ここでアプリ名を変更できます。
         resValue "string", "app_name", "BAX" + 
             (dartEnvironmentVariables.FLAVOR == 'prod' ? '' : ".${dartEnvironmentVariables.FLAVOR}")
-
+        manifestPlaceholders = [ 
+            baxHost: (dartEnvironmentVariables.FLAVOR != 'prod') ? 'flutterunivbaxdev.page.link' : 'flutterunivbax.page.link',
+        ]
     }
 
     signingConfigs {
@@ -97,12 +99,8 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "FLUTTER_UNIV_BAX_HOST_NAME", "\"flutterunivbaxdev.page.link\"")
-        }
         release {
             signingConfig signingConfigs.release
-            buildConfigField("String", "FLUTTER_UNIV_BAX_HOST_NAME", "\"flutterunivbax.page.link\"")
         }
     }
 }
