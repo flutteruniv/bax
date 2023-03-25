@@ -46,7 +46,7 @@ class AuthService {
 
   final actionCodeSettings = ActionCodeSettings(
     // メールに埋め込むディープリンク。端末にアプリがインストールされていない場合にこのURLにリダイレクトされる
-    url: isDevEnvironment() ? 'https://com.flutteruniv.bax.dev' : 'https://com.flutteruniv.bax', // TODO: 適切なURLを設定する
+    url: 'https://bax.network',
     handleCodeInApp: true, // リンクがモバイルで開かれる場合はtrueを指定
     iOSBundleId: isDevEnvironment() ? 'com.flutteruniv.bax.dev' : 'com.flutteruniv.bax',
     androidPackageName: isDevEnvironment() ? 'com.flutteruniv.bax.dev' : 'com.flutteruniv.bax',
