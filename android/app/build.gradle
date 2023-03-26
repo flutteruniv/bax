@@ -82,7 +82,9 @@ android {
         // ここでアプリ名を変更できます。
         resValue "string", "app_name", "BAX" + 
             (dartEnvironmentVariables.FLAVOR == 'prod' ? '' : ".${dartEnvironmentVariables.FLAVOR}")
-
+        manifestPlaceholders = [ 
+            baxHost: (dartEnvironmentVariables.FLAVOR != 'prod') ? 'flutterunivbaxdev.page.link' : 'flutterunivbax.page.link',
+        ]
     }
 
     signingConfigs {
@@ -98,8 +100,6 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
         }
     }

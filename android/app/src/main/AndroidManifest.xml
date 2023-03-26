@@ -11,7 +11,6 @@
 
    <application
         android:label="@string/app_name"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY" 
               android:value="@string/google_maps_key"
@@ -42,7 +41,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                    android:host="flutterunivbaxdev.page.link"
+                    android:host="${baxHost}"
                     android:scheme="https"/>
             </intent-filter>
         </activity>
