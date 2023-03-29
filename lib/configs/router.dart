@@ -35,6 +35,7 @@ final routerProvider = Provider(
               builder: (context, state) => const MeasureWiFiSpeedPage(),
             ),
             GoRoute(
+              name: EmailAuthenticationPage.name,
               path: EmailAuthenticationPage.route,
               builder: (context, state) => const EmailAuthenticationPage(),
             ),

@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/firebase.dart';
 import '../../../configs/logger.dart';
+import '../../authentication/application/auth_service.dart';
 import '../../bax/domain/bax.dart';
 import '../domain/user.dart';
 
 final userRepositoryProvider = Provider(
   (ref) => UserRepository(
+    ref: ref,
     firestore: ref.watch(firebaseFirestoreProvider),
   ),
 );
@@ -19,9 +21,11 @@ final userProvider = StreamProvider.family((ref, String uid) {
 class UserRepository {
   UserRepository({
     required this.firestore,
+    required this.ref,
   });
 
   final FirebaseFirestore firestore;
+  final Ref ref;
 
   static const userCollectionName = 'user';
   static const userFieldUid = 'uid';
@@ -46,7 +50,11 @@ class UserRepository {
   }
 
   /// BAXを付与する
-  Future<void> giveBax(String uid, Bax bax) async {
+  Future<void> giveBax(Bax bax) async {
+    final uid = ref.read(uidProvider).valueOrNull;
+    if (uid == null) {
+      return;
+    }
     final batch = firestore.batch();
     final baxDocRef = firestore.collection(baxCollectionName).doc();
     final userDocRef = firestore.collection(userCollectionName).doc(uid);

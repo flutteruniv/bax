@@ -75,8 +75,9 @@ class FlutterFastNet {
   ) async {
     try {
       final res = await controller.evaluateJavascript(
-        source: _source,
-      ) as Map;
+            source: _source,
+          ) as Map? ??
+          {};
 
       return FastNetResult.fromJson(
         Map<String, dynamic>.from(res),

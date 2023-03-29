@@ -64,7 +64,7 @@ class MeasurementWifiService {
       );
 
       /// BAX付与する
-      await userRepository.giveBax(uid, bax);
+      await userRepository.giveBax(bax);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);

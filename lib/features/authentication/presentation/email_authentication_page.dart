@@ -8,6 +8,7 @@ class EmailAuthenticationPage extends ConsumerStatefulWidget {
   const EmailAuthenticationPage({super.key});
 
   static const route = 'email_authentication';
+  static const name = 'emailAuthentication';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _EmailAuthenticationState();
@@ -31,7 +32,7 @@ class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
               child: Column(
                 children: [
                   const Text(
-                    '本人確認のため、メールアドレスの認証をお願いします',
+                    '本人確認のため、メールアドレスの連携をお願いします',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
@@ -49,7 +50,7 @@ class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
                       await ref.read(authServiceProvider).sendEmail(_email);
                     },
                     child: const Text(
-                      '認証',
+                      '連携',
                       style: TextStyle(
                         fontSize: 14,
                       ),

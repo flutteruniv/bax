@@ -18,6 +18,7 @@ final defaultTheme = ThemeData(
 final baxTheme = defaultTheme.copyWith(
   appBarTheme: const AppBarTheme(
     elevation: 0,
+    centerTitle: true,
     backgroundColor: Colors.transparent,
     foregroundColor: Colors.black,
     titleTextStyle: TextStyle(

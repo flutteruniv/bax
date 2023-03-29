@@ -14,4 +14,10 @@ class BaxReasons {
     text: '新Wi-Fiスポット発見',
     point: 50,
   );
+
+  /// Amazonギフト券交換
+  static const redeemForAmazonGiftCard = BaxReason(
+    text: 'Amazonギフト券交換',
+    point: -500,
+  );
 }
