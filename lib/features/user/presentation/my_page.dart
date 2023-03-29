@@ -49,7 +49,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                           children: [
                             const Text('合計獲得BAX'),
                             Text(
-                              '${user?.baxPoint}',
+                              '${user?.baxPoint ?? 0.0}',
                               style: const TextStyle(
                                 fontSize: 50,
                                 height: 1.1,

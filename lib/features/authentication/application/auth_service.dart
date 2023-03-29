@@ -26,7 +26,7 @@ final authStateChangesProvider = StreamProvider((ref) {
 final uidProvider = Provider((ref) => ref.watch(authStateChangesProvider).whenData((value) => value?.uid));
 
 /// メール送信が完了済であるかどうかのフラグを返すStreamProvider
-final isSentEmailStreamProvider = StreamProvider.autoDispose((ref) {
+final isSentEmailStreamProvider = StreamProvider((ref) {
   return ref.watch(authServiceProvider).isSentEmailStream();
 });
 

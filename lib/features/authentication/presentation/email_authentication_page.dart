@@ -36,6 +36,7 @@ class _EmailAuthenticationState extends ConsumerState<EmailAuthenticationPage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    autofocus: true,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration.collapsed(hintText: 'メールアドレスを入力してください').copyWith(
                       icon: const Icon(Icons.mail),
