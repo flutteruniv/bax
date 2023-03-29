@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../common_widgets/bax_indicator.dart';
+import '../../authentication/application/auth_service.dart';
 import '../../bax/presentation/bax_history_page.dart';
 import '../../map/presentation/facility_map_page.dart';
 import '../application/user_service.dart';
@@ -20,7 +21,40 @@ class _MyPageState extends ConsumerState<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('マイページ')),
+      appBar: AppBar(
+        title: const Text('マイページ'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: const Text('ログアウトしますか？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('しない'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          await ref.read(authServiceProvider).logout();
+                          context.go('/WelComePage');
+                        },
+                        child: const Text('する'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
+      ),
       body: ref.watch(currentUserProvider).when(
         data: (user) {
           return SingleChildScrollView(

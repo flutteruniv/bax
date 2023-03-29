@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/authentication/application/auth_service.dart';
 import '../features/authentication/presentation/email_authentication_page.dart';
+import '../features/authentication/presentation/sign_in_page.dart';
 import '../features/authentication/presentation/welcome_page.dart';
 import '../features/bax/presentation/bax_history_page.dart';
 import '../features/map/presentation/facility_map_page.dart';
@@ -14,6 +15,10 @@ final routerProvider = Provider(
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
     return GoRouter(
       redirect: (context, state) {
+        if (state.location == SignInPage.route) {
+          return SignInPage.route;
+        }
+
         /// 認証済みでなければ[WelcomePage]を表示する
         if (isAuthenticated == false) {
           return WelComePage.route;
@@ -48,6 +53,10 @@ final routerProvider = Provider(
         GoRoute(
           path: WelComePage.route,
           builder: (context, state) => const WelComePage(),
+        ),
+        GoRoute(
+          path: SignInPage.route,
+          builder: (context, state) => const SignInPage(),
         ),
       ],
     );

@@ -63,6 +63,10 @@ class AuthService {
     ref.read(snackBarServiceProvider).showSnackBar('ログインしました');
   }
 
+  Future<void> logout() async {
+    await ref.read(firebaseAuthProvider).signOut();
+  }
+
   /// 指定のアドレスに認証メールを送る
   Future<void> sendEmail(String email) async {
     final isValidEmail = ref.watch(validatorsProvider).validEmail(email);
@@ -89,15 +93,41 @@ class AuthService {
   }
 
   /// アノニマスでログインしている現在のアカウントと、メールアドレスを紐付けさせる
-  Future<void> authenticateEmail(String emailLink) async {
+  Future<void> linkWithCredentialByEmailLink(String emailLink) async {
     final pref = ref.watch(preferencesProvider);
     final authCredential = EmailAuthProvider.credentialWithLink(
       email: pref.getEmail(),
       emailLink: emailLink,
     );
-
     try {
       await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
+      await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
+      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
+    } on FirebaseAuthException catch (e) {
+      logger.e('メール認証エラー: $e');
+      switch (e.code) {
+        case 'provider-already-linked':
+          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に認証済です');
+          break;
+        case 'email-already-in-use':
+          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に他のアカウントで使用されています');
+          break;
+        default:
+          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
+          break;
+      }
+    }
+  }
+
+  /// メールアドレスでログイン
+  Future<void> signWithCredentialByEmailLink(String emailLink) async {
+    final pref = ref.watch(preferencesProvider);
+    final authCredential = EmailAuthProvider.credentialWithLink(
+      email: pref.getEmail(),
+      emailLink: emailLink,
+    );
+    try {
+      await ref.watch(firebaseAuthProvider).signInWithCredential(authCredential);
       await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
       ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
     } on FirebaseAuthException catch (e) {

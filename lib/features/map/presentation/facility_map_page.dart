@@ -65,6 +65,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     }
   }
 
+  StreamSubscription? sub;
+
   @override
   void initState() {
     super.initState();
@@ -75,8 +77,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     fetchLocationDataAndMoveCamera();
 
     // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
-    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
-      await ref.watch(authServiceProvider).authenticateEmail(dynamicLinkData.link.toString());
+    sub = FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+      await ref.watch(authServiceProvider).linkWithCredentialByEmailLink(dynamicLinkData.link.toString());
     });
   }
 
@@ -86,6 +88,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     searchTextEditingController.dispose();
     mapControllerCompleter.future.then((value) => value.dispose());
     focusNode.dispose();
+    sub?.cancel();
     super.dispose();
   }
 
