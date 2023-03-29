@@ -96,8 +96,10 @@ class MapService {
       id: facilityId,
       name: name,
       geo: GeoFirePoint(
-        location.latitude,
-        location.longitude,
+        GeoPoint(
+          location.latitude,
+          location.longitude,
+        ),
       ),
       address: address,
       downloadSpeed: 0,

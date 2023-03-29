@@ -12,6 +12,10 @@ final userRepositoryProvider = Provider(
   ),
 );
 
+final userProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(userRepositoryProvider).streamUser(uid);
+});
+
 class UserRepository {
   UserRepository({
     required this.firestore,
@@ -26,8 +30,8 @@ class UserRepository {
   static const baxCollectionName = 'bax';
 
   /// User情報を取得する
-  Future<User?> getUser(String uid) async {
-    final query = firestore.collection(userCollectionName).doc(uid).withConverter<User?>(
+  Stream<DocumentSnapshot<User?>> streamUser(String? uid) {
+    return firestore.collection(userCollectionName).doc(uid).withConverter<User?>(
       fromFirestore: (snapshot, options) {
         final json = snapshot.data();
         if (json == null) {
@@ -38,9 +42,7 @@ class UserRepository {
       toFirestore: (snapshot, options) {
         return snapshot!.toJson();
       },
-    );
-    final snapshot = await query.get();
-    return snapshot.data();
+    ).snapshots();
   }
 
   /// BAXを付与する

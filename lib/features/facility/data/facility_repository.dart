@@ -71,7 +71,9 @@ class FacilityRepository {
         Facility(
           id: placeId,
           name: facilityName,
-          geo: GeoFirePoint(latitude, longitude),
+          geo: GeoFirePoint(
+            GeoPoint(latitude, longitude),
+          ),
           address: address,
           downloadSpeed: downloadSpeed,
           uploadSpeed: uploadSpeed,

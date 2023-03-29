@@ -18,6 +18,16 @@ final defaultTheme = ThemeData(
 final baxTheme = defaultTheme.copyWith(
   appBarTheme: const AppBarTheme(
     elevation: 0,
+    backgroundColor: Colors.transparent,
+    foregroundColor: Colors.black,
+    titleTextStyle: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    ),
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: Colors.white,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

@@ -7,6 +7,7 @@
     "geopoint",
     "googleapis",
     "inappwebview",
+    "latlng",
     "Mbps",
     "nearbysearch",
     "nodoc",
@@ -14,5 +15,5 @@
     "SSID",
     "unawaited"
   ],
-  "eslint.workingDirectories": ["./functions"],
+  "eslint.workingDirectories": ["./functions"]
 }

@@ -1,30 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../authentication/data/firebase_auth.dart';
+import '../../authentication/application/auth_service.dart';
 import '../data/user_repository.dart';
-import '../domain/user.dart';
 
-final currentUserProvider = FutureProvider.autoDispose(
-  (ref) async {
-    return ref.watch(userServiceProvider).getUser();
-  },
-);
-
-final userServiceProvider = Provider((ref) {
-  return UserService(ref);
+final loginUserProvider = StreamProvider((ref) {
+  final uid = ref.watch(uidProvider).valueOrNull;
+  return ref.read(userRepositoryProvider).streamUser(uid);
 });
 
-class UserService {
-  UserService(this.ref);
-
-  final Ref ref;
-
-  Future<User?> getUser() async {
-    final uid = ref.watch(firebaseAuthProvider).currentUser?.uid;
-    if (uid == null) {
-      return null;
-    }
-    final userRepository = ref.watch(userRepositoryProvider);
-    return userRepository.getUser(uid);
-  }
-}
+/// userのbaxを返す。
+final userBaxProvider = Provider<double>((ref) {
+  return ref.watch(loginUserProvider).valueOrNull?.data()?.baxPoint ?? 0.0;
+});

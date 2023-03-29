@@ -56,9 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         Locale('en', 'US'),
       ],
       theme: theme,
-      routeInformationProvider: router.routeInformationProvider,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      routerConfig: router,
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       builder: (context, child) {
         final isLoading = ref.watch(loadingProvider);

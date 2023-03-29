@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../authentication/application/auth_service.dart';
-import '../../authentication/presentation/email_authentication_page.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
-import '../../payment/repository/payment_repository.dart';
+import '../../user/application/user_service.dart';
 import '../../user/presentation/my_page.dart';
 import '../application/map_service.dart';
 import 'widgets/prediction_result_list.dart';
@@ -65,7 +65,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     }
   }
 
-  StreamSubscription? sub;
+  StreamSubscription<PendingDynamicLinkData>? sub;
 
   @override
   void initState() {
@@ -158,6 +158,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
         body: Stack(
           children: [
             GoogleMap(
+              myLocationButtonEnabled: false,
               onMapCreated: onMapCreated,
               markers: markers,
               initialCameraPosition: CameraPosition(
@@ -176,16 +177,13 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
             /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
             ///
             /// そのため、入力中は透明なContainerを表示させることでいったんお茶を濁す。
-            if (focusNode.hasFocus)
-              // ignore: use_colored_box
-              Container(
-                color: Colors.transparent,
-              ),
+            if (focusNode.hasFocus) Container(color: Colors.transparent),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    const SizedBox(height: 24),
                     SearchTextFormField(
                       controller: searchTextEditingController,
                       focusNode: focusNode,
@@ -196,18 +194,51 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                 ),
               ),
             ),
+
+            /// 所持BAX
+            Align(
+              alignment: Alignment.topRight,
+              child: SafeArea(
+                child: InkWell(
+                  onTap: () {
+                    context.goNamed(MyPage.name);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(80)),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(1, 1),
+                          blurRadius: .1,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/bax_logo.svg',
+                          width: 12,
+                          color: Colors.black,
+                        ),
+                        const SizedBox(width: 8),
+                        Text('${ref.watch(userBaxProvider)}'),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FloatingActionButton(
-              onPressed: fetchLocationDataAndMoveCamera,
-              child: const Icon(
-                Icons.near_me,
-              ),
-            ),
-            const SizedBox(height: 16),
             FloatingActionButton(
               onPressed: () {
                 context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
@@ -218,27 +249,18 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
             ),
             const SizedBox(height: 16),
             FloatingActionButton(
-              onPressed: () {
-                context.go(FacilityMapPage.route + EmailAuthenticationPage.route);
-              },
+              onPressed: fetchLocationDataAndMoveCamera,
               child: const Icon(
-                Icons.mail,
+                Icons.near_me,
               ),
             ),
             const SizedBox(height: 16),
-            FloatingActionButton(
-              onPressed: () async {
-                await ref.read(paymentRepositoryProvider).purchaseSubscription();
-              },
-              child: const Icon(Icons.payment),
-            ),
-            const SizedBox(height: 16),
-            FloatingActionButton(
-              onPressed: () {
-                context.go(FacilityMapPage.route + MyPage.route);
-              },
-              child: const Icon(Icons.person),
-            ),
+            // FloatingActionButton(
+            //   onPressed: () async {
+            //     await ref.read(paymentRepositoryProvider).purchaseSubscription();
+            //   },
+            //   child: const Icon(Icons.payment),
+            // ),
           ],
         ),
       ),

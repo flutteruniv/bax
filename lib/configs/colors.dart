@@ -2,6 +2,6 @@ import 'package:flutter/material.dart';
 
 class BaxColor {
   BaxColor._();
-  static const primaryColor = Colors.red;
-  static const secondaryColor = Colors.lightBlueAccent;
+  static const primaryColor = Colors.black;
+  static const secondaryColor = Colors.black;
 }

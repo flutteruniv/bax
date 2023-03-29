@@ -14,7 +14,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  go_router: ^6.0.1
   google_maps_flutter: ^2.2.3
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
@@ -41,6 +40,7 @@ dependencies:
   purchases_flutter: ^4.10.4
   flutter_riverpod: ^2.3.1
   collection: ^1.17.0
+  go_router: ^6.5.1
 
 dev_dependencies:
   flutter_test:

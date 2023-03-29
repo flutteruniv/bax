@@ -53,7 +53,7 @@ class GeoFirePointConverter implements JsonConverter<GeoFirePoint, Map<String, d
   @override
   GeoFirePoint fromJson(Map<String, dynamic> value) {
     final geoPoint = value['geopoint'] as GeoPoint;
-    return GeoFirePoint(geoPoint.latitude, geoPoint.longitude);
+    return GeoFirePoint(geoPoint);
   }
 
   @override
