@@ -43,8 +43,10 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
       setState(() {});
     });
 
-  void onMapCreated(GoogleMapController controller) {
+  Future<void> onMapCreated(GoogleMapController controller) async {
     mapControllerCompleter.complete(controller);
+    final value = await DefaultAssetBundle.of(context).loadString('assets/map_style_silver.json');
+    await controller.setMapStyle(value);
   }
 
   Future<void> fetchLocationDataAndMoveCamera() async {
@@ -55,7 +57,14 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     if (latitude == null || longitude == null) {
       return;
     }
-    await mapController.moveCamera(CameraUpdate.newLatLng(LatLng(latitude, longitude)));
+    await mapController.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(latitude, longitude),
+          zoom: 16,
+        ),
+      ),
+    );
   }
 
   @override
@@ -182,6 +191,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 24),
                     SearchTextFormField(

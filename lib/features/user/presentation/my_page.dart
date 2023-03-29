@@ -79,19 +79,13 @@ class _MyPageState extends ConsumerState<MyPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('BAX'),
-                        Text(
-                          '${ref.watch(userBaxProvider)}',
-                          style: const TextStyle(
-                            fontSize: 50,
-                            height: 1.1,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      '${ref.watch(userBaxProvider)}',
+                      style: const TextStyle(
+                        fontSize: 50,
+                        height: 1.1,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Expanded(
                       child: Row(

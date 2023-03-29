@@ -118,6 +118,8 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
                         compassEnabled: false,
                         onMapCreated: (controller) async {
                           googleMapController = controller;
+                          final value = await DefaultAssetBundle.of(context).loadString('assets/map_style_silver.json');
+                          await controller.setMapStyle(value);
                         },
                         markers: {
                           Marker(

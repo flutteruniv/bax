@@ -10,6 +10,10 @@ final baxRepositoryProvider = Provider(
   ),
 );
 
+final baxHistoriesProvider = StreamProvider.family((ref, String? uid) {
+  return ref.read(baxRepositoryProvider).streamBaxHistories(uid);
+});
+
 class BaxRepository {
   BaxRepository({required this.firestore});
 
@@ -19,14 +23,9 @@ class BaxRepository {
   static const baxFieldUid = 'uid';
 
   /// Bax履歴を取得する
-  Future<List<Bax>> getBaxHistories(String uid) async {
+  Stream<QuerySnapshot<Bax>> streamBaxHistories(String? uid) {
     final query = _baxCollectionReference.where(baxFieldUid, isEqualTo: uid);
-    final snapshot = await query.get();
-
-    if (snapshot.docs.isEmpty) {
-      return [];
-    }
-    return snapshot.docs.map((snapshot) => snapshot.data()).toList();
+    return query.snapshots();
   }
 
   CollectionReference<Bax> get _baxCollectionReference => firestore.collection(baxCollectionName).withConverter<Bax>(

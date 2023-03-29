@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../map/application/map_service.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../../map/domain/nearby_search_results/nearby_search_results.dart';
+import '../../map/presentation/facility_map_page.dart';
 import '../../map/presentation/nearby_search_results_dialog.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
@@ -24,9 +28,7 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
 
 class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   FastNetResult? fastNetResult;
-
   StreamSubscription<FastNetResult>? sub;
-
   NearbySearchResults? nearbySearchResults;
   NearbySearchResult? get nearbySearchResult {
     return selectedNearbySearchResult ?? nearbySearchResults?.results.firstOrNull;
@@ -55,11 +57,36 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   }
 
   Future<void> startSpeedTest() async {
-    ref.invalidate(ssidProvider);
-
-    final ssid = await ref.read(ssidProvider.future);
+    final ssid = await ref.refresh(ssidProvider.future);
     if (ssid == null) {
-      // TODO(kenta-wakasa): WiFiとの接続状況を確認してください。のエラーダイアログを出す。
+      if (!mounted) {
+        return;
+      }
+      await showDialog<void>(
+        barrierDismissible: false,
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            content: const Text('Wi-Fiに接続されていることを確認して、測定ボタンを押してください。'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  context.go(FacilityMapPage.route);
+                },
+                child: const Text('マップに戻る'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  startSpeedTest();
+                },
+                child: const Text('測定'),
+              ),
+            ],
+          );
+        },
+      );
       return;
     }
     setState(() {
@@ -114,89 +141,294 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    startSpeedTest();
+  }
+
+  @override
   Widget build(BuildContext context) {
     nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            Text(
-              '施設名',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: nearbySearchResult == null
-                      ? const Center(child: CircularProgressIndicator())
-                      : Text(
-                          nearbySearchResult?.name ?? '',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                ),
-                OutlinedButton(
-                  onPressed: selectFacility,
-                  child: const Text('選び直す'),
-                ),
-              ],
-            ),
-            if (fastNetResult != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? ''}'),
-                  Text('ダウンロード速度: ${fastNetResult!.downloadSpeedMbps} Mbps'),
-                  Text('アップロード速度: ${fastNetResult!.uploadSpeedMbps} Mbps'),
-                ],
-              ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: SizedBox.square(
-                  dimension: 120,
-                  child: isProcessing
-                      ? Column(
-                          children: [
-                            const CircularProgressIndicator(),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: stopSpeedTest,
-                              child: const Text('キャンセル'),
-                            ),
-                          ],
-                        )
-                      : ElevatedButton(
-                          onPressed: startSpeedTest,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                '計測',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                'スタート',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                ),
-                              ),
-                            ],
+      appBar: AppBar(
+        title: Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? '未接続'}'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Text(
+              //   '施設名',
+              //   style: Theme.of(context).textTheme.bodySmall,
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: nearbySearchResult == null
+              //           ? const Center(child: CircularProgressIndicator())
+              //           : Text(
+              //               nearbySearchResult?.name ?? '',
+              //               style: Theme.of(context).textTheme.titleLarge,
+              //             ),
+              //     ),
+              //     OutlinedButton(
+              //       onPressed: selectFacility,
+              //       child: const Text('選び直す'),
+              //     ),
+              //   ],
+              // ),
+              // if (fastNetResult != null)
+              //   Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text('ダウンロード速度: ${fastNetResult!.downloadSpeedMbps} Mbps'),
+              //       Text('アップロード速度: ${fastNetResult!.uploadSpeedMbps} Mbps'),
+              //     ],
+              //   ),
+              Transform.translate(
+                offset: const Offset(48, 0),
+                child: Transform.scale(
+                  scale: 1.5,
+                  child: SizedBox(
+                    height: 240,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: SpeedIndicator(
+                            speed: fastNetResult?.downloadSpeedMbps ?? 0.0,
+                            isDownload: true,
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SpeedIndicator(
+                            speed: fastNetResult?.uploadSpeedMbps ?? 0.0,
+                            isDownload: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 100),
+              if (isProcessing)
+                const SizedBox(
+                  height: 12,
+                  child: Center(child: LinearProgressIndicator()),
+                )
+              else
+                const SizedBox(height: 12),
+              const SizedBox(height: 60),
+              Container(
+                alignment: Alignment.center,
+                child: isProcessing
+                    ? ElevatedButton(
+                        onPressed: stopSpeedTest,
+                        child: const Text('キャンセル'),
+                      )
+                    : ElevatedButton(
+                        onPressed: startSpeedTest,
+                        child: const Text(
+                          '測定',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class SpeedIndicator extends StatelessWidget {
+  const SpeedIndicator({
+    super.key,
+    required this.speed,
+    required this.isDownload,
+  });
+
+  final double speed;
+  final bool isDownload;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        CustomPaint(
+          painter: isDownload
+              ? DownloadPainter(
+                  color: Colors.black,
+                  width: 320,
+                  height: 160,
+                )
+              : UploadPainter(
+                  color: Colors.black,
+                  width: 320,
+                  height: 160,
+                ),
+          child: const SizedBox(
+            width: 320,
+            height: 160,
+          ),
+        ),
+        ClipPath(
+          clipper: isDownload ? DownloadClipper() : UploadClipper(),
+          child: Container(
+            width: 320,
+            height: 160,
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              height: 160,
+              width: speed * 2.5,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Container(
+          height: 160,
+          padding: isDownload
+              //     ? const EdgeInsets.only(
+              //         top: 56,
+              //       )
+              //     : const EdgeInsets.only(
+              //         left: 32,
+              //         bottom: 16,
+              //       ),
+              // ? const EdgeInsets.only(
+              //     left: 32,
+              //     top: 16,
+              //   )
+              // : const EdgeInsets.only(
+              //     bottom: 56,
+              //   ),
+
+              ? const EdgeInsets.only(
+                  left: 32,
+                  top: 24,
+                )
+              : const EdgeInsets.only(
+                  left: 24,
+                  bottom: 16,
+                ),
+          alignment: isDownload ? Alignment.topLeft : Alignment.bottomLeft,
+          child: Transform.rotate(
+            angle: isDownload ? pi / 6 : -pi / 6,
+            child: SizedBox(
+              height: 24,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  isDownload ? 'Download: $speed Mbps' : 'Upload: $speed Mbps',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class UploadClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path()
+      ..moveTo(0, size.height)
+      ..lineTo(size.width * 0.1, size.height)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width * 0.9, 0)
+      ..close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(UploadClipper oldClipper) => true;
+}
+
+class UploadPainter extends CustomPainter {
+  UploadPainter({required this.color, required this.height, required this.width});
+  final Color color;
+  final double height;
+  final double width;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final path = Path()
+      ..moveTo(0, size.height)
+      ..lineTo(size.width * 0.1, size.height)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width * 0.9, 0)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class DownloadClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width * 0.1, 0)
+      ..lineTo(size.width, size.height)
+      ..lineTo(size.width * 0.9, size.height)
+      ..close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(DownloadClipper oldClipper) => true;
+}
+
+class DownloadPainter extends CustomPainter {
+  DownloadPainter({required this.color, required this.height, required this.width});
+  final Color color;
+  final double height;
+  final double width;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width * 0.1, 0)
+      ..lineTo(size.width, size.height)
+      ..lineTo(size.width * 0.9, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }

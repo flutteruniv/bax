@@ -68,5 +68,6 @@ flutter:
         - asset: fonts/NotoSansJP-Black.otf
 
   assets:
+    - assets/map_style_silver.json
     - assets/images/
     - assets/launcher_icon/
