@@ -8,6 +8,7 @@ class BaxHistoryPage extends ConsumerStatefulWidget {
   const BaxHistoryPage({super.key});
 
   static const route = 'bax_history';
+  static const name = 'baxHistory';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _BaxHistoryPageState();

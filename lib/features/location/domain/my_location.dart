@@ -35,7 +35,7 @@ final initLocationProvider = FutureProvider((ref) async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return Geolocator.getCurrentPosition(
-    forceAndroidLocationManager: true,
-    desiredAccuracy: LocationAccuracy.high,
-  );
+      // forceAndroidLocationManager: true,
+      // desiredAccuracy: LocationAccuracy.high,
+      );
 });

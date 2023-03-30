@@ -265,12 +265,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
               ),
             ),
             const SizedBox(height: 16),
-            // FloatingActionButton(
-            //   onPressed: () async {
-            //     await ref.read(paymentRepositoryProvider).purchaseSubscription();
-            //   },
-            //   child: const Icon(Icons.payment),
-            // ),
           ],
         ),
       ),

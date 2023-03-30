@@ -9,7 +9,6 @@ import '../../bax/application/bax_service.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../bax/presentation/bax_history_page.dart';
-import '../../map/presentation/facility_map_page.dart';
 import '../application/user_service.dart';
 import '../data/user_repository.dart';
 
@@ -74,11 +73,10 @@ class _MyPageState extends ConsumerState<MyPage> {
                 size: 80,
               ),
               const SizedBox(height: 8),
-              if (ref.watch(authStateChangesProvider).valueOrNull?.email != null)
-                Text(
-                  ref.watch(authStateChangesProvider).valueOrNull?.email ?? 'メールアドレス未連携',
-                )
-              else
+              Text(
+                ref.watch(authStateChangesProvider).valueOrNull?.email ?? '',
+              ),
+              if (ref.watch(authStateChangesProvider).valueOrNull?.isAnonymous ?? false)
                 SizedBox(
                   width: 240,
                   child: OutlinedButton(
@@ -91,7 +89,7 @@ class _MyPageState extends ConsumerState<MyPage> {
               const SizedBox(height: 64),
               InkWell(
                 onTap: () {
-                  context.go('${FacilityMapPage.route}${MyPage.route}/${BaxHistoryPage.route}');
+                  context.go(BaxHistoryPage.name);
                 },
                 child: Center(
                   child: SingleChildScrollView(

@@ -27,13 +27,26 @@ final nearbyFacilityProvider = StreamProvider.autoDispose.family((ref, GeoPoint 
   final mapRepository = ref.read(mapRepositoryProvider);
   final res = await mapRepository.fetchNearByFacility(geoPoint);
   yield res;
-  await Future<void>.delayed(const Duration(seconds: 1));
+  if (res.nextPageToken == null) {
+    return;
+  }
+  await Future<void>.delayed(const Duration(seconds: 2));
+
   final nextPageRes = await mapRepository.fetchNearByFacility(
     geoPoint,
     nextPageToken: res.nextPageToken,
   );
-  yield nextPageRes.copyWith(results: [...res.results, ...nextPageRes.results]);
-  await Future<void>.delayed(const Duration(seconds: 1));
+  yield nextPageRes.copyWith(
+    results: [
+      ...res.results,
+      ...nextPageRes.results,
+    ],
+  );
+  if (nextPageRes.nextPageToken == null) {
+    return;
+  }
+  await Future<void>.delayed(const Duration(seconds: 2));
+
   final finalPageRes = await mapRepository.fetchNearByFacility(
     geoPoint,
     nextPageToken: nextPageRes.nextPageToken,

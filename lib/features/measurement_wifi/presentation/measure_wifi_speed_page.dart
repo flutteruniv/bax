@@ -2,16 +2,17 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../map/application/map_service.dart';
+import '../../authentication/application/auth_service.dart';
+import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
-import '../../map/domain/nearby_search_results/nearby_search_results.dart';
 import '../../map/presentation/facility_map_page.dart';
 import '../../map/presentation/nearby_search_results_dialog.dart';
+import '../application/measurement_wifi_service.dart';
+import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
 import '../domain/wifi_scanner.dart';
@@ -29,35 +30,15 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
 class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   FastNetResult? fastNetResult;
   StreamSubscription<FastNetResult>? sub;
-  NearbySearchResults? nearbySearchResults;
-  NearbySearchResult? get nearbySearchResult {
-    return selectedNearbySearchResult ?? nearbySearchResults?.results.firstOrNull;
-  }
-
-  NearbySearchResult? selectedNearbySearchResult;
 
   bool isProcessing = false;
+  bool isDone = false;
 
-  Future<void> selectFacility() async {
-    final nearbySearchResults = this.nearbySearchResults;
-    if (nearbySearchResults == null) {
-      return;
-    }
-    final res = await showDialog<NearbySearchResult>(
-      context: context,
-      builder: (context) {
-        return const NearbySearchResultsDialog();
-      },
-    );
-    if (res == null) {
-      return;
-    }
-    selectedNearbySearchResult = res;
-    setState(() {});
-  }
+  String? ssid;
 
   Future<void> startSpeedTest() async {
-    final ssid = await ref.refresh(ssidProvider.future);
+    isDone = false;
+    ssid = await ref.refresh(ssidProvider.future);
     if (ssid == null) {
       if (!mounted) {
         return;
@@ -104,25 +85,9 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         setState(() {
           setState(() {
             isProcessing = false;
+            isDone = true;
           });
         });
-        final fastNetResult = this.fastNetResult;
-        final nearbySearchResult = this.nearbySearchResult;
-        if (fastNetResult == null || nearbySearchResult == null) {
-          return;
-        }
-
-        showDialog<void>(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) {
-            return WiFiResultDialog(
-              ssid: ssid,
-              fastNetResult: fastNetResult,
-              nearbySearchResult: nearbySearchResult,
-            );
-          },
-        );
       },
     );
   }
@@ -148,7 +113,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    nearbySearchResults = ref.watch(myNearbyFacilityProvider);
+    // nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? '未接続'}'),
@@ -159,34 +124,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Text(
-              //   '施設名',
-              //   style: Theme.of(context).textTheme.bodySmall,
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: nearbySearchResult == null
-              //           ? const Center(child: CircularProgressIndicator())
-              //           : Text(
-              //               nearbySearchResult?.name ?? '',
-              //               style: Theme.of(context).textTheme.titleLarge,
-              //             ),
-              //     ),
-              //     OutlinedButton(
-              //       onPressed: selectFacility,
-              //       child: const Text('選び直す'),
-              //     ),
-              //   ],
-              // ),
-              // if (fastNetResult != null)
-              //   Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       Text('ダウンロード速度: ${fastNetResult!.downloadSpeedMbps} Mbps'),
-              //       Text('アップロード速度: ${fastNetResult!.uploadSpeedMbps} Mbps'),
-              //     ],
-              //   ),
               Transform.translate(
                 offset: const Offset(48, 0),
                 child: Transform.scale(
@@ -223,23 +160,114 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
               else
                 const SizedBox(height: 12),
               const SizedBox(height: 60),
+              if (isDone && !isProcessing)
+                SizedBox(
+                  height: 40,
+                  width: 240,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final res = await showDialog<NearbySearchResult>(
+                        context: context,
+                        builder: (context) {
+                          return const NearbySearchResultsDialog();
+                        },
+                      );
+                      final ssid = this.ssid;
+                      final fastNetResult = this.fastNetResult;
+
+                      if (ssid == null || fastNetResult == null || res == null) {
+                        return;
+                      }
+
+                      final canPostResult = await ref.read(measurementWifiRepositoryProvider).hasTodayData(
+                            placeId: res.placeId,
+                            today: DateTime.now().toUtc(),
+                            uid: ref.read(uidProvider).valueOrNull ?? '',
+                          );
+
+                      if (!canPostResult) {
+                        if (!mounted) {
+                          return;
+                        }
+                        await showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return const AlertDialog(
+                              content: Text('同じ施設に投稿できるのは1日に1回までです。明日またご協力ください。'),
+                            );
+                          },
+                        );
+                        return;
+                      }
+
+                      final bax = await ref.read(measurementWifiServiceProvider).postMeasurementResult(
+                            ssid,
+                            fastNetResult,
+                            res,
+                          );
+                      if (!mounted) {
+                        return;
+                      }
+
+                      if (bax == null) {
+                        return;
+                      }
+
+                      await showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return BaxRewordDialog(bax: bax);
+                        },
+                      );
+
+                      if (!mounted) {
+                        return;
+                      }
+
+                      setState(() {
+                        isDone = false;
+                      });
+
+                      await showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return WiFiResultDialog(
+                            ssid: ssid,
+                            fastNetResult: fastNetResult,
+                            nearbySearchResult: res,
+                          );
+                        },
+                      );
+                      if (!mounted) {
+                        return;
+                      }
+
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('施設を選んで投稿'),
+                  ),
+                )
+              else
+                const SizedBox(height: 40),
+              const SizedBox(height: 40),
               Container(
                 alignment: Alignment.center,
-                child: isProcessing
-                    ? ElevatedButton(
-                        onPressed: stopSpeedTest,
-                        child: const Text('キャンセル'),
-                      )
-                    : ElevatedButton(
-                        onPressed: startSpeedTest,
-                        child: const Text(
-                          '測定',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
+                child: SizedBox(
+                  height: 40,
+                  width: 240,
+                  child: OutlinedButton(
+                    onPressed: isProcessing ? stopSpeedTest : startSpeedTest,
+                    child: isProcessing
+                        ? const Text('キャンセル')
+                        : const Text(
+                            'もう一度測定',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                      ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -296,21 +324,6 @@ class SpeedIndicator extends StatelessWidget {
         Container(
           height: 160,
           padding: isDownload
-              //     ? const EdgeInsets.only(
-              //         top: 56,
-              //       )
-              //     : const EdgeInsets.only(
-              //         left: 32,
-              //         bottom: 16,
-              //       ),
-              // ? const EdgeInsets.only(
-              //     left: 32,
-              //     top: 16,
-              //   )
-              // : const EdgeInsets.only(
-              //     bottom: 56,
-              //   ),
-
               ? const EdgeInsets.only(
                   left: 32,
                   top: 24,

@@ -7,11 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../authentication/application/auth_service.dart';
-import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
-import '../application/measurement_wifi_service.dart';
-import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
 
 class WiFiResultDialog extends ConsumerStatefulWidget {
@@ -32,18 +28,8 @@ class WiFiResultDialog extends ConsumerStatefulWidget {
 
 class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
   final globalKey = GlobalKey<State<StatefulWidget>>();
-  bool canPostResult = false;
   Uint8List? googleMapImage;
   GoogleMapController? googleMapController;
-
-  Future<void> confirmRightToPost() async {
-    canPostResult = await ref.read(measurementWifiRepositoryProvider).hasTodayData(
-          placeId: widget.nearbySearchResult.placeId,
-          today: DateTime.now().toUtc(),
-          uid: ref.read(uidProvider).valueOrNull ?? '',
-        );
-    setState(() {});
-  }
 
   Future<XFile?> widgetToImage() async {
     googleMapImage = await googleMapController?.takeSnapshot(); // its our screenshot
@@ -73,12 +59,6 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
       return;
     }
     await Share.shareXFiles([xFile]);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    confirmRightToPost();
   }
 
   @override
@@ -221,76 +201,25 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
               ),
             ),
           ),
-          SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                SizedBox(height: 16),
-              ],
-            ),
-          ),
-          if (canPostResult)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 240,
-                    height: 40,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.send),
-                      onPressed: () async {
-                        final bax = await ref.read(measurementWifiServiceProvider).postMeasurementResult(
-                              widget.ssid,
-                              widget.fastNetResult,
-                              widget.nearbySearchResult,
-                            );
-                        if (!mounted) {
-                          return;
-                        }
-
-                        Navigator.of(context).pop();
-
-                        if (bax == null) {
-                          return;
-                        }
-                        await showDialog<void>(
-                          context: context,
-                          builder: (context) {
-                            return BaxRewordDialog(bax: bax);
-                          },
-                        );
-                      },
-                      label: const Text('この結果を投稿する'),
-                    ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 64),
+                width: 240,
+                height: 40,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.white,
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: 240,
-                    height: 40,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                      ),
-                      onPressed: Navigator.of(context).pop,
-                      child: const Text('またあとで'),
-                    ),
-                  ),
-                  const SizedBox(height: 80),
-                  SizedBox(
-                    width: 240,
-                    height: 40,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.share),
-                      onPressed: share,
-                      label: const Text('結果を共有'),
-                    ),
-                  ),
-                  const SizedBox(height: 60),
-                ],
+                  icon: const Icon(Icons.share),
+                  onPressed: share,
+                  label: const Text('結果を共有'),
+                ),
               ),
             ),
+          ),
         ],
       ),
     );

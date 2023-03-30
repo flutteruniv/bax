@@ -45,6 +45,7 @@ final routerProvider = Provider(
               builder: (context, state) => const MyPage(),
               routes: [
                 GoRoute(
+                  name: BaxHistoryPage.name,
                   path: BaxHistoryPage.route,
                   builder: (context, state) => const BaxHistoryPage(),
                 ),

@@ -12,11 +12,10 @@ class NearbySearchResultsDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return AlertDialog(
-      title: const Center(child: Text('近くの施設')),
+      title: const Center(child: Text('近くの施設を選択')),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: (nearbySearchResults?.results ?? []).map((e) {
             return Card(
               elevation: 1,
