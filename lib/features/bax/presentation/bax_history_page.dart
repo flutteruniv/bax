@@ -42,7 +42,6 @@ class _BaxHistoryPageState extends ConsumerState<BaxHistoryPage> {
               : ListTile(
                   title: Text(
                     '${baxHistory.totalPoint}',
-                    style: const TextStyle(color: Colors.blue),
                   ),
                   subtitle: Text('利用日: $createdAt'),
                 );

@@ -7,6 +7,8 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 final customerInfoProvider = StateProvider<CustomerInfo?>((ref) => null);
 final paymentRepositoryProvider = Provider(PaymentRepository.new);
 
+final isProProvider = Provider((ref) => ref.watch(customerInfoProvider)?.activeSubscriptions.isNotEmpty ?? false);
+
 class PaymentRepository {
   PaymentRepository(this.ref);
   final Ref ref;
@@ -32,5 +34,9 @@ class PaymentRepository {
   /// サブスクリプションを開始する
   Future<CustomerInfo> purchaseSubscription() async {
     return Purchases.purchaseProduct(productId);
+  }
+
+  Future<CustomerInfo> restorePurchases() async {
+    return Purchases.restorePurchases();
   }
 }

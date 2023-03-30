@@ -9,6 +9,8 @@ import '../../bax/application/bax_service.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../bax/presentation/bax_history_page.dart';
+import '../../payment/presentation/payment_dialog.dart';
+import '../../payment/repository/payment_repository.dart';
 import '../application/user_service.dart';
 import '../data/user_repository.dart';
 
@@ -25,6 +27,7 @@ class MyPage extends ConsumerStatefulWidget {
 class _MyPageState extends ConsumerState<MyPage> {
   @override
   Widget build(BuildContext context) {
+    final isPro = ref.watch(isProProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('マイページ'),
@@ -68,6 +71,13 @@ class _MyPageState extends ConsumerState<MyPage> {
           child: Column(
             children: [
               const SizedBox(height: 80),
+              if (isPro)
+                const Text(
+                  'BAX Pro',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               const Icon(
                 Icons.account_circle,
                 size: 80,
@@ -89,7 +99,7 @@ class _MyPageState extends ConsumerState<MyPage> {
               const SizedBox(height: 64),
               InkWell(
                 onTap: () {
-                  context.go(BaxHistoryPage.name);
+                  context.goNamed(BaxHistoryPage.name);
                 },
                 child: Center(
                   child: SingleChildScrollView(
@@ -168,6 +178,19 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
         TextButton(
           onPressed: ref.watch(canUseBax)
               ? () async {
+                  final isPro = ref.read(isProProvider);
+                  if (!isPro) {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        fullscreenDialog: true,
+                        builder: (context) {
+                          return const PaymentDialog();
+                        },
+                      ),
+                    );
+                    return;
+                  }
+
                   final uid = ref.read(uidProvider).valueOrNull;
                   if (uid == null) {
                     return;
@@ -180,7 +203,11 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
                           ],
                         ),
                       );
-                  await showDialog(
+
+                  if (!mounted) {
+                    return;
+                  }
+                  await showDialog<void>(
                     context: context,
                     builder: (context) {
                       return const AlertDialog(

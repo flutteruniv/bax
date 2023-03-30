@@ -22,6 +22,7 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
   const MeasureWiFiSpeedPage({super.key});
 
   static const route = 'measure_wifi';
+  static const name = 'measureWifi';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MeasureWiFiSpeedPageState();

@@ -31,6 +31,7 @@ final routerProvider = Provider(
           builder: (context, state) => const FacilityMapPage(),
           routes: [
             GoRoute(
+              name: MeasureWiFiSpeedPage.name,
               path: MeasureWiFiSpeedPage.route,
               builder: (context, state) => const MeasureWiFiSpeedPage(),
             ),

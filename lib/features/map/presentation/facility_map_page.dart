@@ -12,6 +12,8 @@ import '../../authentication/application/auth_service.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
+import '../../payment/presentation/payment_dialog.dart';
+import '../../payment/repository/payment_repository.dart';
 import '../../user/application/user_service.dart';
 import '../../user/presentation/my_page.dart';
 import '../application/map_service.dart';
@@ -104,6 +106,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
   @override
   Widget build(BuildContext context) {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
+    final isPro = ref.watch(isProProvider);
     markers.addAll(
       facilities.map((facility) {
         final data = facility.data();
@@ -183,9 +186,26 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
               myLocationEnabled: true,
             ),
 
-            /// FIXME: GoogleMapに干渉してGestureDetecterが反応せず、キーボードを閉じることができない
-            ///
-            /// そのため、入力中は透明なContainerを表示させることでいったんお茶を濁す。
+            if (!isPro)
+              ColoredBox(
+                color: Colors.white38,
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (context) {
+                            return const PaymentDialog();
+                          },
+                        ),
+                      );
+                    },
+                    child: const Text('Wi-Fiスポットを探す'),
+                  ),
+                ),
+              ),
+
             if (focusNode.hasFocus) Container(color: Colors.transparent),
             SafeArea(
               child: Padding(
@@ -251,7 +271,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           children: [
             FloatingActionButton(
               onPressed: () {
-                context.go(FacilityMapPage.route + MeasureWiFiSpeedPage.route);
+                context.goNamed(MeasureWiFiSpeedPage.name);
               },
               child: const Icon(
                 Icons.network_check,
