@@ -102,7 +102,32 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                 const SizedBox(height: 40),
                 OutlinedButton(
                   onPressed: () async {
-                    await ref.read(paymentRepositoryProvider).restorePurchases();
+                    setState(() {
+                      isProcessing = true;
+                    });
+
+                    try {
+                      final res = await ref.read(paymentRepositoryProvider).restorePurchases();
+                      if (res.activeSubscriptions.isEmpty) {
+                        if (!mounted) {
+                          return;
+                        }
+                        await showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return const AlertDialog(
+                              content: Text('復元に失敗しました。'),
+                            );
+                          },
+                        );
+                      }
+                    } catch (e) {
+                      logger.e(e);
+                    } finally {
+                      setState(() {
+                        isProcessing = false;
+                      });
+                    }
                   },
                   child: const Text('以前購入された方はこちら'),
                 ),
@@ -139,7 +164,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
           ),
           if (isPro)
             AlertDialog(
-              content: const Text('購入ありがとうございます。引き続きBAXをお楽しみください。'),
+              content: const Text('ご購入ありがとうございます。引き続きBAXをお楽しみください。'),
               actions: [
                 TextButton(
                   onPressed: () {
