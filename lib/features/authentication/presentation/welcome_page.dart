@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../configs/urls.dart';
+import '../../location/domain/my_location.dart';
 import '../application/auth_service.dart';
 import 'sign_in_page.dart';
 
@@ -20,8 +21,15 @@ class _WelComePageState extends ConsumerState<WelComePage> {
   int currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(initLocationProvider);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authService = ref.watch(authServiceProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
