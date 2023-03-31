@@ -13,9 +13,7 @@ class PaymentRepository {
   PaymentRepository(this.ref);
   final Ref ref;
 
-  static const _androidProductId = 'bax_monthly_premium_plan:bax-monthly-premium-plan';
-  static const _iOSProductId = 'bax_monthly_premium_plan';
-  final productId = Platform.isAndroid ? _androidProductId : _iOSProductId;
+  static const productId = 'bax_monthly_premium_plan';
 
   static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
   static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';
