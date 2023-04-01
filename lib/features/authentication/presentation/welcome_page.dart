@@ -11,6 +11,7 @@ import 'sign_in_page.dart';
 class WelComePage extends ConsumerStatefulWidget {
   const WelComePage({super.key});
 
+  static const name = 'welcome';
   static const route = '/welcome';
 
   @override

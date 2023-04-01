@@ -7,7 +7,7 @@ import * as functions from "firebase-functions";
  */
 firebaseAdmin.initializeApp();
 
-const webhookUrl = "https://hooks.slack.com/services/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";
+const webhookUrl = "https://hooks.slack.com/services/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";
 
 // Firestoreのリクエストコレクションに新規データが追加された時のトリガー
 export const sendNotificationToSlack = functions.firestore

@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../configs/logger.dart';
 import '../../../configs/urls.dart';
+import '../../load/application/loading_notifier.dart';
 import '../repository/payment_repository.dart';
 
 class PaymentDialog extends ConsumerStatefulWidget {
@@ -15,7 +16,6 @@ class PaymentDialog extends ConsumerStatefulWidget {
 }
 
 class _PaymentDialogState extends ConsumerState<PaymentDialog> {
-  bool isProcessing = false;
   @override
   Widget build(BuildContext context) {
     final isPro = ref.watch(isProProvider);
@@ -79,18 +79,14 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () async {
-                    setState(() {
-                      isProcessing = true;
-                    });
+                    ref.read(loadingProvider.notifier).show();
 
                     try {
                       await ref.read(paymentRepositoryProvider).purchaseSubscription();
                     } catch (e) {
                       logger.e(e);
                     } finally {
-                      setState(() {
-                        isProcessing = false;
-                      });
+                      ref.read(loadingProvider.notifier).hide();
                     }
                   },
                   child: const Text('1週間無料トライアル'),
@@ -102,10 +98,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                 const SizedBox(height: 40),
                 OutlinedButton(
                   onPressed: () async {
-                    setState(() {
-                      isProcessing = true;
-                    });
-
+                    ref.read(loadingProvider.notifier).show();
                     try {
                       final res = await ref.read(paymentRepositoryProvider).restorePurchases();
                       if (res.activeSubscriptions.isEmpty) {
@@ -124,9 +117,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                     } catch (e) {
                       logger.e(e);
                     } finally {
-                      setState(() {
-                        isProcessing = false;
-                      });
+                      ref.read(loadingProvider.notifier).hide();
                     }
                   },
                   child: const Text('以前購入された方はこちら'),
@@ -173,12 +164,6 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                   child: const Text('戻る'),
                 )
               ],
-            ),
-          if (isProcessing)
-            Container(
-              child: const Center(
-                child: LinearProgressIndicator(),
-              ),
             ),
         ],
       ),

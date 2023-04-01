@@ -13,38 +13,44 @@ class NearbySearchResultsDialog extends ConsumerWidget {
     final nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return AlertDialog(
       title: const Center(child: Text('近くの施設を選択')),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: (nearbySearchResults?.results ?? []).map((e) {
-            return Card(
-              elevation: 1,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop(e);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          e.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ),
+      content: (nearbySearchResults?.results ?? []).isEmpty
+          ? Column(
+              children: const [
+                Spacer(),
+              ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: (nearbySearchResults?.results ?? []).map((e) {
+                  return Card(
+                    elevation: 1,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(e);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                e.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }).toList(),
               ),
-            );
-          }).toList(),
-        ),
-      ),
+            ),
     );
   }
 }

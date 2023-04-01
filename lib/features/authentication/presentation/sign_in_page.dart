@@ -10,6 +10,7 @@ import 'widgets/email_send_complete.dart';
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 
+  static const name = 'signIn';
   static const route = '/signIn';
 
   @override

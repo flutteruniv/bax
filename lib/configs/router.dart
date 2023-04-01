@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,11 @@ final routerProvider = Provider(
   (ref) {
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
     return GoRouter(
+      observers: [
+        FirebaseAnalyticsObserver(
+          analytics: FirebaseAnalytics.instance,
+        ),
+      ],
       redirect: (context, state) {
         if (state.location == SignInPage.route) {
           return SignInPage.route;
@@ -27,6 +33,7 @@ final routerProvider = Provider(
       },
       routes: [
         GoRoute(
+          name: 'route',
           path: FacilityMapPage.route,
           builder: (context, state) => const FacilityMapPage(),
           routes: [
@@ -55,10 +62,12 @@ final routerProvider = Provider(
           ],
         ),
         GoRoute(
+          name: WelComePage.name,
           path: WelComePage.route,
           builder: (context, state) => const WelComePage(),
         ),
         GoRoute(
+          name: SignInPage.name,
           path: SignInPage.route,
           builder: (context, state) => const SignInPage(),
         ),
