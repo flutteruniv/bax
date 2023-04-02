@@ -15,6 +15,12 @@ firebase deploy --only firestore:rules --project=dev
 firebase deploy --only functions --project=dev
 ```
 
+## 環境変数設定
+
+```
+firebase functions:config:set --project=dev KEY=VALUE
+```
+
 ## 留意事項
 
 本番環境の Cloud Firestore が Datastore モードになっているため、firestore をデプロイすることができない。
