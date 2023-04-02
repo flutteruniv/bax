@@ -7,7 +7,7 @@ import * as functions from "firebase-functions";
  */
 firebaseAdmin.initializeApp();
 
-const webhookUrl = "https://hooks.slack.com/services/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";
+const SLACK_WEBHOOK_URL = functions.config().slack.webhook_url;
 
 // Firestoreのリクエストコレクションに新規データが追加された時のトリガー
 export const sendNotificationToSlack = functions.firestore
@@ -21,7 +21,7 @@ export const sendNotificationToSlack = functions.firestore
 
       try {
       // Slackに通知を送信
-        await axios.post(webhookUrl, {
+        await axios.post(SLACK_WEBHOOK_URL, {
           text: message,
         });
         console.log("Slack通知が送信されました");
