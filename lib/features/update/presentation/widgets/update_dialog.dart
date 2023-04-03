@@ -35,8 +35,8 @@ class UpdateDialog extends StatelessWidget {
 
   // TODO(kenta-wakasa): ストア情報が未確定のため仮でおいてる。正式に決まったら差し替える。
   Future<void> _launchUrl() async {
-    final appStoreURL = Uri.parse('https://apps.apple.com/jp/app/flutter%E5%A4%A7%E5%AD%A6/id1532391360');
-    final playStoreURL = Uri.parse('https://play.google.com/store/apps/details?id=jp.kboy.kboyflutteruniv&hl=ja&gl=US');
+    final appStoreURL = Uri.parse('https://apps.apple.com/us/app/bax/id1663757722');
+    final playStoreURL = Uri.parse('https://play.google.com/store/apps/details?id=com.flutteruniv.bax');
 
     if (Platform.isAndroid) {
       if (!await launchUrl(playStoreURL)) {
