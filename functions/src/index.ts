@@ -44,14 +44,14 @@ export const sendMeasureWiFiNotificationToSlack = functions.firestore
     .onCreate(async (snapshot, _) => {
         const result = snapshot.data() as WifiMeasurementResult;
         const placeId = result.placeId;
-        const ssid = result.placeId;
+        const ssid = result.ssid;
         const downloadSpeedMbps = result.downloadSpeedMbps;
         const uploadSpeedMbps = result.uploadSpeedMbps;
 
         const googleMapURL = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
 
         // Slackに送信するメッセージを作成
-        const message = `📱 BAX計測\nssid:${ssid}\nDownload${downloadSpeedMbps}\nUpload${uploadSpeedMbps}\n${googleMapURL}`;
+        const message = `📱 BAX計測\nssid: ${ssid}\nDownload: ${downloadSpeedMbps}\nUpload: ${uploadSpeedMbps}\n${googleMapURL}`;
 
         try {
             // Slackに通知を送信
