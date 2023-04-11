@@ -48,7 +48,7 @@ export const sendMeasureWiFiNotificationToSlack = functions.firestore
         const downloadSpeedMbps = result.downloadSpeedMbps;
         const uploadSpeedMbps = result.uploadSpeedMbps;
 
-        const googleMapURL = `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=ja`;
+        const googleMapURL = `https://www.google.com/maps/search/?api=1&query=bax&query_place_id=${placeId}&hl=ja`;
 
         // Slackに送信するメッセージを作成
         const message = `📱 BAX計測\nssid: ${ssid}\nDownload: ${downloadSpeedMbps}\nUpload: ${uploadSpeedMbps}\n${googleMapURL}`;
