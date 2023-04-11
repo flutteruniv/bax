@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../location/domain/my_location.dart';
@@ -105,6 +106,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
+    final localizations = ref.watch(localizationsProvider);
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     final isPro = ref.watch(isProProvider);
     markers.addAll(
@@ -114,7 +116,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           markerId: MarkerId(data.id),
           position: LatLng(data.geo.latitude, data.geo.longitude),
           icon: BitmapDescriptor.defaultMarkerWithHue(data.markerColor),
-          infoWindow: InfoWindow(title: data.name, snippet: 'Wifiダウンロード速度: ${data.downloadSpeed}Mbps'),
+          infoWindow:
+              InfoWindow(title: data.name, snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps'),
           onTap: () {
             /// TODO: 施設詳細画面に遷移する
           },
@@ -150,7 +153,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           markerId: MarkerId(facility.id),
           position: latlng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          infoWindow: InfoWindow(title: facility.name, snippet: 'Wifiダウンロード速度: 未測定'),
+          infoWindow:
+              InfoWindow(title: facility.name, snippet: '${localizations.downloadSpeed}: ${localizations.notMeasured}'),
         );
         markers.add(marker);
       }
@@ -201,7 +205,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                         ),
                       );
                     },
-                    child: const Text('Wi-Fiスポットを探す'),
+                    child: Text(localizations.searchWiFi ?? ''),
                   ),
                 ),
               ),
@@ -269,6 +273,16 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Switch(
+              value: ref.read(localeProvider.notifier).state == const Locale('ja'),
+              onChanged: (value) {
+                if (value) {
+                  ref.read(localeProvider.notifier).state = const Locale('ja');
+                } else {
+                  ref.read(localeProvider.notifier).state = const Locale('en');
+                }
+              },
+            ),
             FloatingActionButton(
               onPressed: () {
                 context.goNamed(MeasureWiFiSpeedPage.name);

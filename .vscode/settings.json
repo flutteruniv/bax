@@ -6,6 +6,7 @@
     "Geolocator",
     "geopoint",
     "googleapis",
+    "hotspots",
     "inappwebview",
     "latlng",
     "Mbps",
