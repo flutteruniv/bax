@@ -137,6 +137,8 @@ PODS:
   - GoogleUtilities/UserDefaults (7.11.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (3.1.0)
+  - in_app_review (0.2.0):
+    - Flutter
   - location (0.0.1):
     - Flutter
   - nanopb (2.30909.0):
@@ -180,6 +182,7 @@ DEPENDENCIES:
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
+  - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -231,6 +234,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocator_apple/ios"
   google_maps_flutter_ios:
     :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
+  in_app_review:
+    :path: ".symlinks/plugins/in_app_review/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   network_info_plus:
@@ -277,6 +282,7 @@ SPEC CHECKSUMS:
   GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
   GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
   GTMSessionFetcher: c9e714f7eec91a55641e2bab9f45fd83a219b882
+  in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   network_info_plus: b78876159360f5580608c2cea620d6ceffabd0ad
@@ -292,6 +298,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 
-PODFILE CHECKSUM: 4fd89a0265b47c08b1c962629bb74e92685fd11b
+PODFILE CHECKSUM: f06a8ad22966c0e0b559bc751c90cf795906ae48
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0
