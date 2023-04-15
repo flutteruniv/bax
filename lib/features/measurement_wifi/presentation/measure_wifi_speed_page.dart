@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -127,11 +126,11 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Transform.translate(
-                offset: const Offset(48, 0),
+                offset: Offset(MediaQuery.of(context).size.width * 0.1, 0),
                 child: Transform.scale(
                   scale: 1.5,
                   child: SizedBox(
-                    height: 240,
+                    width: MediaQuery.of(context).size.width,
                     child: Stack(
                       children: [
                         Align(
@@ -161,7 +160,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                 )
               else
                 const SizedBox(height: 12),
-              const SizedBox(height: 60),
+              const SizedBox(height: 40),
               if (isDone && !isProcessing)
                 SizedBox(
                   height: 40,
@@ -303,40 +302,42 @@ class SpeedIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = width / 2;
     return Stack(
       children: [
         CustomPaint(
           painter: isDownload
               ? DownloadPainter(
                   color: Colors.black,
-                  width: 320,
-                  height: 160,
+                  width: width,
+                  height: height,
                 )
               : UploadPainter(
                   color: Colors.black,
-                  width: 320,
-                  height: 160,
+                  width: width,
+                  height: height,
                 ),
-          child: const SizedBox(
-            width: 320,
-            height: 160,
+          child: SizedBox(
+            width: width,
+            height: height,
           ),
         ),
         ClipPath(
           clipper: isDownload ? DownloadClipper() : UploadClipper(),
           child: Container(
-            width: 320,
-            height: 160,
+            width: width,
+            height: height,
             alignment: Alignment.bottomLeft,
             child: Container(
-              height: 160,
-              width: speed * 2.5,
+              height: height,
+              width: speed * (width / 200),
               color: Colors.black,
             ),
           ),
         ),
         Container(
-          height: 160,
+          height: height,
           padding: isDownload
               ? const EdgeInsets.only(
                   left: 32,
@@ -348,16 +349,16 @@ class SpeedIndicator extends StatelessWidget {
                 ),
           alignment: isDownload ? Alignment.topLeft : Alignment.bottomLeft,
           child: Transform.rotate(
-            angle: isDownload ? pi / 6 : -pi / 6,
+            angle: isDownload ? 0.55 : -0.55,
             child: SizedBox(
-              height: 24,
+              height: 20,
               child: FittedBox(
                 fit: BoxFit.fitHeight,
                 child: Text(
                   isDownload ? 'Download: $speed Mbps' : 'Upload: $speed Mbps',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 12,
                     fontFeatures: [FontFeature.tabularFigures()],
                   ),
                 ),

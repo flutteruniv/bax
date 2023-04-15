@@ -273,16 +273,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Switch(
-              value: ref.read(localeProvider.notifier).state == const Locale('ja'),
-              onChanged: (value) {
-                if (value) {
-                  ref.read(localeProvider.notifier).state = const Locale('ja');
-                } else {
-                  ref.read(localeProvider.notifier).state = const Locale('en');
-                }
-              },
-            ),
             FloatingActionButton(
               onPressed: () {
                 context.goNamed(MeasureWiFiSpeedPage.name);

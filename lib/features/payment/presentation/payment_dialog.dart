@@ -29,7 +29,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
               children: [
                 SvgPicture.asset(
                   'assets/images/bax_logo.svg',
-                  width: 120,
+                  width: 80,
                   color: Colors.black,
                 ),
                 const SizedBox(height: 8),
@@ -76,7 +76,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () async {
                     ref.read(loadingProvider.notifier).show();
@@ -95,7 +95,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                   'トライアル終了後 ¥500/月 課金されます。\n設定画面からいつでも中止できます。',
                   style: TextStyle(fontSize: 12),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
                 OutlinedButton(
                   onPressed: () async {
                     ref.read(loadingProvider.notifier).show();
@@ -122,7 +122,7 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                   },
                   child: const Text('以前購入された方はこちら'),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
                 const Text(
                   '下記に同意の上ご利用ください。',
                   style: TextStyle(fontSize: 12),
