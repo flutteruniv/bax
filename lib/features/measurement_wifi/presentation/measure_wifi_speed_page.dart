@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../authentication/application/auth_service.dart';
 import '../../bax/presentation/bax_reward_dialog.dart';
@@ -239,6 +240,18 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                           );
                         },
                       );
+                      if (!mounted) {
+                        return;
+                      }
+
+                      final inAppReview = InAppReview.instance;
+
+                      /// サポート対象端末であるかのチェック
+                      if (await inAppReview.isAvailable()) {
+                        /// アプリ内レビューをリクエスト
+                        await inAppReview.requestReview();
+                      }
+
                       if (!mounted) {
                         return;
                       }
