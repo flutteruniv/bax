@@ -11,6 +11,8 @@ import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../../map/presentation/facility_map_page.dart';
 import '../../map/presentation/nearby_search_results_dialog.dart';
+import '../../payment/presentation/payment_dialog.dart';
+import '../../payment/repository/payment_repository.dart';
 import '../application/measurement_wifi_service.dart';
 import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
@@ -31,6 +33,9 @@ class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
 class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
   FastNetResult? fastNetResult;
   StreamSubscription<FastNetResult>? sub;
+
+  /// 選択された施設
+  NearbySearchResult? selectedFacility;
 
   bool isProcessing = false;
   bool isDone = false;
@@ -82,15 +87,156 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
           fastNetResult = event;
         });
       },
-      onDone: () {
+      onDone: () async {
         setState(() {
           setState(() {
             isProcessing = false;
             isDone = true;
           });
         });
+
+        if (selectedFacility == null) {
+          return;
+        }
+
+        if (!mounted) {
+          return;
+        }
+
+        await postWiFiMeasurementResult();
       },
     );
+  }
+
+  Future<void> postWiFiMeasurementResult() async {
+    final ssid = this.ssid;
+    final fastNetResult = this.fastNetResult;
+    final selectedFacility = this.selectedFacility;
+
+    final res = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(selectedFacility!.name),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('この施設に投稿しますか？'),
+              const SizedBox(height: 8),
+              if (!ref.watch(isProProvider))
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        fullscreenDialog: true,
+                        builder: (context) {
+                          return const PaymentDialog();
+                        },
+                      ),
+                    );
+                  },
+                  child: const Text('Proプランで獲得BAX2倍'),
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('あとで'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('投稿'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (res != true) {
+      return;
+    }
+
+    if (ssid == null || fastNetResult == null || selectedFacility == null) {
+      return;
+    }
+
+    final canPostResult = await ref.read(measurementWifiRepositoryProvider).hasTodayData(
+          placeId: selectedFacility.placeId,
+          today: DateTime.now().toUtc(),
+          uid: ref.read(uidProvider).valueOrNull ?? '',
+        );
+
+    if (!canPostResult) {
+      if (!mounted) {
+        return;
+      }
+      await showDialog<void>(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text('同じ施設に投稿できるのは1日に1回までです。明日またご協力ください。'),
+          );
+        },
+      );
+      return;
+    }
+
+    final bax = await ref.read(measurementWifiServiceProvider).postMeasurementResult(
+          ssid,
+          fastNetResult,
+          selectedFacility,
+        );
+
+    if (!mounted) {
+      return;
+    }
+
+    if (bax == null) {
+      return;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return BaxRewordDialog(bax: bax);
+      },
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return WiFiResultDialog(
+          ssid: ssid,
+          fastNetResult: fastNetResult,
+          nearbySearchResult: selectedFacility,
+        );
+      },
+    );
+    setState(() {
+      isDone = false;
+      this.selectedFacility = null;
+    });
+
+    if (!mounted) {
+      return;
+    }
+
+    final inAppReview = InAppReview.instance;
+
+    /// サポート対象端末であるかのチェック
+    if (await inAppReview.isAvailable()) {
+      /// アプリ内レビューをリクエスト
+      await inAppReview.requestReview();
+    }
   }
 
   void stopSpeedTest() {
@@ -114,7 +260,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    // nearbySearchResults = ref.watch(myNearbyFacilityProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? '未接続'}'),
@@ -152,7 +297,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 80),
               if (isProcessing)
                 const SizedBox(
                   height: 12,
@@ -160,109 +305,44 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                 )
               else
                 const SizedBox(height: 12),
-              const SizedBox(height: 40),
-              if (isDone && !isProcessing)
+              Text(
+                selectedFacility?.name ?? '',
+                style: const TextStyle(
+                  fontSize: 22,
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (selectedFacility != null && isDone)
                 SizedBox(
                   height: 40,
                   width: 240,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      final res = await showDialog<NearbySearchResult>(
-                        context: context,
-                        builder: (context) {
-                          return const NearbySearchResultsDialog();
-                        },
-                      );
-                      final ssid = this.ssid;
-                      final fastNetResult = this.fastNetResult;
-
-                      if (ssid == null || fastNetResult == null || res == null) {
-                        return;
-                      }
-
-                      final canPostResult = await ref.read(measurementWifiRepositoryProvider).hasTodayData(
-                            placeId: res.placeId,
-                            today: DateTime.now().toUtc(),
-                            uid: ref.read(uidProvider).valueOrNull ?? '',
-                          );
-
-                      if (!canPostResult) {
-                        if (!mounted) {
-                          return;
-                        }
-                        await showDialog<void>(
-                          context: context,
-                          builder: (context) {
-                            return const AlertDialog(
-                              content: Text('同じ施設に投稿できるのは1日に1回までです。明日またご協力ください。'),
-                            );
-                          },
-                        );
-                        return;
-                      }
-
-                      final bax = await ref.read(measurementWifiServiceProvider).postMeasurementResult(
-                            ssid,
-                            fastNetResult,
-                            res,
-                          );
-                      if (!mounted) {
-                        return;
-                      }
-
-                      if (bax == null) {
-                        return;
-                      }
-
-                      await showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return BaxRewordDialog(bax: bax);
-                        },
-                      );
-
-                      if (!mounted) {
-                        return;
-                      }
-
-                      setState(() {
-                        isDone = false;
-                      });
-
-                      await showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return WiFiResultDialog(
-                            ssid: ssid,
-                            fastNetResult: fastNetResult,
-                            nearbySearchResult: res,
-                          );
-                        },
-                      );
-                      if (!mounted) {
-                        return;
-                      }
-
-                      final inAppReview = InAppReview.instance;
-
-                      /// サポート対象端末であるかのチェック
-                      if (await inAppReview.isAvailable()) {
-                        /// アプリ内レビューをリクエスト
-                        await inAppReview.requestReview();
-                      }
-
-                      if (!mounted) {
-                        return;
-                      }
-
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('施設を選んで投稿'),
+                    onPressed: postWiFiMeasurementResult,
+                    child: const Text('投稿'),
                   ),
-                )
-              else
-                const SizedBox(height: 40),
-              const SizedBox(height: 40),
+                ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 40,
+                width: 240,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final res = await showDialog<NearbySearchResult>(
+                      context: context,
+                      builder: (context) {
+                        return const NearbySearchResultsDialog();
+                      },
+                    );
+                    if (res == null) {
+                      return;
+                    }
+                    selectedFacility = res;
+                    setState(() {});
+                  },
+                  child: const Text('施設を選ぶ'),
+                ),
+              ),
+              const SizedBox(height: 16),
               Container(
                 alignment: Alignment.center,
                 child: SizedBox(
@@ -275,9 +355,6 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                         : const Text(
                             'もう一度測定',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
                           ),
                   ),
                 ),

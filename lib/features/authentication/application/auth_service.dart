@@ -58,7 +58,7 @@ class AuthService {
   /// 匿名ログイン
   Future<void> anonymousLogin() async {
     ref.read(loadingProvider.notifier).show();
-    await ref.read(firebaseAuthProvider).signInAnonymously();
+    final userCredential = await ref.read(firebaseAuthProvider).signInAnonymously();
     ref.read(loadingProvider.notifier).hide();
     ref.read(snackBarServiceProvider).showSnackBar('ログインしました');
   }

@@ -115,9 +115,23 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
         return Marker(
           markerId: MarkerId(data.id),
           position: LatLng(data.geo.latitude, data.geo.longitude),
-          icon: BitmapDescriptor.defaultMarkerWithHue(data.markerColor),
-          infoWindow:
-              InfoWindow(title: data.name, snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps'),
+          icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(data.markerColor) : BitmapDescriptor.defaultMarker,
+          infoWindow: isPro
+              ? InfoWindow(title: data.name, snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps')
+              : InfoWindow(
+                  snippet: 'Proプランで閲覧可能',
+                  title: '詳細を見る',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        fullscreenDialog: true,
+                        builder: (context) {
+                          return const PaymentDialog();
+                        },
+                      ),
+                    );
+                  },
+                ),
           onTap: () {
             /// TODO: 施設詳細画面に遷移する
           },
@@ -189,26 +203,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
               zoomControlsEnabled: false,
               myLocationEnabled: true,
             ),
-
-            if (!isPro)
-              ColoredBox(
-                color: Colors.white38,
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          fullscreenDialog: true,
-                          builder: (context) {
-                            return const PaymentDialog();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(localizations.searchWiFi ?? ''),
-                  ),
-                ),
-              ),
 
             if (focusNode.hasFocus) Container(color: Colors.transparent),
             SafeArea(

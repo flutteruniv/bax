@@ -24,7 +24,7 @@ class BaxRepository {
 
   /// Bax履歴を取得する
   Stream<QuerySnapshot<Bax>> streamBaxHistories(String? uid) {
-    final query = _baxCollectionReference.where(baxFieldUid, isEqualTo: uid);
+    final query = _baxCollectionReference.where(baxFieldUid, isEqualTo: uid).orderBy('createdAt', descending: true);
     return query.snapshots();
   }
 

@@ -57,13 +57,19 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     Text(
-                      '・文字列による施設検索',
+                      '・施設のテキスト検索',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       '・Wi-Fi速度マップの利用',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '・獲得BAXが2倍',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

@@ -94,7 +94,6 @@ class _NavigatorPageState extends ConsumerState<NavigatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(Localizations.localeOf(context));
     final isLoading = ref.watch(loadingProvider);
     final minimumVersion = ref.watch(updateStreamProvider);
     final deviceVersion = ref.watch(nowVersionProvider);

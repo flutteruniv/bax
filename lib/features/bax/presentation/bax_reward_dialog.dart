@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../payment/repository/payment_repository.dart';
 import '../domain/bax.dart';
 
 class BaxRewordDialog extends ConsumerStatefulWidget {
@@ -47,6 +48,21 @@ class _BaxRewordDialogState extends ConsumerState<BaxRewordDialog> {
                   ),
                 ),
                 const Divider(),
+                if (ref.watch(isProProvider))
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Pro ブースト',
+                          style: TextStyle(),
+                        ),
+                      ),
+                      Text(
+                        '×${widget.bax.bonusRate}',
+                        style: const TextStyle(),
+                      ),
+                    ],
+                  ),
                 Row(
                   children: [
                     const Expanded(

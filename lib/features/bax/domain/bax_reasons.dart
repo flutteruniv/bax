@@ -12,7 +12,7 @@ class BaxReasons {
   /// その施設に対して初の投稿の場合
   static const findingNewWiFi = BaxReason(
     text: '新Wi-Fiスポット発見',
-    point: 50,
+    point: 20,
   );
 
   /// Amazonギフト券交換

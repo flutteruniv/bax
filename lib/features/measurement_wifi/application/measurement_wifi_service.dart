@@ -8,6 +8,7 @@ import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
+import '../../payment/repository/payment_repository.dart';
 import '../../user/data/user_repository.dart';
 import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
@@ -56,18 +57,9 @@ class MeasurementWifiService {
       // 計測結果を追加する
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
 
-      /// TODO: bonusRateと付与ポイントを動的にする
-      final bax = Bax(
-        uid: uid,
-        bonusRate: 1,
-        baxReasons: [BaxReasons.measurementWifi],
-      );
-
-      /// BAX付与する
-      await userRepository.giveBax(bax);
-
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
       final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
+
       var totalDownloadSpeed = 0.0;
       var totalUploadSpeed = 0.0;
       for (final result in results) {
@@ -88,6 +80,21 @@ class MeasurementWifiService {
             averageDownloadSpeed,
             averageUploadSpeed,
           );
+
+      final bax = Bax(
+        uid: uid,
+
+        /// proであれば2倍にする
+        bonusRate: ref.read(isProProvider) ? 2 : 1,
+        baxReasons: [
+          /// 過去に計測がなければボーナスポイントを付与
+          if (results.length == 1) BaxReasons.findingNewWiFi,
+          BaxReasons.measurementWifi,
+        ],
+      );
+
+      /// BAX付与する
+      await userRepository.giveBax(bax);
       return bax;
     } on FirebaseException catch (e) {
       if (e.code == 'permission-denied') {

@@ -17,6 +17,8 @@ class NearbySearchResultsDialog extends ConsumerWidget {
           ? Column(
               children: const [
                 Spacer(),
+                CircularProgressIndicator(),
+                Spacer(),
               ],
             )
           : SingleChildScrollView(
