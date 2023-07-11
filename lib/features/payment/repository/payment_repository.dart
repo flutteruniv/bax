@@ -5,11 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../authentication/application/auth_service.dart';
+import '../../user/application/user_service.dart';
 
 final customerInfoProvider = StateProvider<CustomerInfo?>((ref) => null);
 final paymentRepositoryProvider = Provider(PaymentRepository.new);
 
-final isProProvider = Provider((ref) => ref.watch(customerInfoProvider)?.activeSubscriptions.isNotEmpty ?? false);
+final isProProvider = Provider(
+  (ref) {
+    final user = ref.watch(loginUserProvider).valueOrNull;
+    return user?.data()?.isPro == true || (ref.watch(customerInfoProvider)?.activeSubscriptions.isNotEmpty ?? false);
+  },
+);
 
 class PaymentRepository {
   PaymentRepository(this.ref);
@@ -17,8 +23,13 @@ class PaymentRepository {
 
   static const productId = 'bax_monthly_premium_plan';
 
+  /// old
   static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
   static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';
+
+  /// new
+  // static const _androidAPIKey = 'goog_QlFVnrlvJvIyPZFegAQugcOytvh';
+  // static const _iOSAPIKey = 'appl_GUEhLBjxzWdSvnDkvGTcbGobmdT';
   final apiKey = Platform.isAndroid ? _androidAPIKey : _iOSAPIKey;
 
   Future<void> initPlatformState() async {
@@ -28,6 +39,7 @@ class PaymentRepository {
     /// customerInfoの更新を監視
     Purchases.addCustomerInfoUpdateListener((customerInfo) {
       ref.read(customerInfoProvider.notifier).update((_) => customerInfo);
+
       final uid = ref.read(uidProvider).valueOrNull;
       if (uid == null) {
         return;

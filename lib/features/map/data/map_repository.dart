@@ -118,7 +118,6 @@ class MapRepository {
           // TODO(kenta-wakasa): 多言語対応のとき注意
           'language': 'ja',
           'key': googleMapAPIKey,
-
           'rankby': 'distance',
           // 'opennow': 'true',
           if (nextPageToken != null) 'pagetoken': nextPageToken,

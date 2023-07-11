@@ -14,8 +14,8 @@ class NearbySearchResultsDialog extends ConsumerWidget {
     return AlertDialog(
       title: const Center(child: Text('近くの施設を選択')),
       content: (nearbySearchResults?.results ?? []).isEmpty
-          ? Column(
-              children: const [
+          ? const Column(
+              children: [
                 Spacer(),
                 CircularProgressIndicator(),
                 Spacer(),

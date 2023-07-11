@@ -16,11 +16,11 @@
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
 	<key>signingStyle</key>
-	<string>manual</string>
+	<string>automatic</string>
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>FB6D8X43R8</string>
+	<string>42XYZEWKER</string>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>

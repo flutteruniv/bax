@@ -115,13 +115,13 @@ class _NavigatorPageState extends ConsumerState<NavigatorPage> {
                 loading: Container.new,
                 data: (value) {
                   final minimumVersionData = value.data();
-                  final minimumVersion = minimumVersionData!['minimumSupportedVersion'] as String;
+                  final minimumVersion = minimumVersionData?['minimumSupportedVersion'] as String?;
 
                   return deviceVersion.when(
                     error: (error, stackTrace) => Container(),
                     loading: Container.new,
                     data: (value) {
-                      if (UpdateDialog.versionCheck(minimumVersion, value)) {
+                      if (UpdateDialog.versionCheck(minimumVersion ?? '0.0.0', value)) {
                         return const UpdateDialog();
                       }
                       return Container();

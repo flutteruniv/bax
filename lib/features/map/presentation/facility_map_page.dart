@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
@@ -117,7 +118,14 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           position: LatLng(data.geo.latitude, data.geo.longitude),
           icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(data.markerColor) : BitmapDescriptor.defaultMarker,
           infoWindow: isPro
-              ? InfoWindow(title: data.name, snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps')
+              ? InfoWindow(
+                  title: data.name,
+                  snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps',
+                  onTap: () {
+                    final url = 'https://www.google.com/maps/search/?api=1&query=${data.name}';
+                    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  },
+                )
               : InfoWindow(
                   snippet: 'Proプランで閲覧可能',
                   title: '詳細を見る',
