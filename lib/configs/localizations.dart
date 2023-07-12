@@ -1,41 +1,47 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final localeProvider = StateProvider(
-  (ref) => const Locale('ja'),
+  (ref) {
+    final defaultLocaleName = Platform.localeName;
+    return Locale(defaultLocaleName);
+  },
 );
 
 final localizationsProvider = Provider(
-  (ref) => AppLocalizations(ref.watch(localeProvider).languageCode),
+  (ref) => AppLocalizations(LType.values.byName(ref.watch(localeProvider).languageCode.split('_').first)),
 );
+
+enum LType { en, ja }
 
 class AppLocalizations {
   AppLocalizations(this.l);
 
-  final String l;
+  final LType l;
 
-  String? get terms => {
-        'ja': '利用規約',
-        'en': 'Terms of Use',
-      }[l];
+  String get terms => switch (l) {
+        LType.ja => '利用規約',
+        LType.en => 'Terms of Use',
+      };
 
-  String? get privacy => {
-        'ja': 'プライバシーポリシー',
-        'en': 'Privacy policy',
-      }[l];
+  String get privacy => switch (l) {
+        LType.ja => 'プライバシーポリシー',
+        LType.en => 'Privacy policy',
+      };
 
-  String? get searchWiFi => {
-        'ja': 'Wi-Fiスポットを探す',
-        'en': 'Search for Wi-Fi hotspots',
-      }[l];
+  String get searchWiFi => switch (l) {
+        LType.ja => 'Wi-Fiスポットを探す',
+        LType.en => 'Search for Wi-Fi hotspots',
+      };
+  String get downloadSpeed => switch (l) {
+        LType.ja => 'ダウンロード速度',
+        LType.en => 'download speed',
+      };
 
-  String? get downloadSpeed => {
-        'ja': 'Wifiダウンロード速度',
-        'en': 'Wi-Fi download speed',
-      }[l];
-
-  String? get notMeasured => {
-        'ja': 'Wifiダウンロード速度',
-        'en': 'Wi-Fi download speed',
-      }[l];
+  String get notMeasured => switch (l) {
+        LType.ja => '未測定',
+        LType.en => 'Not measured',
+      };
 }

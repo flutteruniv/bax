@@ -6,7 +6,7 @@ publish_to: "none"
 version: 1.0.5+20
 
 environment:
-  sdk: ">=2.18.5 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.2
@@ -43,6 +43,10 @@ dependencies:
   firebase_analytics: ^10.2.0
   in_app_review: ^2.0.6
   intl: ^0.18.0
+  open_settings: ^2.0.2
+  system_settings: ^2.1.0
+  app_settings: ^5.0.0
+  maps_launcher:
 
 dev_dependencies:
   flutter_test:

@@ -24,12 +24,12 @@ class PaymentRepository {
   static const productId = 'bax_monthly_premium_plan';
 
   /// old
-  static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
-  static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';
+  // static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
+  // static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';
 
   /// new
-  // static const _androidAPIKey = 'goog_QlFVnrlvJvIyPZFegAQugcOytvh';
-  // static const _iOSAPIKey = 'appl_GUEhLBjxzWdSvnDkvGTcbGobmdT';
+  static const _androidAPIKey = 'goog_QlFVnrlvJvIyPZFegAQugcOytvh';
+  static const _iOSAPIKey = 'appl_GUEhLBjxzWdSvnDkvGTcbGobmdT';
   final apiKey = Platform.isAndroid ? _androidAPIKey : _iOSAPIKey;
 
   Future<void> initPlatformState() async {

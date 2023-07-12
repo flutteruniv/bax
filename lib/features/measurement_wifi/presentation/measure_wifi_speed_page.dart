@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:system_settings/system_settings.dart';
 
 import '../../authentication/application/auth_service.dart';
 import '../../bax/presentation/bax_reward_dialog.dart';
@@ -54,7 +57,22 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         context: context,
         builder: (dialogContext) {
           return AlertDialog(
-            content: const Text('Wi-Fiに接続されていることを確認して、測定ボタンを押してください。'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Wi-Fiに接続されていることを確認して、測定ボタンを押してください。'),
+                ElevatedButton(
+                  onPressed: () {
+                    if (Platform.isIOS) {
+                      const MethodChannel('openSetting').invokeMethod('openSetting');
+                    } else {
+                      SystemSettings.wifi();
+                    }
+                  },
+                  child: const Text('Wi-Fi設定画面へ'),
+                ),
+              ],
+            ),
             actions: [
               TextButton(
                 onPressed: () {

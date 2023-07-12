@@ -13,6 +13,22 @@ import GoogleMaps
     }
 
     GeneratedPluginRegistrant.register(with: self)
+
+    /// 設定画面を開くための設定
+    let methodChannelName = "openSetting"
+    let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+    let settingsChannel = FlutterMethodChannel(name: methodChannelName, binaryMessenger: controller as! FlutterBinaryMessenger)
+    settingsChannel.setMethodCallHandler({
+      (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+      if (call.method == "openSetting") {
+        let url = URL(string: "App-Prefs:root")
+        let app = UIApplication.shared
+        result(app.openURL(url!))
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    })
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
