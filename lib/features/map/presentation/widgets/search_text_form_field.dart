@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../configs/localizations.dart';
 import '../../../payment/presentation/payment_dialog.dart';
 import '../../../payment/repository/payment_repository.dart';
 import '../../application/map_service.dart';
@@ -38,7 +39,9 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
   @override
   Widget build(BuildContext context) {
     final localeLanguage = Localizations.localeOf(context).languageCode;
+
     final isPro = ref.watch(isProProvider);
+    final localizations = ref.watch(localizationsProvider);
     return AnimatedContainer(
       width: searchMode ? MediaQuery.of(context).size.width : 56,
       duration: const Duration(milliseconds: 250),
@@ -61,7 +64,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
               controller: widget.controller,
               focusNode: widget.focusNode,
               autofocus: true,
-              decoration: const InputDecoration.collapsed(hintText: 'ここで検索').copyWith(
+              decoration: InputDecoration.collapsed(hintText: localizations.searchHear).copyWith(
                 icon: const Icon(Icons.search),
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(60)], // 一旦60文字で制限

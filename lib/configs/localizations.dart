@@ -44,4 +44,8 @@ class AppLocalizations {
         LType.ja => '未測定',
         LType.en => 'Not measured',
       };
+  String get searchHear => switch (l) {
+        LType.ja => 'ここで検索',
+        LType.en => 'Search here',
+      };
 }

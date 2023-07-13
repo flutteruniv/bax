@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:system_settings/system_settings.dart';
 
+import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../bax/presentation/bax_reward_dialog.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
@@ -56,6 +57,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         barrierDismissible: false,
         context: context,
         builder: (dialogContext) {
+          final localizations = ref.watch(localizationsProvider);
           return AlertDialog(
             content: Column(
               mainAxisSize: MainAxisSize.min,
