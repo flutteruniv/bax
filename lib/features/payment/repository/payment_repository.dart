@@ -17,17 +17,24 @@ final isProProvider = Provider(
   },
 );
 
+final storeProductsProvider = FutureProvider(
+  (ref) {
+    return Purchases.getProducts(
+      [ref.watch(productIdProvider)],
+    );
+  },
+);
+
+final priceStringProvider = FutureProvider(
+  (ref) async => (await ref.watch(storeProductsProvider.future)).first.priceString,
+);
+
+final productIdProvider = Provider((ref) => 'bax_monthly_premium_plan');
+
 class PaymentRepository {
   PaymentRepository(this.ref);
   final Ref ref;
 
-  static const productId = 'bax_monthly_premium_plan';
-
-  /// old
-  // static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
-  // static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';
-
-  /// new
   static const _androidAPIKey = 'goog_QlFVnrlvJvIyPZFegAQugcOytvh';
   static const _iOSAPIKey = 'appl_GUEhLBjxzWdSvnDkvGTcbGobmdT';
   final apiKey = Platform.isAndroid ? _androidAPIKey : _iOSAPIKey;
@@ -52,7 +59,7 @@ class PaymentRepository {
   Future<CustomerInfo> purchaseSubscription() async {
     final uid = ref.read(uidProvider).valueOrNull!;
     await Purchases.logIn(uid);
-    return Purchases.purchaseProduct(productId);
+    return Purchases.purchaseProduct(ref.read(productIdProvider));
   }
 
   /// サブスクリプションを復元する
@@ -62,3 +69,7 @@ class PaymentRepository {
     return Purchases.restorePurchases();
   }
 }
+
+/// old
+// static const _androidAPIKey = 'goog_LGBCtTpXecsHelnYUVJlEJXgqBi';
+// static const _iOSAPIKey = 'appl_tOEvRcOONWfjFuHMmHZenhCBezI';

@@ -57,7 +57,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         barrierDismissible: false,
         context: context,
         builder: (dialogContext) {
-          final localizations = ref.watch(localizationsProvider);
+          final l = ref.watch(localizationsProvider);
           return AlertDialog(
             content: Column(
               mainAxisSize: MainAxisSize.min,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../configs/localizations.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/urls.dart';
 import '../../load/application/loading_notifier.dart';
@@ -18,7 +19,9 @@ class PaymentDialog extends ConsumerStatefulWidget {
 class _PaymentDialogState extends ConsumerState<PaymentDialog> {
   @override
   Widget build(BuildContext context) {
+    final l = ref.watch(localizationsProvider);
     final isPro = ref.watch(isProProvider);
+    final priceString = ref.watch(priceStringProvider).valueOrNull ?? '   ';
     return Scaffold(
       appBar: AppBar(),
       body: Stack(
@@ -40,43 +43,43 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  '¥500/月',
-                  style: TextStyle(
+                Text(
+                  '$priceString/${l.month}',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'アップグレードで次の機能が解放されます',
-                  style: TextStyle(fontSize: 12),
+                Text(
+                  l.upgradingWillUnlockTheFollowingFeatures,
+                  style: const TextStyle(fontSize: 12),
                 ),
                 const SizedBox(height: 4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      '・施設のテキスト検索',
-                      style: TextStyle(
+                      '・${l.textSearchForFacilities}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '・Wi-Fi速度マップの利用',
-                      style: TextStyle(
+                      '・${l.useOfWiFiSpeedMap}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '・獲得BAXが2倍',
-                      style: TextStyle(
+                      '・${l.earnDoublePoints}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '・BAXと特典の交換',
-                      style: TextStyle(
+                      '・${l.exchangePointsForRewards}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -95,11 +98,11 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                       ref.read(loadingProvider.notifier).hide();
                     }
                   },
-                  child: const Text('1週間無料トライアル'),
+                  child: Text(l.oneWeekFreeTrial),
                 ),
-                const Text(
-                  'トライアル終了後 ¥500/月 課金されます。\n設定画面からいつでも中止できます。',
-                  style: TextStyle(fontSize: 12),
+                Text(
+                  '${l.billingAfterTrialEnds}\n${l.cancelAnytimeInSettings}',
+                  style: const TextStyle(fontSize: 12),
                 ),
                 const SizedBox(height: 32),
                 OutlinedButton(
@@ -114,8 +117,8 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                         await showDialog<void>(
                           context: context,
                           builder: (context) {
-                            return const AlertDialog(
-                              content: Text('復元に失敗しました。'),
+                            return AlertDialog(
+                              content: Text(l.restoreFailed),
                             );
                           },
                         );
@@ -126,32 +129,34 @@ class _PaymentDialogState extends ConsumerState<PaymentDialog> {
                       ref.read(loadingProvider.notifier).hide();
                     }
                   },
-                  child: const Text('以前購入された方はこちら'),
+                  child: Text(l.restorePurchase),
                 ),
                 const SizedBox(height: 32),
-                const Text(
-                  '下記に同意の上ご利用ください。',
-                  style: TextStyle(fontSize: 12),
+                Text(
+                  l.agreeToBelowBeforeUse,
+                  style: const TextStyle(fontSize: 12),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
                       onPressed: () {
+                        // TODO(kenta-wakasa): 利用規約の多言語対応
                         launchUrl(Uri.parse(termOfServiceUrl));
                       },
-                      child: const Text(
-                        '利用規約',
-                        style: TextStyle(fontSize: 12),
+                      child: Text(
+                        l.terms,
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        // TODO(kenta-wakasa): プライバシーポリシーの多言語対応
                         launchUrl(Uri.parse(privacyPolicyUrl));
                       },
-                      child: const Text(
-                        'プライバシーポリシー',
-                        style: TextStyle(fontSize: 12),
+                      child: Text(
+                        l.privacy,
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                   ],
