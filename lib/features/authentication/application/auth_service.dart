@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/environment.dart';
+import '../../../configs/localizations.dart';
 import '../../../configs/logger.dart';
 import '../../../configs/preferences.dart';
 import '../../../configs/validators.dart';
@@ -38,6 +39,8 @@ class AuthService {
   AuthService(this.ref);
   final Ref ref;
 
+  AppLocalizations get l => ref.read(localizationsProvider);
+
   final _isSentEmailController = StreamController<bool>();
 
   Stream<bool> isSentEmailStream() {
@@ -58,9 +61,9 @@ class AuthService {
   /// 匿名ログイン
   Future<void> anonymousLogin() async {
     ref.read(loadingProvider.notifier).show();
-    final userCredential = await ref.read(firebaseAuthProvider).signInAnonymously();
+    await ref.read(firebaseAuthProvider).signInAnonymously();
     ref.read(loadingProvider.notifier).hide();
-    ref.read(snackBarServiceProvider).showSnackBar('ログインしました');
+    ref.read(snackBarServiceProvider).showSnackBar(l.loggedIn);
   }
 
   Future<void> logout() async {
@@ -83,10 +86,10 @@ class AuthService {
       logger.e('メール送信エラー: $e');
       switch (e.code) {
         case 'invalid-email':
-          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスが無効です');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.invalidEmail);
           break;
         default:
-          ref.watch(snackBarServiceProvider).showSnackBar('メールの送信に失敗しました');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailSendFailed);
           break;
       }
     }
@@ -102,18 +105,18 @@ class AuthService {
     try {
       await ref.watch(firebaseAuthProvider).currentUser?.linkWithCredential(authCredential);
       await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
-      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
+      ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerified);
     } on FirebaseAuthException catch (e) {
       logger.e('メール認証エラー: $e');
       switch (e.code) {
         case 'provider-already-linked':
-          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に認証済です');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyVerified);
           break;
         case 'email-already-in-use':
-          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に他のアカウントで使用されています');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyInUse);
           break;
         default:
-          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerificationFailed);
           break;
       }
     }
@@ -129,18 +132,18 @@ class AuthService {
     try {
       await ref.watch(firebaseAuthProvider).signInWithCredential(authCredential);
       await pref.removeEmail(); // アカウント紐付け後は保持しておく必要がないのでローカルから削除する
-      ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証が完了しました');
+      ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerified);
     } on FirebaseAuthException catch (e) {
       logger.e('メール認証エラー: $e');
       switch (e.code) {
         case 'provider-already-linked':
-          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に認証済です');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyVerified);
           break;
         case 'email-already-in-use':
-          ref.watch(snackBarServiceProvider).showSnackBar('このメールアドレスは既に他のアカウントで使用されています');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyInUse);
           break;
         default:
-          ref.watch(snackBarServiceProvider).showSnackBar('メールアドレスの認証に失敗しました');
+          ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerificationFailed);
           break;
       }
     }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../configs/localizations.dart';
 import '../../../configs/urls.dart';
 import '../../location/domain/my_location.dart';
 import '../application/auth_service.dart';
@@ -30,6 +31,7 @@ class _WelComePageState extends ConsumerState<WelComePage> {
   @override
   Widget build(BuildContext context) {
     final authService = ref.watch(authServiceProvider);
+    final l = ref.watch(localizationsProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -43,8 +45,8 @@ class _WelComePageState extends ConsumerState<WelComePage> {
                       currentIndex = value;
                     });
                   },
-                  children: const [
-                    Center(
+                  children: [
+                    const Center(
                       child: Text(
                         'BAX',
                         style: TextStyle(
@@ -53,22 +55,25 @@ class _WelComePageState extends ConsumerState<WelComePage> {
                         ),
                       ),
                     ),
+                    // TODO(kenta-wakasa): はやいWi-Fiを見つけている人のイメージをAIで作成する。
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.all(48),
-                        child: Text('BAXはWi-Fiの速度をみんなで測定して、Wi-Fiの速度が速い施設を探しやすくするためのアプリです。'),
+                        padding: const EdgeInsets.all(48),
+                        child: Text(l.appDescription),
                       ),
                     ),
+                    // TODO(kenta-wakasa): Wi-Fi測定がGiftに変わるイラストのイメージをAIで作成する。
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.all(48),
-                        child: Text('Wi-Fiを測定するとBAXというポイントが付与されます。BAXはAmazonギフト券などの特典に交換可能です。'),
+                        padding: const EdgeInsets.all(48),
+                        child: Text(l.earnBAXDescription),
                       ),
                     ),
+                    // TODO(kenta-wakasa): 世界がハッピーになっているイメージ
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.all(48),
-                        child: Text('あなたの測定が、みんなの役に立ちます。ご協力よろしくお願いいたします。'),
+                        padding: const EdgeInsets.all(48),
+                        child: Text(l.measureContribution),
                       ),
                     ),
                   ],
@@ -104,13 +109,13 @@ class _WelComePageState extends ConsumerState<WelComePage> {
                           onPressed: () {
                             launchUrl(Uri.parse(termOfServiceUrl));
                           },
-                          child: const Text('利用規約'),
+                          child: Text(l.terms),
                         ),
                         TextButton(
                           onPressed: () {
                             launchUrl(Uri.parse(privacyPolicyUrl));
                           },
-                          child: const Text('プライバシーポリシー'),
+                          child: Text(l.privacy),
                         ),
                       ],
                     ),
@@ -118,13 +123,13 @@ class _WelComePageState extends ConsumerState<WelComePage> {
                       onPressed: () async {
                         await authService.anonymousLogin();
                       },
-                      child: const Text('規約に同意してはじめる'),
+                      child: Text(l.agreeToTerms),
                     ),
                     OutlinedButton(
                       onPressed: () {
                         context.go(SignInPage.route);
                       },
-                      child: const Text('データを引き継ぐ'),
+                      child: Text(l.transferData),
                     ),
                   ],
                 ),

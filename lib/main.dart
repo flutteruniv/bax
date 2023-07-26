@@ -27,7 +27,7 @@ void main() async {
     ProviderScope(
       overrides: [
         if (kDebugMode) localeProvider.overrideWith((ref) => const Locale('en')),
-        if (kDebugMode) isProProvider.overrideWithValue(false),
+        if (kDebugMode) isProProvider.overrideWithValue(true),
       ],
       child: const MyApp(),
     ),

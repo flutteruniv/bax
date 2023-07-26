@@ -4,6 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/localizations.dart';
 import '../application/auth_service.dart';
 import 'widgets/email_send_complete.dart';
 
@@ -41,7 +42,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     final isSentEmail = ref.watch(isSentEmailStreamProvider).valueOrNull ?? false;
     // メール送信完了時点で空文字にする
     _email = isSentEmail ? '' : _email;
-
+    final l = ref.watch(localizationsProvider);
     return Scaffold(
       appBar: AppBar(),
       body: isSentEmail
@@ -50,28 +51,31 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  const Text(
-                    '本人確認のため、メールアドレスの認証をお願いします',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    l.verifyForConfirmation,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
                   TextFormField(
                     autofocus: true,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration.collapsed(hintText: 'メールアドレスを入力してください').copyWith(
+                    decoration: InputDecoration.collapsed(hintText: l.enterEmail).copyWith(
                       icon: const Icon(Icons.mail),
                     ),
                     onChanged: (value) => _email = value,
                   ),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await ref.read(authServiceProvider).sendEmail(_email);
-                    },
-                    child: const Text(
-                      '認証',
-                      style: TextStyle(
-                        fontSize: 14,
+                  const SizedBox(height: 64),
+                  SizedBox(
+                    width: 240,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await ref.read(authServiceProvider).sendEmail(_email);
+                      },
+                      child: Text(
+                        l.authenticate,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ),

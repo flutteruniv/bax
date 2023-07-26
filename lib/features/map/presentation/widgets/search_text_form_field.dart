@@ -38,7 +38,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final localeLanguage = Localizations.localeOf(context).languageCode;
+    final languageCode = ref.watch(localeProvider).languageCode.split('_').first;
 
     final isPro = ref.watch(isProProvider);
     final localizations = ref.watch(localizationsProvider);
@@ -69,15 +69,13 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(60)], // 一旦60文字で制限
               enableInteractiveSelection: true, // コピペ可
-              onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value, localeLanguage),
+              onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value, languageCode),
             )
           : Row(
               children: [
                 InkWell(
                   onTap: () {
                     if (!isPro) {
-                      // TODO(kenta-wakasa): 課金ダイアログを表示
-
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
                           fullscreenDialog: true,

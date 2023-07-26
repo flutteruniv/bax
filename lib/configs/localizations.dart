@@ -123,7 +123,7 @@ class AppLocalizations {
         LType.en => 'Cancel',
       };
   String get ok => switch (l) {
-        LType.ja => 'しない',
+        LType.ja => 'する',
         LType.en => 'OK',
       };
   String get linkEmailAddress => switch (l) {
@@ -212,8 +212,146 @@ class AppLocalizations {
         LType.ja => '近くの施設を選択',
         LType.en => 'Select nearby facility',
       };
+  String get viewableWithProPlan => switch (l) {
+        LType.ja => 'Proプランで閲覧可能',
+        LType.en => 'Viewable with Pro Plan',
+      };
+  String get viewDetails => switch (l) {
+        LType.ja => '詳細を見る',
+        LType.en => 'View details',
+      };
+  String get noMatchingResults => switch (l) {
+        LType.ja => '一致する検索結果がありません',
+        LType.en => 'No matching results found',
+      };
+  String get errorOccurred => switch (l) {
+        LType.ja => 'エラーが発生しました。\n時間を置いて再度お試しください。',
+        LType.en => 'An error has occurred.\nPlease try again later.',
+      };
+  String get error => switch (l) {
+        LType.ja => 'エラー',
+        LType.en => 'error',
+      };
+
+  String get history => switch (l) {
+        LType.ja => '履歴',
+        LType.en => 'History',
+      };
+  String get acquired => switch (l) {
+        LType.ja => '獲得',
+        LType.en => 'Acquired',
+      };
+  String get dateOfUse => switch (l) {
+        LType.ja => '利用日',
+        LType.en => 'Date of use',
+      };
+  String get unknown => switch (l) {
+        LType.ja => '不明',
+        LType.en => 'Unknown',
+      };
+  String get loggedIn => switch (l) {
+        LType.ja => 'ログインしました',
+        LType.en => 'Logged in',
+      };
+  String get invalidEmail => switch (l) {
+        LType.ja => 'メールアドレスが無効です',
+        LType.en => 'Invalid email address',
+      };
+  String get emailSendFailed => switch (l) {
+        LType.ja => 'メールの送信に失敗しました',
+        LType.en => 'Failed to send email',
+      };
+  String get emailVerified => switch (l) {
+        LType.ja => 'メールアドレスの認証が完了しました',
+        LType.en => 'Email verification completed',
+      };
+  String get emailAlreadyVerified => switch (l) {
+        LType.ja => 'このメールアドレスは既に認証済です',
+        LType.en => 'This email address is already verified',
+      };
+  String get emailAlreadyInUse => switch (l) {
+        LType.ja => 'このメールアドレスは既に他のアカウントで使用されています',
+        LType.en => 'This email address is already in use by another account',
+      };
+  String get emailVerificationFailed => switch (l) {
+        LType.ja => 'メールアドレスの認証に失敗しました',
+        LType.en => 'Email verification failed',
+      };
+  String get enterEmail => switch (l) {
+        LType.ja => 'メールアドレスを入力してください',
+        LType.en => 'Please enter your email address',
+      };
+  String get invalidEmailFormat => switch (l) {
+        LType.ja => 'メールアドレスが無効な形式です',
+        LType.en => 'Invalid email format',
+      };
+  String get emailSentForVerification => switch (l) {
+        LType.ja => 'メールアドレス受信確認用のメールを送信しました。',
+        LType.en => 'We have sent an email for confirmation of receipt to your email address',
+      };
+  String get verifyEmail => switch (l) {
+        LType.ja => 'メールをご確認いただき、メールに記載されたURLをクリックして、メール認証を完了してください。',
+        LType.en =>
+          'Please check your email and click on the URL provided in the email to complete the email verification.',
+      };
+  String get ifEmailNotReceived => switch (l) {
+        LType.ja => 'メールが届かない場合、以下をご確認ください。',
+        LType.en => 'If you do not receive the email, please check the following:',
+      };
+
+  String get checkSpamFolder => switch (l) {
+        LType.ja => '迷惑メールフォルダに入っていませんか？',
+        LType.en => 'Is it in your spam folder?',
+      };
+  String get setMailReception => switch (l) {
+        LType.ja => 'noreply@bax.network」からのメールを受け取れるように設定してください。',
+        LType.en => 'Please set your account to receive emails from "noreply@bax.network"',
+      };
+  String get checkEmailAddress => switch (l) {
+        LType.ja => '入力したメールアドレスに誤りはありませんか？',
+        LType.en => 'Is there any mistake in the email address you entered?',
+      };
+  String get verifyForConfirmation => switch (l) {
+        LType.ja => '本人確認のため、メールアドレスの連携をお願いします',
+        LType.en => 'For identity verification, please link your email address',
+      };
+
+  String get link => switch (l) {
+        LType.ja => '連携',
+        LType.en => 'link',
+      };
+  String get authenticate => switch (l) {
+        LType.ja => '認証',
+        LType.en => 'Authenticate',
+      };
+  String get resetEmail => switch (l) {
+        LType.ja => 'メールアドレスを再設定',
+        LType.en => 'Reset Email Address',
+      };
+  String get appDescription => switch (l) {
+        LType.ja => 'BAXはWi-Fiの速度をみんなで測定して、Wi-Fiの速度が速い施設を探しやすくするためのアプリです。',
+        LType.en =>
+          'BAX is an app that enables everyone to measure Wi-Fi speeds, making it easier to find facilities with fast Wi-Fi.',
+      };
+  String get earnBAXDescription => switch (l) {
+        LType.ja => 'Wi-Fiを測定するとBAXというポイントが付与されます。BAXはAmazonギフト券などの特典に交換可能です。',
+        LType.en =>
+          'You earn points called BAX when you measure Wi-Fi. BAX can be exchanged for rewards such as Amazon gift cards.',
+      };
+  String get measureContribution => switch (l) {
+        LType.ja => 'あなたの測定が、みんなの役に立ちます。ご協力よろしくお願いいたします。',
+        LType.en => 'Your measurements help everyone. Thank you for your cooperation.',
+      };
+  String get agreeToTerms => switch (l) {
+        LType.ja => '規約に同意してはじめる',
+        LType.en => 'Agree to the terms to begin',
+      };
+  String get transferData => switch (l) {
+        LType.ja => 'データを引き継ぐ',
+        LType.en => 'Transfer data',
+      };
   String get XXX => switch (l) {
-        LType.ja => '近くの施設を選択',
+        LType.ja => 'データを引き継ぐ',
         LType.en => 'XXX',
       };
 }

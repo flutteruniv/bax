@@ -111,7 +111,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    final localizations = ref.watch(localizationsProvider);
+    final l = ref.watch(localizationsProvider);
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     final isPro = ref.watch(isProProvider);
     markers.addAll(
@@ -124,7 +124,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           infoWindow: isPro
               ? InfoWindow(
                   title: data.name,
-                  snippet: '${localizations.downloadSpeed}: ${data.downloadSpeed}Mbps',
+                  snippet: '${l.downloadSpeed}: ${data.downloadSpeed}Mbps',
                   onTap: () async {
                     final url = 'https://www.google.com/maps/search/?api=1&query=${data.name}';
                     if (Platform.isIOS) {
@@ -145,8 +145,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                   },
                 )
               : InfoWindow(
-                  snippet: 'Proプランで閲覧可能',
-                  title: '詳細を見る',
+                  snippet: l.viewableWithProPlan,
+                  title: l.viewDetails,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
@@ -159,7 +159,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                   },
                 ),
           onTap: () {
-            /// TODO: 施設詳細画面に遷移する
+            // TODO(kenta-wakasa): 施設詳細画面に遷移する
           },
         );
       }).toSet(),
@@ -193,8 +193,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           markerId: MarkerId(facility.id),
           position: latlng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          infoWindow:
-              InfoWindow(title: facility.name, snippet: '${localizations.downloadSpeed}: ${localizations.notMeasured}'),
+          infoWindow: InfoWindow(title: facility.name, snippet: '${l.downloadSpeed}: ${l.notMeasured}'),
         );
         markers.add(marker);
       }
