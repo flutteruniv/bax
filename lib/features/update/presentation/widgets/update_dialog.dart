@@ -1,16 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../configs/localizations.dart';
+
 /// 強制アップデート促すダイアログ
-class UpdateDialog extends StatelessWidget {
+class UpdateDialog extends ConsumerWidget {
   const UpdateDialog({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = ref.watch(localizationsProvider);
     return Stack(
       children: [
         Container(
@@ -18,13 +22,13 @@ class UpdateDialog extends StatelessWidget {
         ),
         SimpleDialog(
           children: [
-            const SimpleDialogOption(
-              child: Text('最新バージョンにアップデートしてください。'),
+            SimpleDialogOption(
+              child: Text(l.pleaseUpdate),
             ),
             SimpleDialogOption(
               child: ElevatedButton(
                 onPressed: _launchUrl,
-                child: const Text('アップデート'),
+                child: Text(l.update),
               ),
             )
           ],

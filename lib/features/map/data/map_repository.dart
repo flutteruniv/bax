@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../configs/http.dart';
+import '../../../configs/localizations.dart';
 import '../../../configs/secrets.dart';
 import '../domain/facility_prediction_results/facility_prediction_result.dart';
 import '../domain/facility_prediction_results/facility_prediction_results.dart';
@@ -19,7 +20,7 @@ final predictionResultStreamProvider = StreamProvider(
 );
 
 final mapRepositoryProvider = Provider(
-  (ref) => MapRepository(),
+  MapRepository.new,
 );
 
 /// [GeoPoint]を引数として与え、近くの施設を検索して結果を返す[FutureProvider]
@@ -61,9 +62,11 @@ final nearbyFacilityProvider = StreamProvider.autoDispose.family((ref, GeoPoint 
 });
 
 class MapRepository {
-  MapRepository();
+  MapRepository(this.ref);
 
   final _predictionResultController = StreamController<List<FacilityPredictionResult>>();
+
+  final Ref ref;
 
   Stream<List<FacilityPredictionResult>> predictionResultStream() {
     return _predictionResultController.stream;
@@ -114,12 +117,9 @@ class MapRepository {
         '/maps/api/place/nearbysearch/json',
         {
           'location': '${geoPoint.latitude} ${geoPoint.longitude}',
-          // 'radius': '50',
-          // TODO(kenta-wakasa): 多言語対応のとき注意
-          'language': 'ja',
+          'language': ref.read(localeProvider).languageCode.split('_').first,
           'key': googleMapAPIKey,
           'rankby': 'distance',
-          // 'opennow': 'true',
           if (nextPageToken != null) 'pagetoken': nextPageToken,
         },
       ),

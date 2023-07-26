@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../configs/localizations.dart';
 import '../../map/domain/nearby_search_results/nearby_search_result.dart';
 import '../domain/fast_net_result.dart';
 
@@ -64,6 +65,7 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final l = ref.watch(localizationsProvider);
     return Container(
       alignment: Alignment.center,
       child: Stack(
@@ -215,7 +217,7 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
                   ),
                   icon: const Icon(Icons.share),
                   onPressed: share,
-                  label: const Text('結果を共有'),
+                  label: Text(l.shareResults),
                 ),
               ),
             ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +21,7 @@ import '../data/measurement_wifi_repository.dart';
 import '../domain/fast_net_result.dart';
 import '../domain/flutter_fast_net.dart';
 import '../domain/wifi_scanner.dart';
+import 'speed_indicator.dart';
 import 'wifi_result.dart';
 
 class MeasureWiFiSpeedPage extends ConsumerStatefulWidget {
@@ -62,7 +62,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('Wi-Fiに接続されていることを確認して、測定ボタンを押してください。'),
+                Text(l.checkConnectionAndMeasure),
                 ElevatedButton(
                   onPressed: () {
                     if (Platform.isIOS) {
@@ -71,7 +71,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                       SystemSettings.wifi();
                     }
                   },
-                  child: const Text('Wi-Fi設定画面へ'),
+                  child: Text(l.toWiFiSettings),
                 ),
               ],
             ),
@@ -81,14 +81,14 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                   Navigator.of(dialogContext).pop();
                   context.go(FacilityMapPage.route);
                 },
-                child: const Text('マップに戻る'),
+                child: Text(l.backToMap),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(dialogContext).pop();
                   startSpeedTest();
                 },
-                child: const Text('測定'),
+                child: Text(l.measure),
               ),
             ],
           );
@@ -132,6 +132,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
     final ssid = this.ssid;
     final fastNetResult = this.fastNetResult;
     final selectedFacility = this.selectedFacility;
+    final l = ref.watch(localizationsProvider);
 
     final res = await showDialog<bool>(
       context: context,
@@ -141,7 +142,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('この施設に投稿しますか？'),
+              Text(l.postToThisFacility),
               const SizedBox(height: 8),
               if (!ref.watch(isProProvider))
                 ElevatedButton(
@@ -155,7 +156,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                       ),
                     );
                   },
-                  child: const Text('Proプランで獲得BAX2倍'),
+                  child: Text(l.doubleBAXWithProPlan),
                 ),
             ],
           ),
@@ -164,13 +165,13 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('あとで'),
+              child: Text(l.later),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('投稿'),
+              child: Text(l.post),
             ),
           ],
         );
@@ -198,8 +199,8 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
       await showDialog<void>(
         context: context,
         builder: (context) {
-          return const AlertDialog(
-            content: Text('同じ施設に投稿できるのは1日に1回までです。明日またご協力ください。'),
+          return AlertDialog(
+            content: Text(l.onePostPerDay),
           );
         },
       );
@@ -280,9 +281,10 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l = ref.watch(localizationsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? '未接続'}'),
+        title: Text('SSID: ${ref.watch(ssidProvider).valueOrNull ?? l.notConnected}'),
       ),
       body: Center(
         child: Padding(
@@ -338,7 +340,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                   width: 240,
                   child: ElevatedButton(
                     onPressed: postWiFiMeasurementResult,
-                    child: const Text('投稿'),
+                    child: Text(l.post),
                   ),
                 ),
               const SizedBox(height: 16),
@@ -359,7 +361,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                     selectedFacility = res;
                     setState(() {});
                   },
-                  child: const Text('施設を選ぶ'),
+                  child: Text(l.selectFacility),
                 ),
               ),
               const SizedBox(height: 16),
@@ -371,9 +373,9 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
                   child: OutlinedButton(
                     onPressed: isProcessing ? stopSpeedTest : startSpeedTest,
                     child: isProcessing
-                        ? const Text('キャンセル')
-                        : const Text(
-                            'もう一度測定',
+                        ? Text(l.cancel)
+                        : Text(
+                            l.measureAgain,
                             textAlign: TextAlign.center,
                           ),
                   ),
@@ -384,176 +386,5 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
         ),
       ),
     );
-  }
-}
-
-class SpeedIndicator extends StatelessWidget {
-  const SpeedIndicator({
-    super.key,
-    required this.speed,
-    required this.isDownload,
-  });
-
-  final double speed;
-  final bool isDownload;
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = width / 2;
-    return Stack(
-      children: [
-        CustomPaint(
-          painter: isDownload
-              ? DownloadPainter(
-                  color: Colors.black,
-                  width: width,
-                  height: height,
-                )
-              : UploadPainter(
-                  color: Colors.black,
-                  width: width,
-                  height: height,
-                ),
-          child: SizedBox(
-            width: width,
-            height: height,
-          ),
-        ),
-        ClipPath(
-          clipper: isDownload ? DownloadClipper() : UploadClipper(),
-          child: Container(
-            width: width,
-            height: height,
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              height: height,
-              width: speed * (width / 200),
-              color: Colors.black,
-            ),
-          ),
-        ),
-        Container(
-          height: height,
-          padding: isDownload
-              ? const EdgeInsets.only(
-                  left: 32,
-                  top: 24,
-                )
-              : const EdgeInsets.only(
-                  left: 24,
-                  bottom: 16,
-                ),
-          alignment: isDownload ? Alignment.topLeft : Alignment.bottomLeft,
-          child: Transform.rotate(
-            angle: isDownload ? 0.55 : -0.55,
-            child: SizedBox(
-              height: 20,
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Text(
-                  isDownload ? 'Download: $speed Mbps' : 'Upload: $speed Mbps',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    fontFeatures: [FontFeature.tabularFigures()],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class UploadClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(size.width * 0.1, size.height)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width * 0.9, 0)
-      ..close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(UploadClipper oldClipper) => true;
-}
-
-class UploadPainter extends CustomPainter {
-  UploadPainter({required this.color, required this.height, required this.width});
-  final Color color;
-  final double height;
-  final double width;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke;
-
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(size.width * 0.1, size.height)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width * 0.9, 0)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-class DownloadClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width * 0.1, 0)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width * 0.9, size.height)
-      ..close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(DownloadClipper oldClipper) => true;
-}
-
-class DownloadPainter extends CustomPainter {
-  DownloadPainter({required this.color, required this.height, required this.width});
-  final Color color;
-  final double height;
-  final double width;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke;
-
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width * 0.1, 0)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width * 0.9, size.height)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }

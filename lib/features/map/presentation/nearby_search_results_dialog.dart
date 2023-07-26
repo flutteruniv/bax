@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/localizations.dart';
 import '../application/map_service.dart';
 
 class NearbySearchResultsDialog extends ConsumerWidget {
@@ -11,8 +12,9 @@ class NearbySearchResultsDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nearbySearchResults = ref.watch(myNearbyFacilityProvider);
+    final l = ref.watch(localizationsProvider);
     return AlertDialog(
-      title: const Center(child: Text('近くの施設を選択')),
+      title: Center(child: Text(l.selectNearbyFacility)),
       content: (nearbySearchResults?.results ?? []).isEmpty
           ? const Column(
               children: [

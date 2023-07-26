@@ -151,8 +151,69 @@ class AppLocalizations {
         LType.en =>
           'The exchange has been completed successfully. A gift code will be sent to the linked email address within 3 business days. Please wait for a while.',
       };
+  String get pleaseUpdate => switch (l) {
+        LType.ja => '最新バージョンにアップデートしてください。',
+        LType.en => 'Please update to the latest version.',
+      };
+  String get update => switch (l) {
+        LType.ja => 'アップデート',
+        LType.en => 'Update',
+      };
+  String get shareResults => switch (l) {
+        LType.ja => '結果を共有',
+        LType.en => 'Share results',
+      };
+  String get checkConnectionAndMeasure => switch (l) {
+        LType.ja => 'Wi-Fiに接続されていることを確認して、測定ボタンを押してください。',
+        LType.en => 'Please ensure you\'re connected to Wi-Fi and then press the measure button.',
+      };
+  String get toWiFiSettings => switch (l) {
+        LType.ja => 'Wi-Fi設定画面へ',
+        LType.en => 'Go to Wi-Fi settings',
+      };
+  String get backToMap => switch (l) {
+        LType.ja => 'マップに戻る',
+        LType.en => 'Back to map',
+      };
+  String get measure => switch (l) {
+        LType.ja => '測定',
+        LType.en => 'Measure',
+      };
+  String get postToThisFacility => switch (l) {
+        LType.ja => 'この施設に投稿しますか？',
+        LType.en => 'Do you want to post to this facility?',
+      };
+  String get doubleBAXWithProPlan => switch (l) {
+        LType.ja => 'Proプランで獲得BAX2倍',
+        LType.en => 'Earn double BAX with Pro Plan',
+      };
+  String get post => switch (l) {
+        LType.ja => '投稿',
+        LType.en => 'Post',
+      };
+  String get onePostPerDay => switch (l) {
+        LType.ja => '同じ施設に投稿できるのは1日に1回までです。明日またご協力ください。',
+        LType.en => 'You can only post once per day to the same facility. Please contribute again tomorrow.',
+      };
+  String get notConnected => switch (l) {
+        LType.ja => '未接続',
+        LType.en => 'Not connected',
+      };
+  String get selectFacility => switch (l) {
+        LType.ja => '施設を選ぶ',
+        LType.en => 'Select a facility',
+      };
+
+  String get measureAgain => switch (l) {
+        LType.ja => 'もう一度測定',
+        LType.en => 'Measure again',
+      };
+  String get selectNearbyFacility => switch (l) {
+        LType.ja => '近くの施設を選択',
+        LType.en => 'Select nearby facility',
+      };
   String get XXX => switch (l) {
-        LType.ja => '正常に完了しました。3営業日以内に連携済みのメールアドレスへギフトコードが送られます。しばらくお待ち下さい。',
+        LType.ja => '近くの施設を選択',
         LType.en => 'XXX',
       };
 }
