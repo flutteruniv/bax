@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../authentication/presentation/email_authentication_page.dart';
 import '../../authentication/presentation/welcome_page.dart';
@@ -18,7 +19,6 @@ class MyPage extends ConsumerStatefulWidget {
   const MyPage({super.key});
 
   static const route = 'my_page';
-  static const name = 'myPage';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyPageState();
@@ -28,9 +28,10 @@ class _MyPageState extends ConsumerState<MyPage> {
   @override
   Widget build(BuildContext context) {
     final isPro = ref.watch(isProProvider);
+    final l = ref.watch(localizationsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('マイページ'),
+        title: Text(l.myPage),
         actions: [
           IconButton(
             onPressed: () {
@@ -38,13 +39,13 @@ class _MyPageState extends ConsumerState<MyPage> {
                 context: context,
                 builder: (dialogContext) {
                   return AlertDialog(
-                    content: const Text('ログアウトしますか？\nメールアドレス未連携の場合、BAXはすべて失われます。'),
+                    content: Text(l.confirmLogout),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(dialogContext).pop();
                         },
-                        child: const Text('しない'),
+                        child: Text(l.cancel),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -55,7 +56,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                           }
                           context.go(WelComePage.route);
                         },
-                        child: const Text('する'),
+                        child: Text(l.ok),
                       ),
                     ],
                   );
@@ -93,7 +94,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                     onPressed: () {
                       context.goNamed(EmailAuthenticationPage.name);
                     },
-                    child: const Text('メールアドレスを連携'),
+                    child: Text(l.linkEmailAddress),
                   ),
                 ),
               const SizedBox(height: 64),
@@ -136,14 +137,14 @@ class _MyPageState extends ConsumerState<MyPage> {
                 width: 240,
                 child: ElevatedButton(
                   onPressed: () {
-                    showDialog(
+                    showDialog<void>(
                       context: context,
                       builder: (context) {
                         return const UseBaxDialog();
                       },
                     );
                   },
-                  child: const Text('500 BAX を使う'),
+                  child: Text(l.use500BAX),
                 ),
               )
             ],
@@ -164,16 +165,17 @@ class UseBaxDialog extends ConsumerStatefulWidget {
 class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
   @override
   Widget build(BuildContext context) {
+    final l = ref.watch(localizationsProvider);
     return AlertDialog(
-      content: const Text(
-        '500BAXをAmazonギフト券に交換できます。事前にメールアドレスの連携が必要です。',
+      content: Text(
+        l.exchange500BAXForAmazonGift,
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('あとで'),
+          child: Text(l.later),
         ),
         TextButton(
           onPressed: ref.watch(canUseBax)
@@ -210,15 +212,18 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
                   await showDialog<void>(
                     context: context,
                     builder: (context) {
-                      return const AlertDialog(
-                        content: Text('正常に完了しました。3営業日以内に連携済みのメールアドレスへギフトコードが送られます。しばらくお待ち下さい。'),
+                      return AlertDialog(
+                        content: Text(l.exchangeCompleted),
                       );
                     },
                   );
+                  if (!mounted) {
+                    return;
+                  }
                   Navigator.of(context).pop();
                 }
               : null,
-          child: const Text('交換する'),
+          child: Text(l.exchange),
         ),
       ],
     );

@@ -48,7 +48,6 @@ final routerProvider = Provider(
               builder: (context, state) => const EmailAuthenticationPage(),
             ),
             GoRoute(
-              name: MyPage.name,
               path: MyPage.route,
               builder: (context, state) => const MyPage(),
               routes: [

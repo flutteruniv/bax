@@ -263,7 +263,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                 child: SafeArea(
                   child: InkWell(
                     onTap: () {
-                      context.goNamed(MyPage.name);
+                      context.go('${FacilityMapPage.route}${MyPage.route}');
                     },
                     child: Container(
                       margin: const EdgeInsets.only(right: 16),

@@ -110,8 +110,49 @@ class AppLocalizations {
         LType.ja => '下記に同意の上ご利用ください。',
         LType.en => 'Please agree to the following before use',
       };
+  String get myPage => switch (l) {
+        LType.ja => 'マイページ',
+        LType.en => 'My Page',
+      };
+  String get confirmLogout => switch (l) {
+        LType.ja => 'ログアウトしますか？\nメールアドレス未連携の場合、BAXはすべて失われます。',
+        LType.en => 'Are you sure you want to log out? \nIf your email address is not linked, all BAX will be lost.',
+      };
+  String get cancel => switch (l) {
+        LType.ja => 'しない',
+        LType.en => 'Cancel',
+      };
+  String get ok => switch (l) {
+        LType.ja => 'しない',
+        LType.en => 'OK',
+      };
+  String get linkEmailAddress => switch (l) {
+        LType.ja => 'メールアドレスを連携',
+        LType.en => 'Link email address',
+      };
+  String get use500BAX => switch (l) {
+        LType.ja => '500 BAX を使う',
+        LType.en => 'Use 500 BAX',
+      };
+  String get exchange500BAXForAmazonGift => switch (l) {
+        LType.ja => '500BAXをAmazonギフト券に交換できます。事前にメールアドレスの連携が必要です。',
+        LType.en => 'You can exchange 500 BAX for an Amazon gift card. You need to link your email address in advance.',
+      };
+  String get later => switch (l) {
+        LType.ja => 'あとで',
+        LType.en => 'Later',
+      };
+  String get exchange => switch (l) {
+        LType.ja => '交換する',
+        LType.en => 'Exchange',
+      };
+  String get exchangeCompleted => switch (l) {
+        LType.ja => '正常に完了しました。3営業日以内に連携済みのメールアドレスへギフトコードが送られます。しばらくお待ち下さい。',
+        LType.en =>
+          'The exchange has been completed successfully. A gift code will be sent to the linked email address within 3 business days. Please wait for a while.',
+      };
   String get XXX => switch (l) {
-        LType.ja => '下記に同意の上ご利用ください。',
+        LType.ja => '正常に完了しました。3営業日以内に連携済みのメールアドレスへギフトコードが送られます。しばらくお待ち下さい。',
         LType.en => 'XXX',
       };
 }
