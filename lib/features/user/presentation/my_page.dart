@@ -14,6 +14,7 @@ import '../../payment/presentation/payment_dialog.dart';
 import '../../payment/repository/payment_repository.dart';
 import '../application/user_service.dart';
 import '../data/user_repository.dart';
+import '../domain/user.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   const MyPage({super.key});
@@ -29,6 +30,7 @@ class _MyPageState extends ConsumerState<MyPage> {
   Widget build(BuildContext context) {
     final isPro = ref.watch(isProProvider);
     final l = ref.watch(localizationsProvider);
+    final loginUser = ref.watch(loginUserProvider).valueOrNull;
     return Scaffold(
       appBar: AppBar(
         title: Text(l.myPage),
@@ -146,7 +148,24 @@ class _MyPageState extends ConsumerState<MyPage> {
                   },
                   child: Text(l.use500BAX),
                 ),
-              )
+              ),
+              const SizedBox(height: 64),
+              DropdownButton<LType>(
+                value: loginUser?.data()?.languageCode ?? LType.en,
+                items: [
+                  for (final e in LType.values)
+                    DropdownMenuItem(
+                      value: e,
+                      child: Text(e.displayName),
+                    )
+                ],
+                onChanged: (value) {
+                  loginUser?.reference.set(
+                    loginUser.data()?.copyWith(languageCode: value ?? LType.en) ??
+                        User(languageCode: value ?? LType.en),
+                  );
+                },
+              ),
             ],
           ),
         ),

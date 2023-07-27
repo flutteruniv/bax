@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'configs/localizations.dart';
 import 'configs/preferences.dart';
@@ -22,10 +23,12 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  final preferences = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
   runApp(
     ProviderScope(
       overrides: [
+        preferencesProvider.overrideWithValue(Preferences(preferences)),
         if (kDebugMode) localeProvider.overrideWith((ref) => const Locale('en')),
         if (kDebugMode) isProProvider.overrideWithValue(true),
       ],

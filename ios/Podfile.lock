@@ -1,44 +1,44 @@
 PODS:
   - app_settings (4.3.0):
     - Flutter
-  - cloud_firestore (4.5.0):
-    - Firebase/Firestore (= 10.10.0)
+  - cloud_firestore (4.8.4):
+    - Firebase/Firestore (= 10.12.0)
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - Firebase/Analytics (10.10.0):
+  - Firebase/Analytics (10.12.0):
     - Firebase/Core
-  - Firebase/Auth (10.10.0):
+  - Firebase/Auth (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 10.10.0)
-  - Firebase/Core (10.10.0):
+    - FirebaseAuth (~> 10.12.0)
+  - Firebase/Core (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 10.10.0)
-  - Firebase/CoreOnly (10.10.0):
-    - FirebaseCore (= 10.10.0)
-  - Firebase/DynamicLinks (10.10.0):
+    - FirebaseAnalytics (~> 10.12.0)
+  - Firebase/CoreOnly (10.12.0):
+    - FirebaseCore (= 10.12.0)
+  - Firebase/DynamicLinks (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseDynamicLinks (~> 10.10.0)
-  - Firebase/Firestore (10.10.0):
+    - FirebaseDynamicLinks (~> 10.12.0)
+  - Firebase/Firestore (10.12.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 10.10.0)
-  - firebase_analytics (10.2.0):
-    - Firebase/Analytics (= 10.10.0)
+    - FirebaseFirestore (~> 10.12.0)
+  - firebase_analytics (10.4.4):
+    - Firebase/Analytics (= 10.12.0)
     - firebase_core
     - Flutter
-  - firebase_auth (4.4.0):
-    - Firebase/Auth (= 10.10.0)
+  - firebase_auth (4.7.2):
+    - Firebase/Auth (= 10.12.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.14.0):
-    - Firebase/CoreOnly (= 10.10.0)
+  - firebase_core (2.15.0):
+    - Firebase/CoreOnly (= 10.12.0)
     - Flutter
-  - firebase_dynamic_links (5.1.0):
-    - Firebase/DynamicLinks (= 10.10.0)
+  - firebase_dynamic_links (5.3.4):
+    - Firebase/DynamicLinks (= 10.12.0)
     - firebase_core
     - Flutter
-  - FirebaseAnalytics (10.10.0):
-    - FirebaseAnalytics/AdIdSupport (= 10.10.0)
+  - FirebaseAnalytics (10.12.0):
+    - FirebaseAnalytics/AdIdSupport (= 10.12.0)
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -46,37 +46,37 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (10.10.0):
+  - FirebaseAnalytics/AdIdSupport (10.12.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
-    - GoogleAppMeasurement (= 10.10.0)
+    - GoogleAppMeasurement (= 10.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseAppCheckInterop (10.12.0)
-  - FirebaseAuth (10.10.0):
+  - FirebaseAuth (10.12.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseCore (10.10.0):
+  - FirebaseCore (10.12.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
   - FirebaseCoreInternal (10.12.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseDynamicLinks (10.10.0):
+  - FirebaseDynamicLinks (10.12.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseFirestore (10.10.0):
-    - FirebaseFirestore/AutodetectLeveldb (= 10.10.0)
-  - FirebaseFirestore/AutodetectLeveldb (10.10.0):
+  - FirebaseFirestore (10.12.0):
+    - FirebaseFirestore/AutodetectLeveldb (= 10.12.0)
+  - FirebaseFirestore/AutodetectLeveldb (10.12.0):
     - FirebaseFirestore/Base
     - FirebaseFirestore/WithLeveldb
-  - FirebaseFirestore/Base (10.10.0)
-  - FirebaseFirestore/WithLeveldb (10.10.0):
+  - FirebaseFirestore/Base (10.12.0)
+  - FirebaseFirestore/WithLeveldb (10.12.0):
     - FirebaseFirestore/Base
   - FirebaseInstallations (10.12.0):
     - FirebaseCore (~> 10.0)
@@ -95,22 +95,22 @@ PODS:
     - Flutter
   - google_maps_flutter_ios (0.0.1):
     - Flutter
-    - GoogleMaps
-  - GoogleAppMeasurement (10.10.0):
-    - GoogleAppMeasurement/AdIdSupport (= 10.10.0)
+    - GoogleMaps (< 8.0)
+  - GoogleAppMeasurement (10.12.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (10.10.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.10.0)
+  - GoogleAppMeasurement/AdIdSupport (10.12.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.10.0):
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.12.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
@@ -121,24 +121,24 @@ PODS:
   - GoogleMaps/Base (7.4.0)
   - GoogleMaps/Maps (7.4.0):
     - GoogleMaps/Base
-  - GoogleUtilities/AppDelegateSwizzler (7.11.1):
+  - GoogleUtilities/AppDelegateSwizzler (7.11.4):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.11.1):
+  - GoogleUtilities/Environment (7.11.4):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.1):
+  - GoogleUtilities/Logger (7.11.4):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.11.1):
+  - GoogleUtilities/MethodSwizzler (7.11.4):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.11.1):
+  - GoogleUtilities/Network (7.11.4):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.11.1)"
-  - GoogleUtilities/Reachability (7.11.1):
+  - "GoogleUtilities/NSData+zlib (7.11.4)"
+  - GoogleUtilities/Reachability (7.11.4):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.11.1):
+  - GoogleUtilities/UserDefaults (7.11.4):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (3.1.1)
   - in_app_review (0.2.0):
@@ -162,15 +162,15 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
-  - PromisesObjC (2.2.0)
-  - purchases_flutter (4.11.1):
+  - PromisesObjC (2.3.1)
+  - purchases_flutter (4.13.0):
     - Flutter
-    - PurchasesHybridCommon (= 4.14.1)
-  - PurchasesHybridCommon (4.14.1):
-    - RevenueCat (= 4.17.8)
-  - RevenueCat (4.17.8)
+    - PurchasesHybridCommon (= 4.18.0)
+  - PurchasesHybridCommon (4.18.0):
+    - RevenueCat (= 4.21.0)
+  - RevenueCat (4.21.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -188,7 +188,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
-  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.10.0`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.12.0`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -242,7 +242,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_dynamic_links/ios"
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 10.10.0
+    :tag: 10.12.0
   Flutter:
     :path: Flutter
   flutter_inappwebview:
@@ -281,31 +281,31 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 10.10.0
+    :tag: 10.12.0
 
 SPEC CHECKSUMS:
   app_settings: ee4ae4d1c9a907a23b81c40e5c56a5ca8a20a62b
-  cloud_firestore: ed9c99a4846210a90dc6e7e5c2dedae0284d7ebd
-  Firebase: facd334e557a979bd03a0b58d90fd56b52b8aba0
-  firebase_analytics: 26b27249eb35d52bb0d70b114d5504518287920e
-  firebase_auth: 00e13e65260b1b144b05038cf3acb5257697ab26
-  firebase_core: 85b6664038311940ad60584eaabc73103c61f5de
-  firebase_dynamic_links: a7b4b3534736e335fc0fe31668c8b2133d11e509
-  FirebaseAnalytics: 7bc7de519111dae802f5bc0c9c083918f8b8870d
+  cloud_firestore: 005e157ad342dbfb2e461cb111a9020aa71bfb22
+  Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
+  firebase_analytics: 3ff822ee2e90f95b61f0da300df20b378d380fbb
+  firebase_auth: 3f7820b22557dd4a1b024f4d86947d1a0ff8a10f
+  firebase_core: e477125798fc37cd4ab43ca6a8536bf7e0929c00
+  firebase_dynamic_links: d85cf455646322fd101c8a5a5942c3d47132fe80
+  FirebaseAnalytics: 0270389efbe3022b54ec4588862dabec3477ee98
   FirebaseAppCheckInterop: f95a4feb9089867aff1a4bdc2ce309137e07736a
-  FirebaseAuth: 5ddbe23ebc4e647469261f5c59cd12a04f37c8e6
-  FirebaseCore: d027ff503d37edb78db98429b11f580a24a7df2a
+  FirebaseAuth: a66c1e14ec58f41d154a4b41ce1a23ea00ad4805
+  FirebaseCore: f86a1394906b97ac445ae49c92552a9425831bed
   FirebaseCoreInternal: 950500ad8a08963657f6d8c67b579740c06d6aa1
-  FirebaseDynamicLinks: 3f61f496236d30fa749377159fb7b3d82ecb3c49
-  FirebaseFirestore: b4b875bbcf4c2f7edac19064e5fc31bf814e963e
+  FirebaseDynamicLinks: 1a387da899779e5ef34f4d6f8bdba882f90d0e67
+  FirebaseFirestore: 8d9dd05bb50e0891ebe4fdd9bd0f9b9d22ea5556
   FirebaseInstallations: 7b99ef103f013624444c614397038219c45f8e63
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  google_maps_flutter_ios: 3e0b99383a8003b8169d06e7e324170bd0424105
-  GoogleAppMeasurement: bbbfd4bcb2b40ae9b772c3b0823a58c1e3d618f9
+  google_maps_flutter_ios: abdac20d6ce8931f6ebc5f46616df241bfaa2cfd
+  GoogleAppMeasurement: 2d800fab85e7848b1e66a6f8ce5bca06c5aad892
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
-  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
+  GoogleUtilities: c63691989bf362ba0505507da00eeb326192e83e
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
@@ -315,17 +315,17 @@ SPEC CHECKSUMS:
   open_settings: 9628e736cb2738fd1dc84159565755c214478158
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  purchases_flutter: 941e65870ed6f7439122cb4999fb61636dd86ccf
-  PurchasesHybridCommon: fb1a3319024c1aa9f98d40cc5820476b824409fc
-  RevenueCat: f2f96c2cbde5ddab3a86381923c6f023383342e0
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  purchases_flutter: ee7f7c20c021c4a1a482a70ab78d3d36594295bb
+  PurchasesHybridCommon: 6b510d4965166df2137347a414d6a8e2906d5a5e
+  RevenueCat: 465a9dc1fff60b09f29792082e5d5d5aeed01122
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   system_settings: 8f5cdbfa72c677fc8d665b863bcc20d393d87e9d
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 
-PODFILE CHECKSUM: c3c397f32513a51f8c28628df8c1d0920e71d863
+PODFILE CHECKSUM: cc45546941e3da426f520c07eccdfd48fa133527
 
 COCOAPODS: 1.11.3

@@ -20,9 +20,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
-  /// BAXの合計値
   double get baxPoint => throw _privateConstructorUsedError;
   bool get isPro => throw _privateConstructorUsedError;
+  LType? get languageCode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({double baxPoint, bool isPro});
+  $Res call({double baxPoint, bool isPro, LType? languageCode});
 }
 
 /// @nodoc
@@ -52,6 +52,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? baxPoint = null,
     Object? isPro = null,
+    Object? languageCode = freezed,
   }) {
     return _then(_value.copyWith(
       baxPoint: null == baxPoint
@@ -62,6 +63,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.isPro
           : isPro // ignore: cast_nullable_to_non_nullable
               as bool,
+      languageCode: freezed == languageCode
+          ? _value.languageCode
+          : languageCode // ignore: cast_nullable_to_non_nullable
+              as LType?,
     ) as $Val);
   }
 }
@@ -72,7 +77,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double baxPoint, bool isPro});
+  $Res call({double baxPoint, bool isPro, LType? languageCode});
 }
 
 /// @nodoc
@@ -86,6 +91,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   $Res call({
     Object? baxPoint = null,
     Object? isPro = null,
+    Object? languageCode = freezed,
   }) {
     return _then(_$_User(
       baxPoint: null == baxPoint
@@ -96,6 +102,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.isPro
           : isPro // ignore: cast_nullable_to_non_nullable
               as bool,
+      languageCode: freezed == languageCode
+          ? _value.languageCode
+          : languageCode // ignore: cast_nullable_to_non_nullable
+              as LType?,
     ));
   }
 }
@@ -103,20 +113,22 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 /// @nodoc
 @JsonSerializable()
 class _$_User implements _User {
-  const _$_User({required this.baxPoint, this.isPro = false});
+  const _$_User({this.baxPoint = 0.0, this.isPro = false, this.languageCode});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
-  /// BAXの合計値
   @override
+  @JsonKey()
   final double baxPoint;
   @override
   @JsonKey()
   final bool isPro;
+  @override
+  final LType? languageCode;
 
   @override
   String toString() {
-    return 'User(baxPoint: $baxPoint, isPro: $isPro)';
+    return 'User(baxPoint: $baxPoint, isPro: $isPro, languageCode: $languageCode)';
   }
 
   @override
@@ -126,12 +138,14 @@ class _$_User implements _User {
             other is _$_User &&
             (identical(other.baxPoint, baxPoint) ||
                 other.baxPoint == baxPoint) &&
-            (identical(other.isPro, isPro) || other.isPro == isPro));
+            (identical(other.isPro, isPro) || other.isPro == isPro) &&
+            (identical(other.languageCode, languageCode) ||
+                other.languageCode == languageCode));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, baxPoint, isPro);
+  int get hashCode => Object.hash(runtimeType, baxPoint, isPro, languageCode);
 
   @JsonKey(ignore: true)
   @override
@@ -148,17 +162,19 @@ class _$_User implements _User {
 }
 
 abstract class _User implements User {
-  const factory _User({required final double baxPoint, final bool isPro}) =
-      _$_User;
+  const factory _User(
+      {final double baxPoint,
+      final bool isPro,
+      final LType? languageCode}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
   @override
-
-  /// BAXの合計値
   double get baxPoint;
   @override
   bool get isPro;
+  @override
+  LType? get languageCode;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;

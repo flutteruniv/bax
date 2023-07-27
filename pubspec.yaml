@@ -3,7 +3,7 @@ description: Search for speed.
 
 publish_to: "none"
 
-version: 1.1.0+25
+version: 1.1.0+26
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -40,25 +40,24 @@ dependencies:
   flutter_riverpod: ^2.3.1
   collection: ^1.17.0
   go_router: ^6.5.1
-  firebase_analytics: ^10.2.0
   in_app_review: ^2.0.6
   intl: ^0.18.0
   open_settings: ^2.0.2
   system_settings: ^2.1.0
   app_settings: ^5.0.0
   maps_launcher:
+  firebase_analytics: ^10.4.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   riverpod_lint: ^1.1.3
-
   flutter_lints: ^2.0.0
-  freezed:
-  build_runner:
   json_serializable: ^6.5.4
   pedantic_mono:
   flutter_launcher_icons: ^0.11.0
+  build_runner: ^2.4.6
+  freezed: ^2.3.3
 
 flutter:
   uses-material-design: true

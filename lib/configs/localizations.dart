@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/user/application/user_service.dart';
+
 final localeProvider = StateProvider(
   (ref) {
     final defaultLocaleName = Platform.localeName;
@@ -13,8 +15,9 @@ final localeProvider = StateProvider(
 final localizationsProvider = Provider(
   (ref) {
     try {
+      final languageCode = ref.watch(loginUserProvider).valueOrNull?.data()?.languageCode;
       return AppLocalizations(
-        LType.values.byName(ref.watch(localeProvider).languageCode.split('_').first),
+        languageCode ?? LType.values.byName(ref.watch(localeProvider).languageCode.split('_').first),
       );
     } catch (_) {}
 
@@ -23,7 +26,14 @@ final localizationsProvider = Provider(
   },
 );
 
-enum LType { en, ja }
+enum LType {
+  en('English'),
+  ja('日本語');
+
+  const LType(this.displayName);
+
+  final String displayName;
+}
 
 class AppLocalizations {
   AppLocalizations(this.l);
@@ -32,7 +42,7 @@ class AppLocalizations {
 
   String get terms => switch (l) {
         LType.ja => '利用規約',
-        LType.en => 'Terms of Use',
+        LType.en => 'Terms of use',
       };
 
   String get privacy => switch (l) {
@@ -80,7 +90,7 @@ class AppLocalizations {
 
   String get earnDoublePoints => switch (l) {
         LType.ja => '獲得BAXが2倍',
-        LType.en => 'earn double points.',
+        LType.en => 'Earn double points.',
       };
   String get exchangePointsForRewards => switch (l) {
         LType.ja => 'BAXと特典の交換',
@@ -119,7 +129,7 @@ class AppLocalizations {
         LType.en => 'Are you sure you want to log out? \nIf your email address is not linked, all BAX will be lost.',
       };
   String get cancel => switch (l) {
-        LType.ja => 'しない',
+        LType.ja => 'キャンセル',
         LType.en => 'Cancel',
       };
   String get ok => switch (l) {
@@ -350,7 +360,7 @@ class AppLocalizations {
         LType.ja => 'データを引き継ぐ',
         LType.en => 'Transfer data',
       };
-  String get XXX => switch (l) {
+  String get xxx => switch (l) {
         LType.ja => 'データを引き継ぐ',
         LType.en => 'XXX',
       };
