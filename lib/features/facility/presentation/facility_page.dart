@@ -135,7 +135,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                     ),
                     const SizedBox(height: 4),
                     SizedBox(
-                      height: 240,
+                      height: 200,
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         itemCount: measurementWifiResults.length,
@@ -150,8 +150,11 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                                   DateFormat('yyyy/MM/dd HH:mm').format(wifiMeasurementResult.terminalTime.dateTime!),
                                   style: textTheme.bodySmall,
                                 ),
-                                Text(
-                                  ' ${wifiMeasurementResult.ssid} : ↓${wifiMeasurementResult.downloadSpeedMbps}Mbps ↑${wifiMeasurementResult.uploadSpeedMbps}Mbps',
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    ' ${wifiMeasurementResult.ssid} : ↓${wifiMeasurementResult.downloadSpeedMbps}Mbps ↑${wifiMeasurementResult.uploadSpeedMbps}Mbps',
+                                  ),
                                 ),
                               ],
                             ),
@@ -170,6 +173,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                         child: const Text('マップアプリで表示'),
                       ),
                     ),
+                    const SizedBox(height: 56),
                   ],
                 ),
               ),
@@ -332,21 +336,23 @@ class DownloadUploadIndTile extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '$downloadSpeed',
-                        style: const TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          height: 1,
+                FittedBox(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$downloadSpeed',
+                          style: const TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                          ),
                         ),
-                      ),
-                      const TextSpan(
-                        text: 'Mbps',
-                      ),
-                    ],
+                        const TextSpan(
+                          text: 'Mbps',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -374,19 +380,21 @@ class DownloadUploadIndTile extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '$uploadSpeed',
-                        style: const TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          height: 1,
+                FittedBox(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$uploadSpeed',
+                          style: const TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                          ),
                         ),
-                      ),
-                      const TextSpan(text: 'Mpbs'),
-                    ],
+                        const TextSpan(text: 'Mpbs'),
+                      ],
+                    ),
                   ),
                 ),
               ],
