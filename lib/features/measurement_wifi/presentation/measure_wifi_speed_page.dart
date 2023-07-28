@@ -189,7 +189,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
     final canPostResult = await ref.read(measurementWifiRepositoryProvider).hasTodayData(
           placeId: selectedFacility.placeId,
           today: DateTime.now().toUtc(),
-          uid: ref.read(uidProvider).valueOrNull ?? '',
+          uid: ref.read(uidProvider) ?? '',
         );
 
     if (!canPostResult) {

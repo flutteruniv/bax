@@ -212,7 +212,7 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
                     return;
                   }
 
-                  final uid = ref.read(uidProvider).valueOrNull;
+                  final uid = ref.read(uidProvider);
                   if (uid == null) {
                     return;
                   }

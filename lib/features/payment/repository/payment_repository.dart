@@ -47,7 +47,7 @@ class PaymentRepository {
     Purchases.addCustomerInfoUpdateListener((customerInfo) {
       ref.read(customerInfoProvider.notifier).update((_) => customerInfo);
 
-      final uid = ref.read(uidProvider).valueOrNull;
+      final uid = ref.read(uidProvider);
       if (uid == null) {
         return;
       }
@@ -57,15 +57,20 @@ class PaymentRepository {
 
   /// サブスクリプションを開始する
   Future<CustomerInfo> purchaseSubscription() async {
-    final uid = ref.read(uidProvider).valueOrNull!;
-    await Purchases.logIn(uid);
+    final uid = ref.read(uidProvider);
+    if (uid != null) {
+      await Purchases.logIn(uid);
+    }
     return Purchases.purchaseProduct(ref.read(productIdProvider));
   }
 
   /// サブスクリプションを復元する
   Future<CustomerInfo> restorePurchases() async {
-    final uid = ref.read(uidProvider).valueOrNull!;
-    await Purchases.logIn(uid);
+    final uid = ref.read(uidProvider);
+    if (uid != null) {
+      await Purchases.logIn(uid);
+    }
+
     return Purchases.restorePurchases();
   }
 }

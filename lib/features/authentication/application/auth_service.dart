@@ -24,7 +24,7 @@ final authStateChangesProvider = StreamProvider((ref) {
   return firebaseAuth.authStateChanges();
 });
 
-final uidProvider = Provider((ref) => ref.watch(authStateChangesProvider).whenData((value) => value?.uid));
+final uidProvider = Provider((ref) => ref.watch(authStateChangesProvider).valueOrNull?.uid);
 
 /// メール送信が完了済であるかどうかのフラグを返すStreamProvider
 final isSentEmailStreamProvider = StreamProvider((ref) {
@@ -87,7 +87,6 @@ class AuthService {
       switch (e.code) {
         case 'invalid-email':
           ref.watch(snackBarServiceProvider).showSnackBar(l.invalidEmail);
-          break;
         default:
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailSendFailed);
           break;
@@ -111,10 +110,8 @@ class AuthService {
       switch (e.code) {
         case 'provider-already-linked':
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyVerified);
-          break;
         case 'email-already-in-use':
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyInUse);
-          break;
         default:
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerificationFailed);
           break;
@@ -138,10 +135,8 @@ class AuthService {
       switch (e.code) {
         case 'provider-already-linked':
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyVerified);
-          break;
         case 'email-already-in-use':
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailAlreadyInUse);
-          break;
         default:
           ref.watch(snackBarServiceProvider).showSnackBar(l.emailVerificationFailed);
           break;

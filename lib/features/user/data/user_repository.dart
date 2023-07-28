@@ -51,7 +51,7 @@ class UserRepository {
 
   /// BAXを付与する
   Future<void> giveBax(Bax bax) async {
-    final uid = ref.read(uidProvider).valueOrNull;
+    final uid = ref.read(uidProvider);
     if (uid == null) {
       return;
     }

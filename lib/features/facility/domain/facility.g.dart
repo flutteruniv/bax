@@ -23,24 +23,24 @@ _$_Facility _$$_FacilityFromJson(Map<String, dynamic> json) => _$_Facility(
               .fromJson(json['updatedAt'] as Object),
       hasPowerSource: (json['hasPowerSource'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+              .toSet() ??
+          const <String>{},
       noPowerSource: (json['noPowerSource'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+              .toSet() ??
+          const <String>{},
       hasWorkSpace: (json['hasWorkSpace'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+              .toSet() ??
+          const <String>{},
       noWorkSpace: (json['noWorkSpace'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+              .toSet() ??
+          const <String>{},
       powerSourceSpots: (json['powerSourceSpots'] as List<dynamic>?)
               ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+              .toSet() ??
+          const <String>{},
       docRef: const DocumentReferenceConverter()
           .fromJson(json['docRef'] as DocumentReference<Object?>),
     );
@@ -56,10 +56,10 @@ Map<String, dynamic> _$$_FacilityToJson(_$_Facility instance) =>
       'createdAt': unionTimestampConverter.toJson(instance.createdAt),
       'updatedAt': alwaysUseServerTimestampUnionTimestampConverter
           .toJson(instance.updatedAt),
-      'hasPowerSource': instance.hasPowerSource,
-      'noPowerSource': instance.noPowerSource,
-      'hasWorkSpace': instance.hasWorkSpace,
-      'noWorkSpace': instance.noWorkSpace,
-      'powerSourceSpots': instance.powerSourceSpots,
+      'hasPowerSource': instance.hasPowerSource.toList(),
+      'noPowerSource': instance.noPowerSource.toList(),
+      'hasWorkSpace': instance.hasWorkSpace.toList(),
+      'noWorkSpace': instance.noWorkSpace.toList(),
+      'powerSourceSpots': instance.powerSourceSpots.toList(),
       'docRef': const DocumentReferenceConverter().toJson(instance.docRef),
     };

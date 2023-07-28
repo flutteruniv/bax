@@ -6,7 +6,7 @@ import '../data/bax_repository.dart';
 
 final myBaxHistoriesProvider = Provider(
   (ref) {
-    final uid = ref.watch(uidProvider).valueOrNull;
+    final uid = ref.watch(uidProvider);
     return ref.watch(baxHistoriesProvider(uid)).valueOrNull;
   },
 );

@@ -36,30 +36,30 @@ class Facility with _$Facility {
     /// 更新日
     @alwaysUseServerTimestampUnionTimestampConverter
     @Default(UnionTimestamp.serverTimestamp())
-        UnionTimestamp updatedAt,
+    UnionTimestamp updatedAt,
 
     /// 電源あり報告
     ///
     /// 報告者のuidを追加する
-    @Default(<String>[]) List<String> hasPowerSource,
+    @Default(<String>{}) Set<String> hasPowerSource,
 
     /// 電源なし報告
     ///
     /// 報告者のuidを追加する
-    @Default(<String>[]) List<String> noPowerSource,
+    @Default(<String>{}) Set<String> noPowerSource,
 
     /// 作業スペースあり報告
     ///
     /// 報告者のuidを追加する
-    @Default(<String>[]) List<String> hasWorkSpace,
+    @Default(<String>{}) Set<String> hasWorkSpace,
 
     /// 作業スペースなし報告
     ///
     /// 報告者のuidを追加する
-    @Default(<String>[]) List<String> noWorkSpace,
+    @Default(<String>{}) Set<String> noWorkSpace,
 
     /// 電源スポットの写真
-    @Default(<String>[]) List<String> powerSourceSpots,
+    @Default(<String>{}) Set<String> powerSourceSpots,
 
     /// DocumentReference
     @DocumentReferenceConverter() required DocumentReference docRef,
@@ -78,5 +78,23 @@ class Facility with _$Facility {
     } else {
       return BitmapDescriptor.hueBlue;
     }
+  }
+
+  bool? get haaPowerSpot {
+    if (hasPowerSource.length == noPowerSource.length) {
+      return null;
+    }
+    return hasPowerSource.length > noPowerSource.length;
+  }
+
+  bool? hasPowerSpotUserSelect(String uid) {
+    if (hasPowerSource.contains(uid)) {
+      return true;
+    }
+
+    if (noPowerSource.contains(uid)) {
+      return false;
+    }
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
@@ -19,6 +20,15 @@ final facilitiesStreamProvider = StreamProvider(
     return ref.watch(facilityRepositoryProvider).facilitiesStream();
   },
 );
+
+final facilityProvider = Provider.autoDispose.family((ref, String docId) {
+  final facilities = ref.watch(facilitiesStreamProvider).valueOrNull;
+  if (facilities == null) {
+    return null;
+  }
+  final facility = facilities.firstWhereOrNull((element) => element.id == docId);
+  return facility;
+});
 
 class FacilityRepository {
   FacilityRepository({

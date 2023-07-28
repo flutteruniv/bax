@@ -6,7 +6,7 @@ import '../data/user_repository.dart';
 import '../domain/user.dart';
 
 final loginUserProvider = StreamProvider((ref) {
-  final uid = ref.watch(uidProvider).valueOrNull;
+  final uid = ref.watch(uidProvider);
   if (uid == null) {
     return const Stream<QueryDocumentSnapshot<User?>>.empty();
   }

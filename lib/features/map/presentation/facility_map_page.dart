@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +8,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_launcher/maps_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../facility/data/facility_repository.dart';
+import '../../facility/presentation/facility_page.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
-import '../../payment/presentation/payment_dialog.dart';
 import '../../payment/repository/payment_repository.dart';
 import '../../user/application/user_service.dart';
 import '../../user/presentation/my_page.dart';
 import '../application/map_service.dart';
 import 'widgets/prediction_result_list.dart';
 import 'widgets/search_text_form_field.dart';
-import 'widgets/select_map_app_bottom_sheet.dart';
 
 class FacilityMapPage extends ConsumerStatefulWidget {
   const FacilityMapPage({super.key});
@@ -121,45 +117,9 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
           markerId: MarkerId(data.id),
           position: LatLng(data.geo.latitude, data.geo.longitude),
           icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(data.markerColor) : BitmapDescriptor.defaultMarker,
-          infoWindow: isPro
-              ? InfoWindow(
-                  title: data.name,
-                  snippet: '${l.downloadSpeed}: ${data.downloadSpeed}Mbps',
-                  onTap: () async {
-                    final url = 'https://www.google.com/maps/search/?api=1&query=${data.name}';
-                    if (Platform.isIOS) {
-                      final type = await SelectMapAppBottomSheet.show(context);
-                      if (type == null) {
-                        return;
-                      }
-                      switch (type) {
-                        case AppMapType.apple:
-                          await MapsLauncher.launchQuery(data.name);
-                        case AppMapType.google:
-                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                      }
-                      return;
-                    }
-
-                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                  },
-                )
-              : InfoWindow(
-                  snippet: l.viewableWithProPlan,
-                  title: l.viewDetails,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        fullscreenDialog: true,
-                        builder: (context) {
-                          return const PaymentDialog();
-                        },
-                      ),
-                    );
-                  },
-                ),
           onTap: () {
             // TODO(kenta-wakasa): 施設詳細画面に遷移する
+            context.go('${FacilityMapPage.route}${FacilityPage.route}/${facility.id}');
           },
         );
       }).toSet(),

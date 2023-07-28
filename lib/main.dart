@@ -10,6 +10,7 @@ import 'configs/localizations.dart';
 import 'configs/preferences.dart';
 import 'configs/router.dart';
 import 'configs/theme.dart';
+import 'features/authentication/application/auth_service.dart';
 import 'features/load/application/loading_notifier.dart';
 import 'features/load/application/navigator_key.dart';
 import 'features/load/application/scaffold_manager_key.dart';
@@ -49,9 +50,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     ref.read(paymentRepositoryProvider).initPlatformState();
-
-    /// Preferenceの初期化
-    ref.read(preferencesProvider);
+    ref.read(authStateChangesProvider);
   }
 
   @override
@@ -123,13 +122,13 @@ class _NavigatorPageState extends ConsumerState<NavigatorPage> {
                 loading: Container.new,
                 data: (value) {
                   final minimumVersionData = value.data();
-                  final minimumVersion = minimumVersionData?['minimumSupportedVersion'] as String?;
+                  final minimumVersion = minimumVersionData?['minimumSupportedVersion'] as String? ?? '0.0.0';
 
                   return deviceVersion.when(
                     error: (error, stackTrace) => Container(),
                     loading: Container.new,
                     data: (value) {
-                      if (UpdateDialog.versionCheck(minimumVersion ?? '0.0.0', value)) {
+                      if (UpdateDialog.versionCheck(minimumVersion, value)) {
                         return const UpdateDialog();
                       }
                       return Container();

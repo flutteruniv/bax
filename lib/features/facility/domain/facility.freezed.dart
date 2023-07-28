@@ -50,25 +50,25 @@ mixin _$Facility {
   /// 電源あり報告
   ///
   /// 報告者のuidを追加する
-  List<String> get hasPowerSource => throw _privateConstructorUsedError;
+  Set<String> get hasPowerSource => throw _privateConstructorUsedError;
 
   /// 電源なし報告
   ///
   /// 報告者のuidを追加する
-  List<String> get noPowerSource => throw _privateConstructorUsedError;
+  Set<String> get noPowerSource => throw _privateConstructorUsedError;
 
   /// 作業スペースあり報告
   ///
   /// 報告者のuidを追加する
-  List<String> get hasWorkSpace => throw _privateConstructorUsedError;
+  Set<String> get hasWorkSpace => throw _privateConstructorUsedError;
 
   /// 作業スペースなし報告
   ///
   /// 報告者のuidを追加する
-  List<String> get noWorkSpace => throw _privateConstructorUsedError;
+  Set<String> get noWorkSpace => throw _privateConstructorUsedError;
 
   /// 電源スポットの写真
-  List<String> get powerSourceSpots => throw _privateConstructorUsedError;
+  Set<String> get powerSourceSpots => throw _privateConstructorUsedError;
 
   /// DocumentReference
   @DocumentReferenceConverter()
@@ -94,11 +94,11 @@ abstract class $FacilityCopyWith<$Res> {
       double uploadSpeed,
       @unionTimestampConverter UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
-      List<String> hasPowerSource,
-      List<String> noPowerSource,
-      List<String> hasWorkSpace,
-      List<String> noWorkSpace,
-      List<String> powerSourceSpots,
+      Set<String> hasPowerSource,
+      Set<String> noPowerSource,
+      Set<String> hasWorkSpace,
+      Set<String> noWorkSpace,
+      Set<String> powerSourceSpots,
       @DocumentReferenceConverter() DocumentReference<Object?> docRef});
 
   $UnionTimestampCopyWith<$Res> get createdAt;
@@ -169,23 +169,23 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
       hasPowerSource: null == hasPowerSource
           ? _value.hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       noPowerSource: null == noPowerSource
           ? _value.noPowerSource
           : noPowerSource // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       hasWorkSpace: null == hasWorkSpace
           ? _value.hasWorkSpace
           : hasWorkSpace // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       noWorkSpace: null == noWorkSpace
           ? _value.noWorkSpace
           : noWorkSpace // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       powerSourceSpots: null == powerSourceSpots
           ? _value.powerSourceSpots
           : powerSourceSpots // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       docRef: null == docRef
           ? _value.docRef
           : docRef // ignore: cast_nullable_to_non_nullable
@@ -226,11 +226,11 @@ abstract class _$$_FacilityCopyWith<$Res> implements $FacilityCopyWith<$Res> {
       double uploadSpeed,
       @unionTimestampConverter UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter UnionTimestamp updatedAt,
-      List<String> hasPowerSource,
-      List<String> noPowerSource,
-      List<String> hasWorkSpace,
-      List<String> noWorkSpace,
-      List<String> powerSourceSpots,
+      Set<String> hasPowerSource,
+      Set<String> noPowerSource,
+      Set<String> hasWorkSpace,
+      Set<String> noWorkSpace,
+      Set<String> powerSourceSpots,
       @DocumentReferenceConverter() DocumentReference<Object?> docRef});
 
   @override
@@ -301,23 +301,23 @@ class __$$_FacilityCopyWithImpl<$Res>
       hasPowerSource: null == hasPowerSource
           ? _value._hasPowerSource
           : hasPowerSource // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       noPowerSource: null == noPowerSource
           ? _value._noPowerSource
           : noPowerSource // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       hasWorkSpace: null == hasWorkSpace
           ? _value._hasWorkSpace
           : hasWorkSpace // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       noWorkSpace: null == noWorkSpace
           ? _value._noWorkSpace
           : noWorkSpace // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       powerSourceSpots: null == powerSourceSpots
           ? _value._powerSourceSpots
           : powerSourceSpots // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
       docRef: null == docRef
           ? _value.docRef
           : docRef // ignore: cast_nullable_to_non_nullable
@@ -341,11 +341,11 @@ class _$_Facility extends _Facility {
           this.createdAt = const UnionTimestamp.serverTimestamp(),
       @alwaysUseServerTimestampUnionTimestampConverter
           this.updatedAt = const UnionTimestamp.serverTimestamp(),
-      final List<String> hasPowerSource = const <String>[],
-      final List<String> noPowerSource = const <String>[],
-      final List<String> hasWorkSpace = const <String>[],
-      final List<String> noWorkSpace = const <String>[],
-      final List<String> powerSourceSpots = const <String>[],
+      final Set<String> hasPowerSource = const <String>{},
+      final Set<String> noPowerSource = const <String>{},
+      final Set<String> hasWorkSpace = const <String>{},
+      final Set<String> noWorkSpace = const <String>{},
+      final Set<String> powerSourceSpots = const <String>{},
       @DocumentReferenceConverter()
           required this.docRef})
       : _hasPowerSource = hasPowerSource,
@@ -398,78 +398,77 @@ class _$_Facility extends _Facility {
   /// 電源あり報告
   ///
   /// 報告者のuidを追加する
-  final List<String> _hasPowerSource;
+  final Set<String> _hasPowerSource;
 
   /// 電源あり報告
   ///
   /// 報告者のuidを追加する
   @override
   @JsonKey()
-  List<String> get hasPowerSource {
-    if (_hasPowerSource is EqualUnmodifiableListView) return _hasPowerSource;
+  Set<String> get hasPowerSource {
+    if (_hasPowerSource is EqualUnmodifiableSetView) return _hasPowerSource;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_hasPowerSource);
+    return EqualUnmodifiableSetView(_hasPowerSource);
   }
 
   /// 電源なし報告
   ///
   /// 報告者のuidを追加する
-  final List<String> _noPowerSource;
+  final Set<String> _noPowerSource;
 
   /// 電源なし報告
   ///
   /// 報告者のuidを追加する
   @override
   @JsonKey()
-  List<String> get noPowerSource {
-    if (_noPowerSource is EqualUnmodifiableListView) return _noPowerSource;
+  Set<String> get noPowerSource {
+    if (_noPowerSource is EqualUnmodifiableSetView) return _noPowerSource;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_noPowerSource);
+    return EqualUnmodifiableSetView(_noPowerSource);
   }
 
   /// 作業スペースあり報告
   ///
   /// 報告者のuidを追加する
-  final List<String> _hasWorkSpace;
+  final Set<String> _hasWorkSpace;
 
   /// 作業スペースあり報告
   ///
   /// 報告者のuidを追加する
   @override
   @JsonKey()
-  List<String> get hasWorkSpace {
-    if (_hasWorkSpace is EqualUnmodifiableListView) return _hasWorkSpace;
+  Set<String> get hasWorkSpace {
+    if (_hasWorkSpace is EqualUnmodifiableSetView) return _hasWorkSpace;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_hasWorkSpace);
+    return EqualUnmodifiableSetView(_hasWorkSpace);
   }
 
   /// 作業スペースなし報告
   ///
   /// 報告者のuidを追加する
-  final List<String> _noWorkSpace;
+  final Set<String> _noWorkSpace;
 
   /// 作業スペースなし報告
   ///
   /// 報告者のuidを追加する
   @override
   @JsonKey()
-  List<String> get noWorkSpace {
-    if (_noWorkSpace is EqualUnmodifiableListView) return _noWorkSpace;
+  Set<String> get noWorkSpace {
+    if (_noWorkSpace is EqualUnmodifiableSetView) return _noWorkSpace;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_noWorkSpace);
+    return EqualUnmodifiableSetView(_noWorkSpace);
   }
 
   /// 電源スポットの写真
-  final List<String> _powerSourceSpots;
+  final Set<String> _powerSourceSpots;
 
   /// 電源スポットの写真
   @override
   @JsonKey()
-  List<String> get powerSourceSpots {
-    if (_powerSourceSpots is EqualUnmodifiableListView)
-      return _powerSourceSpots;
+  Set<String> get powerSourceSpots {
+    if (_powerSourceSpots is EqualUnmodifiableSetView) return _powerSourceSpots;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_powerSourceSpots);
+    return EqualUnmodifiableSetView(_powerSourceSpots);
   }
 
   /// DocumentReference
@@ -558,11 +557,11 @@ abstract class _Facility extends Facility {
           final UnionTimestamp createdAt,
       @alwaysUseServerTimestampUnionTimestampConverter
           final UnionTimestamp updatedAt,
-      final List<String> hasPowerSource,
-      final List<String> noPowerSource,
-      final List<String> hasWorkSpace,
-      final List<String> noWorkSpace,
-      final List<String> powerSourceSpots,
+      final Set<String> hasPowerSource,
+      final Set<String> noPowerSource,
+      final Set<String> hasWorkSpace,
+      final Set<String> noWorkSpace,
+      final Set<String> powerSourceSpots,
       @DocumentReferenceConverter()
           required final DocumentReference<Object?> docRef}) = _$_Facility;
   const _Facility._() : super._();
@@ -609,29 +608,29 @@ abstract class _Facility extends Facility {
   /// 電源あり報告
   ///
   /// 報告者のuidを追加する
-  List<String> get hasPowerSource;
+  Set<String> get hasPowerSource;
   @override
 
   /// 電源なし報告
   ///
   /// 報告者のuidを追加する
-  List<String> get noPowerSource;
+  Set<String> get noPowerSource;
   @override
 
   /// 作業スペースあり報告
   ///
   /// 報告者のuidを追加する
-  List<String> get hasWorkSpace;
+  Set<String> get hasWorkSpace;
   @override
 
   /// 作業スペースなし報告
   ///
   /// 報告者のuidを追加する
-  List<String> get noWorkSpace;
+  Set<String> get noWorkSpace;
   @override
 
   /// 電源スポットの写真
-  List<String> get powerSourceSpots;
+  Set<String> get powerSourceSpots;
   @override
 
   /// DocumentReference
