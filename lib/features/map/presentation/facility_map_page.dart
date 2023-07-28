@@ -33,14 +33,13 @@ class FacilityMapPage extends ConsumerStatefulWidget {
 
 class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsBindingObserver {
   final mapControllerCompleter = Completer<GoogleMapController>();
-
   final searchTextEditingController = TextEditingController();
-
   Position? position;
-
   bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
+  Set<Marker> markers = <Marker>{};
+  StreamSubscription<PendingDynamicLinkData>? subDynamicLinks;
 
-  final Set<Marker> markers = {};
+  bool hasPowerSpot = false;
 
   late final focusNode = FocusNode()
     ..addListener(() {
@@ -54,7 +53,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
   }
 
   Future<void> fetchLocationDataAndMoveCamera() async {
-    final position = await ref.refresh(initLocationProvider.future);
+    position = await ref.refresh(initLocationProvider.future);
     final mapController = await mapControllerCompleter.future;
     final latitude = position?.latitude;
     final longitude = position?.longitude;
@@ -71,14 +70,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     );
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (AppLifecycleState.resumed == state) {
-      fetchLocationDataAndMoveCamera();
-    }
-  }
-
-  StreamSubscription<PendingDynamicLinkData>? sub;
+  Marker? searchedMarker;
 
   @override
   void initState() {
@@ -90,7 +82,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     fetchLocationDataAndMoveCamera();
 
     // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
-    sub = FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+    subDynamicLinks = FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
       await ref.watch(authServiceProvider).linkWithCredentialByEmailLink(dynamicLinkData.link.toString());
     });
   }
@@ -101,8 +93,15 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     searchTextEditingController.dispose();
     mapControllerCompleter.future.then((value) => value.dispose());
     focusNode.dispose();
-    sub?.cancel();
+    subDynamicLinks?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (AppLifecycleState.resumed == state) {
+      fetchLocationDataAndMoveCamera();
+    }
   }
 
   @override
@@ -110,20 +109,32 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     final l = ref.watch(localizationsProvider);
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     final isPro = ref.watch(isProProvider);
-    markers.addAll(
-      facilities.map((facility) {
-        final data = facility.data();
-        return Marker(
-          markerId: MarkerId(data.id),
-          position: LatLng(data.geo.latitude, data.geo.longitude),
-          icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(data.markerColor) : BitmapDescriptor.defaultMarker,
-          onTap: () {
-            // TODO(kenta-wakasa): 施設詳細画面に遷移する
-            context.go('${FacilityMapPage.route}${FacilityPage.route}/${facility.id}');
-          },
-        );
-      }).toSet(),
-    );
+    markers
+      ..clear()
+      ..addAll(
+        facilities.map((e) => e.data()).map((facility) {
+          return Marker(
+            markerId: MarkerId(facility.id),
+            position: LatLng(facility.geo.latitude, facility.geo.longitude),
+            icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(facility.markerColor) : BitmapDescriptor.defaultMarker,
+            onTap: () {
+              context.go('${FacilityMapPage.route}${FacilityPage.route}/${facility.id}');
+            },
+          );
+        }).toSet(),
+      );
+
+    if (searchedMarker != null) {
+      markers.add(searchedMarker!);
+    }
+
+    if (hasPowerSpot) {
+      for (final facility in facilities) {
+        if (facility.data().haaPowerSpot != true) {
+          markers.removeWhere((element) => element.markerId.value == facility.id);
+        }
+      }
+    }
 
     ref.listen(selectedLocationInfoStreamProvider, (previous, next) async {
       final facility = next.value;
@@ -149,25 +160,23 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
 
       if (facility.downloadSpeed == 0) {
         // 未測定の場合はMarkerがないので未測定Markerを設置する
-        final marker = Marker(
+        searchedMarker = Marker(
           markerId: MarkerId(facility.id),
           position: latlng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
           infoWindow: InfoWindow(title: facility.name, snippet: '${l.downloadSpeed}: ${l.notMeasured}'),
         );
-        markers.add(marker);
+        markers.add(searchedMarker!);
       }
 
       // 追加したMarkerが描画されるのを一瞬待ってからMarkerInfoを表示する
-      Future.delayed(const Duration(milliseconds: 100), () async {
+      Future.delayed(const Duration(milliseconds: 200), () async {
         await mapController.showMarkerInfoWindow(MarkerId(facility.id));
       });
     });
 
     return GestureDetector(
-      onTap: () {
-        primaryFocus?.unfocus();
-      },
+      onTap: () => primaryFocus?.unfocus(),
       child: AnnotatedRegion(
         value: const SystemUiOverlayStyle(
           /// Android のステータスバーアイコンの色が変更される
@@ -196,15 +205,94 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                 zoomControlsEnabled: false,
                 myLocationEnabled: true,
               ),
-
               if (focusNode.hasFocus) Container(color: Colors.transparent),
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                hasPowerSpot = !hasPowerSpot;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(80)),
+                                color: Colors.white,
+                                border: hasPowerSpot ? Border.all(color: Colors.yellow[900]!) : null,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: .1,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.power_outlined,
+                                    size: 16,
+                                    color: hasPowerSpot ? Colors.yellow[900]! : null,
+                                  ),
+                                  Text(
+                                    '電源席あり',
+                                    style: hasPowerSpot
+                                        ? TextStyle(
+                                            color: Colors.yellow[900]!,
+                                          )
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              context.go('${FacilityMapPage.route}${MyPage.route}');
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(80)),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: .1,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/images/bax_logo.svg',
+                                    width: 12,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text('${ref.watch(userBaxProvider)}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                       SearchTextFormField(
                         controller: searchTextEditingController,
                         focusNode: focusNode,
@@ -212,46 +300,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
                       const SizedBox(height: 8),
                       if (shouldShowPredicationResultList) const PredicationResultList(),
                     ],
-                  ),
-                ),
-              ),
-
-              /// 所持BAX
-              Align(
-                alignment: Alignment.topRight,
-                child: SafeArea(
-                  child: InkWell(
-                    onTap: () {
-                      context.go('${FacilityMapPage.route}${MyPage.route}');
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(80)),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            offset: Offset(1, 1),
-                            blurRadius: .1,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/bax_logo.svg',
-                            width: 12,
-                            color: Colors.black,
-                          ),
-                          const SizedBox(width: 8),
-                          Text('${ref.watch(userBaxProvider)}'),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ),
