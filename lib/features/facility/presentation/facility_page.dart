@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widgets/bax_indicator.dart';
 import '../../authentication/application/auth_service.dart';
+import '../../measurement_wifi/data/measurement_wifi_repository.dart';
 import '../data/facility_repository.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
@@ -25,7 +28,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
     final textTheme = Theme.of(context).textTheme;
     final uid = ref.watch(uidProvider);
 
-    void onTapNoPower() {}
+    final measurementWifiResults = ref.watch(measurementWifiResultsForFacility(widget.docId)).value ?? [];
 
     return Scaffold(
       appBar: AppBar(),
@@ -110,6 +113,62 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                           );
                         }
                       },
+                    ),
+                    const SizedBox(height: 24),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.wifi_outlined,
+                          // color: activeColor,
+                        ),
+                        Expanded(
+                          child: Text(
+                            '計測履歴',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              // color: activeColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      height: 240,
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: measurementWifiResults.length,
+                        itemBuilder: (context, index) {
+                          final wifiMeasurementResult = measurementWifiResults[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 4, bottom: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  DateFormat('yyyy/MM/dd HH:mm').format(wifiMeasurementResult.terminalTime.dateTime!),
+                                  style: textTheme.bodySmall,
+                                ),
+                                Text(
+                                  ' ${wifiMeasurementResult.ssid} : ↓${wifiMeasurementResult.downloadSpeedMbps}Mbps ↑${wifiMeasurementResult.uploadSpeedMbps}Mbps',
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          final url = 'https://www.google.com/maps/search/?api=1&query=${facility.data().name}';
+                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                        },
+                        child: const Text('マップアプリで表示'),
+                      ),
                     ),
                   ],
                 ),
@@ -285,7 +344,7 @@ class DownloadUploadIndTile extends StatelessWidget {
                         ),
                       ),
                       const TextSpan(
-                        text: 'Mpbs',
+                        text: 'Mbps',
                       ),
                     ],
                   ),

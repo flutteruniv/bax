@@ -12,6 +12,10 @@ final measurementWifiRepositoryProvider = Provider(
   ),
 );
 
+final measurementWifiResultsForFacility = FutureProvider.autoDispose.family((ref, String placeId) {
+  return ref.watch(measurementWifiRepositoryProvider).getWifiMeasurementResults(placeId, all: true);
+});
+
 class MeasurementWifiRepository {
   MeasurementWifiRepository({
     required this.firestore,
@@ -63,7 +67,7 @@ class MeasurementWifiRepository {
     }
   }
 
-  Future<List<WifiMeasurementResult>> getWifiMeasurementResults(String placeId) async {
+  Future<List<WifiMeasurementResult>> getWifiMeasurementResults(String placeId, {bool all = false}) async {
     final collectionRef =
         firestore.collection(wifiMeasurementResultCollectionName).withConverter<WifiMeasurementResult>(
       fromFirestore: (snapshot, options) {
@@ -74,10 +78,14 @@ class MeasurementWifiRepository {
         return snapshot.toJson();
       },
     );
-    final query = collectionRef
-        .where(wifiMeasurementResultFieldPlaceId, isEqualTo: placeId)
-        .orderBy(wifiMeasurementResultFieldCreatedAt, descending: true)
-        .limit(3);
+    final query = all
+        ? collectionRef
+            .where(wifiMeasurementResultFieldPlaceId, isEqualTo: placeId)
+            .orderBy(wifiMeasurementResultFieldCreatedAt, descending: true)
+        : collectionRef
+            .where(wifiMeasurementResultFieldPlaceId, isEqualTo: placeId)
+            .orderBy(wifiMeasurementResultFieldCreatedAt, descending: true)
+            .limit(3);
     final snapshot = await query.get();
     return snapshot.docs.map((event) => event.data()).toList();
   }
