@@ -64,7 +64,7 @@ class MapService {
 
     final location = await ref.read(initLocationProvider.future);
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
-    await Future<void>.delayed(const Duration(milliseconds: 600));
+    await Future<void>.delayed(const Duration(milliseconds: 300));
     if (_holdQuery == query) {
       // TODO: Validationチェック。
       /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
@@ -86,7 +86,7 @@ class MapService {
   Future<void> geocoding(String facilityId, String name, String address) async {
     final facility = await ref.watch(facilityRepositoryProvider).fetchFacility(facilityId);
     if (facility != null) {
-      _selectedLocationInfoController.add(facility);
+      _selectedLocationInfoController.add(facility.data());
       return;
     }
 
@@ -106,10 +106,11 @@ class MapService {
       uploadSpeed: 0,
       docRef: ref.read(facilityRepositoryProvider).facilityCollectionReference.doc(facilityId),
     );
+
+    /// Firestoreに保存
+    await newFacility.docRef.set(newFacility);
     _selectedLocationInfoController.add(
       newFacility,
     );
-    // TODO(kenta-wakasa): firestoreに保存もしてしまう
-    await newFacility.docRef.set(newFacility);
   }
 }

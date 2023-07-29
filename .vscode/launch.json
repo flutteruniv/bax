@@ -21,6 +21,15 @@
       ]
     },
     {
+      "name": "本番環境プロファイルビルド",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ]
+    },
+    {
       "name": "開発環境リリースビルド",
       "request": "launch",
       "type": "dart",

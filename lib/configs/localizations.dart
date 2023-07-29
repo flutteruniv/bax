@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/user/application/user_service.dart';
 
-final localeProvider = StateProvider(
+final localeProvider = Provider(
   (ref) {
     final defaultLocaleName = Platform.localeName;
     return Locale(defaultLocaleName);

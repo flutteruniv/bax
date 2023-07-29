@@ -8,176 +8,194 @@ import '../../authentication/application/auth_service.dart';
 import '../../measurement_wifi/data/measurement_wifi_repository.dart';
 import '../data/facility_repository.dart';
 
-class FacilityPage extends ConsumerStatefulWidget {
-  const FacilityPage({
+class FacilityDetailsWidget extends ConsumerStatefulWidget {
+  const FacilityDetailsWidget({
     super.key,
     required this.docId,
+    required this.controller,
   });
 
   static const route = 'facility';
   final String docId;
+  final ScrollController controller;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FacilityPageState();
 }
 
-class _FacilityPageState extends ConsumerState<FacilityPage> {
+class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     final facility = ref.watch(facilityProvider(widget.docId));
     final textTheme = Theme.of(context).textTheme;
     final uid = ref.watch(uidProvider);
-
     final measurementWifiResults = ref.watch(measurementWifiResultsForFacility(widget.docId)).value ?? [];
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: facility == null
-          ? const Center(
-              child: BaxIndicator(),
-            )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      facility.data().name,
-                      style: const TextStyle(
-                        height: 1.2,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      facility.data().address,
-                      style: textTheme.bodySmall,
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    DownloadUploadIndTile(
-                      downloadSpeed: facility.data().downloadSpeed,
-                      uploadSpeed: facility.data().uploadSpeed,
-                    ),
-                    const SizedBox(height: 16),
-                    PowerTile(
-                      hasPowerSpotUserSelect: facility.data().hasPowerSpotUserSelect(uid ?? ''),
-                      hasPowerSpot: facility.data().haaPowerSpot,
-                      onTapPower: () {
-                        if (uid == null) {
-                          return;
-                        }
-                        if (facility.data().hasPowerSource.contains(uid)) {
-                          facility.reference.set(
-                            facility.data().copyWith(
-                              hasPowerSource: {
-                                for (final e in facility.data().hasPowerSource)
-                                  if (e != uid) e
-                              },
-                            ),
-                          );
-                        } else {
-                          facility.reference.set(
-                            facility.data().copyWith(
-                              hasPowerSource: {
-                                ...facility.data().hasPowerSource,
-                                uid,
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      onTapNoPower: () {
-                        if (uid == null) {
-                          return;
-                        }
-                        if (facility.data().noPowerSource.contains(uid)) {
-                          facility.reference.set(
-                            facility.data().copyWith(
-                              noPowerSource: {
-                                for (final e in facility.data().noPowerSource)
-                                  if (e != uid) e
-                              },
-                            ),
-                          );
-                        } else {
-                          facility.reference.set(
-                            facility.data().copyWith(
-                              noPowerSource: {
-                                ...facility.data().noPowerSource,
-                                uid,
-                              },
-                            ),
-                          );
-                        }
+    if (facility == null) {
+      return const Center(
+        child: BaxIndicator(),
+      );
+    }
+
+    return SingleChildScrollView(
+      controller: widget.controller,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            Center(
+              child: Container(
+                height: 4,
+                width: 72,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.grey[300],
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                facility.data().name,
+                maxLines: 1,
+                style: const TextStyle(
+                  height: 1.2,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              facility.data().address,
+              maxLines: 1,
+              style: textTheme.bodySmall,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            DownloadUploadIndTile(
+              downloadSpeed: facility.data().downloadSpeed,
+              uploadSpeed: facility.data().uploadSpeed,
+            ),
+            const SizedBox(height: 16),
+            PowerTile(
+              hasPowerSpotUserSelect: facility.data().hasPowerSpotUserSelect(uid ?? ''),
+              hasPowerSpot: facility.data().haaPowerSpot,
+              onTapPower: () {
+                if (uid == null) {
+                  return;
+                }
+                if (facility.data().hasPowerSource.contains(uid)) {
+                  facility.reference.set(
+                    facility.data().copyWith(
+                      hasPowerSource: {
+                        for (final e in facility.data().hasPowerSource)
+                          if (e != uid) e
                       },
                     ),
-                    const SizedBox(height: 24),
-                    const Row(
+                  );
+                } else {
+                  facility.reference.set(
+                    facility.data().copyWith(
+                      hasPowerSource: {
+                        ...facility.data().hasPowerSource,
+                        uid,
+                      },
+                    ),
+                  );
+                }
+              },
+              onTapNoPower: () {
+                if (uid == null) {
+                  return;
+                }
+                if (facility.data().noPowerSource.contains(uid)) {
+                  facility.reference.set(
+                    facility.data().copyWith(
+                      noPowerSource: {
+                        for (final e in facility.data().noPowerSource)
+                          if (e != uid) e
+                      },
+                    ),
+                  );
+                } else {
+                  facility.reference.set(
+                    facility.data().copyWith(
+                      noPowerSource: {
+                        ...facility.data().noPowerSource,
+                        uid,
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 24),
+            const Row(
+              children: [
+                Icon(
+                  Icons.wifi_outlined,
+                  // color: activeColor,
+                ),
+                Expanded(
+                  child: Text(
+                    '計測履歴',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      // color: activeColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: measurementWifiResults.length,
+                itemBuilder: (context, index) {
+                  final wifiMeasurementResult = measurementWifiResults[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 4, bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.wifi_outlined,
-                          // color: activeColor,
+                        Text(
+                          DateFormat('yyyy/MM/dd HH:mm').format(wifiMeasurementResult.terminalTime.dateTime!),
+                          style: textTheme.bodySmall,
                         ),
-                        Expanded(
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
                           child: Text(
-                            '計測履歴',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              // color: activeColor,
-                            ),
+                            ' ${wifiMeasurementResult.ssid} : ↓${wifiMeasurementResult.downloadSpeedMbps}Mbps ↑${wifiMeasurementResult.uploadSpeedMbps}Mbps',
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: measurementWifiResults.length,
-                        itemBuilder: (context, index) {
-                          final wifiMeasurementResult = measurementWifiResults[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 4, bottom: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  DateFormat('yyyy/MM/dd HH:mm').format(wifiMeasurementResult.terminalTime.dateTime!),
-                                  style: textTheme.bodySmall,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Text(
-                                    ' ${wifiMeasurementResult.ssid} : ↓${wifiMeasurementResult.downloadSpeedMbps}Mbps ↑${wifiMeasurementResult.uploadSpeedMbps}Mbps',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          final url = 'https://www.google.com/maps/search/?api=1&query=${facility.data().name}';
-                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                        },
-                        child: const Text('マップアプリで表示'),
-                      ),
-                    ),
-                    const SizedBox(height: 56),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () async {
+                  final url = 'https://www.google.com/maps/search/?api=1&query=${facility.data().name}';
+                  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                },
+                child: const Text('マップアプリで表示'),
+              ),
+            ),
+            const SizedBox(height: 56),
+          ],
+        ),
+      ),
     );
   }
 }

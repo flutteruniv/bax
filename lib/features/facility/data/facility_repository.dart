@@ -30,16 +30,28 @@ final facilityProvider = Provider.autoDispose.family((ref, String docId) {
   return facility;
 });
 
+/// 選択中のplaceId
+final selectedPlaceIdProvider = StateProvider<String?>((ref) => null);
+
+/// 選択中のfacility
+final selectedFacilityProvider = Provider.autoDispose((ref) {
+  final selectedPlaceId = ref.watch(selectedPlaceIdProvider);
+  if (selectedPlaceId == null) {
+    return null;
+  }
+  return ref.watch(facilityProvider(selectedPlaceId));
+});
+
 class FacilityRepository {
   FacilityRepository({
     required this.firestore,
   });
 
   Stream<List<QueryDocumentSnapshot<Facility>>> facilitiesStream() {
-    return facilityCollectionReference.where('downloadSpeed', isNotEqualTo: 0).snapshots().map((event) => event.docs);
+    return facilityCollectionReference.snapshots().map((event) => event.docs);
   }
 
-  Future<Facility?> fetchFacility(String facilityId) async {
+  Future<QueryDocumentSnapshot<Facility>?> fetchFacility(String facilityId) async {
     final query = facilityCollectionReference.where(facilityFieldId, isEqualTo: facilityId);
     final snapshot = await query.get();
 
@@ -47,7 +59,7 @@ class FacilityRepository {
       return null;
     }
 
-    return snapshot.docs.first.data();
+    return snapshot.docs.first;
   }
 
   final FirebaseFirestore firestore;

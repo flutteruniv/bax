@@ -1,5 +1,4 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,7 +7,6 @@ import '../features/authentication/presentation/email_authentication_page.dart';
 import '../features/authentication/presentation/sign_in_page.dart';
 import '../features/authentication/presentation/welcome_page.dart';
 import '../features/bax/presentation/bax_history_page.dart';
-import '../features/facility/presentation/facility_page.dart';
 import '../features/map/presentation/facility_map_page.dart';
 import '../features/measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import '../features/user/presentation/my_page.dart';
@@ -35,22 +33,9 @@ final routerProvider = Provider(
       },
       routes: [
         GoRoute(
-          name: 'route',
           path: FacilityMapPage.route,
           builder: (context, state) => const FacilityMapPage(),
           routes: [
-            GoRoute(
-              path: '${FacilityPage.route}/:docId',
-              pageBuilder: (context, state) {
-                final docId = state.params['docId']!;
-                return MaterialPage(
-                  fullscreenDialog: true,
-                  child: FacilityPage(
-                    docId: docId,
-                  ),
-                );
-              },
-            ),
             GoRoute(
               name: MeasureWiFiSpeedPage.name,
               path: MeasureWiFiSpeedPage.route,

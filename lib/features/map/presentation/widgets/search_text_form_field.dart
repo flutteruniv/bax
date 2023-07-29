@@ -28,7 +28,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
   void initState() {
     super.initState();
     widget.focusNode.addListener(() {
-      if (widget.focusNode.hasFocus == false) {
+      if (!widget.focusNode.hasFocus) {
         setState(() {
           searchMode = false;
         });

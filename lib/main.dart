@@ -31,6 +31,7 @@ void main() async {
       overrides: [
         preferencesProvider.overrideWithValue(Preferences(preferences)),
         if (kDebugMode) localeProvider.overrideWith((ref) => const Locale('en')),
+        if (kDebugMode) localizationsProvider.overrideWithValue(AppLocalizations(LType.en)),
         if (kDebugMode) isProProvider.overrideWithValue(true),
       ],
       child: const MyApp(),
@@ -59,24 +60,33 @@ class _MyAppState extends ConsumerState<MyApp> {
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localeProvider);
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ja'),
-        Locale('en'),
-      ],
-      locale: locale,
-      theme: theme,
-      routerConfig: router,
-      scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
-      builder: (context, child) {
-        return NavigatorPage(child: child);
-      },
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        /// Android のステータスバーアイコンの色が変更される
+        statusBarIconBrightness: Brightness.light,
+
+        /// iOS のステータスバーの文字色が変更される
+        statusBarBrightness: Brightness.light,
+      ),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ja'),
+          Locale('en'),
+        ],
+        locale: locale,
+        theme: theme,
+        routerConfig: router,
+        scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
+        builder: (context, child) {
+          return NavigatorPage(child: child);
+        },
+      ),
     );
   }
 }

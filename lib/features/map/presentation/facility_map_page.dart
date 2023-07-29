@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../facility/data/facility_repository.dart';
-import '../../facility/presentation/facility_page.dart';
+import '../../facility/presentation/facility_details_widget.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
 import '../../payment/repository/payment_repository.dart';
@@ -31,14 +31,17 @@ class FacilityMapPage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _FacilityMapPageState();
 }
 
-class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsBindingObserver {
+class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   final mapControllerCompleter = Completer<GoogleMapController>();
   final searchTextEditingController = TextEditingController();
   Position? position;
   bool get shouldShowPredicationResultList => searchTextEditingController.text.isNotEmpty;
   Set<Marker> markers = <Marker>{};
   StreamSubscription<PendingDynamicLinkData>? subDynamicLinks;
+  final slideUpPanelController = ScrollController();
 
+  /// 検索結果のマーカー
+  Marker? searchedMarker;
   bool hasPowerSpot = false;
 
   late final focusNode = FocusNode()
@@ -70,12 +73,9 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     );
   }
 
-  Marker? searchedMarker;
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     searchTextEditingController.addListener(() {
       setState(() {});
     });
@@ -83,25 +83,19 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
 
     // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
     subDynamicLinks = FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
+      // TODO(kenta-wakasa): 毎回認証リンクとは限らないはずなので、その辺りをハンドリングする仕組みが必要そう
       await ref.watch(authServiceProvider).linkWithCredentialByEmailLink(dynamicLinkData.link.toString());
     });
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     searchTextEditingController.dispose();
     mapControllerCompleter.future.then((value) => value.dispose());
     focusNode.dispose();
     subDynamicLinks?.cancel();
+    slideUpPanelController.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (AppLifecycleState.resumed == state) {
-      fetchLocationDataAndMoveCamera();
-    }
   }
 
   @override
@@ -109,25 +103,32 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
     final l = ref.watch(localizationsProvider);
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     final isPro = ref.watch(isProProvider);
-    markers
-      ..clear()
-      ..addAll(
-        facilities.map((e) => e.data()).map((facility) {
-          return Marker(
-            markerId: MarkerId(facility.id),
-            position: LatLng(facility.geo.latitude, facility.geo.longitude),
-            icon: isPro ? BitmapDescriptor.defaultMarkerWithHue(facility.markerColor) : BitmapDescriptor.defaultMarker,
-            onTap: () {
-              context.go('${FacilityMapPage.route}${FacilityPage.route}/${facility.id}');
-            },
-          );
-        }).toSet(),
-      );
+    final selectedFacility = ref.watch(selectedFacilityProvider);
+    const radius = BorderRadius.only(
+      topLeft: Radius.circular(16),
+      topRight: Radius.circular(16),
+    );
 
+    markers = facilities.where((element) => element.data().downloadSpeed != 0.0).map((qds) {
+      final facility = qds.data();
+      return Marker(
+        markerId: MarkerId(facility.id),
+        position: LatLng(facility.geo.latitude, facility.geo.longitude),
+        icon: isPro
+            ? BitmapDescriptor.defaultMarkerWithHue(facility.markerColor)
+            : BitmapDescriptor.defaultMarkerWithHue(30),
+        onTap: () {
+          ref.read(selectedPlaceIdProvider.notifier).update((state) => facility.id);
+        },
+      );
+    }).toSet();
+
+    /// 検索結果のマーカーを足す
     if (searchedMarker != null) {
       markers.add(searchedMarker!);
     }
 
+    /// 電源あり以外のマーカーを取り除く
     if (hasPowerSpot) {
       for (final facility in facilities) {
         if (facility.data().haaPowerSpot != true) {
@@ -158,152 +159,178 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> with WidgetsB
       searchTextEditingController.text = '';
       primaryFocus?.unfocus();
 
+      ref.read(selectedPlaceIdProvider.notifier).update((state) => facility.id);
+
       if (facility.downloadSpeed == 0) {
         // 未測定の場合はMarkerがないので未測定Markerを設置する
         searchedMarker = Marker(
           markerId: MarkerId(facility.id),
           position: latlng,
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          infoWindow: InfoWindow(title: facility.name, snippet: '${l.downloadSpeed}: ${l.notMeasured}'),
+          onTap: () {
+            ref.read(selectedPlaceIdProvider.notifier).update((state) => facility.id);
+          },
         );
         markers.add(searchedMarker!);
       }
 
       // 追加したMarkerが描画されるのを一瞬待ってからMarkerInfoを表示する
-      Future.delayed(const Duration(milliseconds: 200), () async {
-        await mapController.showMarkerInfoWindow(MarkerId(facility.id));
-      });
+      // Future.delayed(const Duration(milliseconds: 100), () async {
+      //   await mapController.showMarkerInfoWindow(MarkerId(facility.id));
+      // });
     });
 
-    return GestureDetector(
-      onTap: () => primaryFocus?.unfocus(),
-      child: AnnotatedRegion(
-        value: const SystemUiOverlayStyle(
-          /// Android のステータスバーアイコンの色が変更される
-          statusBarIconBrightness: Brightness.light,
-
-          /// iOS のステータスバーの文字色が変更される
-          statusBarBrightness: Brightness.light,
-        ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: GestureDetector(
+        onTap: () => primaryFocus?.unfocus(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              GoogleMap(
-                myLocationButtonEnabled: false,
-                onMapCreated: onMapCreated,
-                markers: markers,
-                initialCameraPosition: CameraPosition(
-                  /// 初期値を東京駅にしています。
-                  target: LatLng(
-                    position?.latitude ?? 35.6812362,
-                    position?.longitude ?? 139.7649361,
-                  ),
-                  zoom: 16,
+          body: SlidingUpPanel(
+            renderPanelSheet: false, //selectedFacilitySnapshot != null,
+            borderRadius: radius,
+            maxHeight: MediaQuery.sizeOf(context).height -
+                MediaQuery.of(context).viewPadding.top -
+                MediaQuery.of(context).viewPadding.bottom,
+            snapPoint: .3,
+            minHeight: 180,
+            panelBuilder: (controller) {
+              if (selectedFacility == null) {
+                return const SizedBox();
+              }
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: radius,
                 ),
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationEnabled: true,
-              ),
-              if (focusNode.hasFocus) Container(color: Colors.transparent),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                hasPowerSpot = !hasPowerSpot;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(80)),
-                                color: Colors.white,
-                                border: hasPowerSpot ? Border.all(color: Colors.yellow[900]!) : null,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: .1,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.power_outlined,
-                                    size: 16,
-                                    color: hasPowerSpot ? Colors.yellow[900]! : null,
-                                  ),
-                                  Text(
-                                    '電源席あり',
-                                    style: hasPowerSpot
-                                        ? TextStyle(
-                                            color: Colors.yellow[900]!,
-                                          )
-                                        : null,
-                                  ),
-                                ],
+                child: FacilityDetailsWidget(
+                  docId: selectedFacility.id,
+                  controller: controller,
+                ),
+              );
+            },
+            body: Stack(
+              children: [
+                GoogleMap(
+                  myLocationButtonEnabled: false,
+                  onMapCreated: onMapCreated,
+                  markers: markers,
+                  initialCameraPosition: CameraPosition(
+                    /// 初期値を東京駅にしています。
+                    target: LatLng(
+                      position?.latitude ?? 35.6812362,
+                      position?.longitude ?? 139.7649361,
+                    ),
+                    zoom: 16,
+                  ),
+                  mapToolbarEnabled: false,
+                  zoomControlsEnabled: false,
+                  myLocationEnabled: true,
+                ),
+                if (focusNode.hasFocus) Container(color: Colors.transparent),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  hasPowerSpot = !hasPowerSpot;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(80)),
+                                  color: Colors.white,
+                                  border: hasPowerSpot ? Border.all(color: Colors.yellow[900]!) : null,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      offset: Offset(1, 1),
+                                      blurRadius: .1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.power_outlined,
+                                      size: 16,
+                                      color: hasPowerSpot ? Colors.yellow[900]! : null,
+                                    ),
+                                    Text(
+                                      '電源席あり',
+                                      style: hasPowerSpot
+                                          ? TextStyle(
+                                              color: Colors.yellow[900]!,
+                                            )
+                                          : null,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              context.go('${FacilityMapPage.route}${MyPage.route}');
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(80)),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: .1,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/images/bax_logo.svg',
-                                    width: 12,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text('${ref.watch(userBaxProvider)}'),
-                                ],
+                            const Spacer(),
+                            InkWell(
+                              onTap: () {
+                                context.go('${FacilityMapPage.route}${MyPage.route}');
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(80)),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(1, 1),
+                                      blurRadius: .1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/images/bax_logo.svg',
+                                      width: 12,
+                                      color: Colors.black,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text('${ref.watch(userBaxProvider)}'),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      SearchTextFormField(
-                        controller: searchTextEditingController,
-                        focusNode: focusNode,
-                      ),
-                      const SizedBox(height: 8),
-                      if (shouldShowPredicationResultList) const PredicationResultList(),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        /// 検索フォーム
+                        SearchTextFormField(
+                          controller: searchTextEditingController,
+                          focusNode: focusNode,
+                        ),
+                        const SizedBox(height: 8),
+                        if (shouldShowPredicationResultList) const PredicationResultList(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           floatingActionButton: Column(
             mainAxisSize: MainAxisSize.min,
