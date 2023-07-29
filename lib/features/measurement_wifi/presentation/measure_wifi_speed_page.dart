@@ -196,14 +196,7 @@ class _MeasureWiFiSpeedPageState extends ConsumerState<MeasureWiFiSpeedPage> {
               if (!ref.watch(isProProvider))
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        fullscreenDialog: true,
-                        builder: (context) {
-                          return const PaymentDialog();
-                        },
-                      ),
-                    );
+                    PaymentDialog.showFullScreenDialog(context);
                   },
                   child: Text(l.doubleBAXWithProPlan),
                 ),

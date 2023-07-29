@@ -201,14 +201,7 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
               ? () async {
                   final isPro = ref.read(isProProvider);
                   if (!isPro) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        fullscreenDialog: true,
-                        builder: (context) {
-                          return const PaymentDialog();
-                        },
-                      ),
-                    );
+                    PaymentDialog.showFullScreenDialog(context);
                     return;
                   }
 

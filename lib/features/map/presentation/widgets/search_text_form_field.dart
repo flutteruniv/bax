@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/localizations.dart';
-import '../../../payment/presentation/payment_dialog.dart';
 import '../../../payment/repository/payment_repository.dart';
 import '../../application/map_service.dart';
 
@@ -77,17 +76,6 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
               children: [
                 InkWell(
                   onTap: () {
-                    if (!isPro) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          fullscreenDialog: true,
-                          builder: (context) {
-                            return const PaymentDialog();
-                          },
-                        ),
-                      );
-                      return;
-                    }
                     setState(() {
                       searchMode = true;
                     });

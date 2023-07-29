@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common_widgets/bax_indicator.dart';
 import '../../../../configs/localizations.dart';
-import '../../application/map_service.dart';
 import '../../data/map_repository.dart';
 import '../../domain/facility_prediction_results/facility_prediction_result.dart';
 

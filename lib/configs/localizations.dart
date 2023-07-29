@@ -360,8 +360,38 @@ class AppLocalizations {
         LType.ja => 'データを引き継ぐ',
         LType.en => 'Transfer data',
       };
-  String get xxx => switch (l) {
-        LType.ja => 'データを引き継ぐ',
+
+  String get hasPowerSeats => switch (l) {
+        LType.ja => '電源席あり',
+        LType.en => 'Has Power Seats',
+      };
+
+  String get viewingWithProPlan => switch (l) {
+        LType.ja => '※Proプランに加入することで閲覧可能です',
+        LType.en => 'Viewing available with Pro plan',
+      };
+  String get viewWifiSpeed => switch (l) {
+        LType.ja => 'Wi-Fi速度を見る',
+        LType.en => 'View Wi-Fi speed',
+      };
+  String get measurementHistory => switch (l) {
+        LType.ja => '計測履歴',
+        LType.en => 'Measurement History',
+      };
+  String get viewMeasurementHistory => switch (l) {
+        LType.ja => '計測履歴を見る',
+        LType.en => 'View Measurement History',
+      };
+  String get powerSource => switch (l) {
+        LType.ja => '電源',
+        LType.en => 'Power',
+      };
+  String get showInMapApp => switch (l) {
+        LType.ja => 'マップアプリで表示',
+        LType.en => 'Show in Map App',
+      };
+  String get XXX => switch (l) {
+        LType.ja => 'マップアプリで表示',
         LType.en => 'XXX',
       };
 }

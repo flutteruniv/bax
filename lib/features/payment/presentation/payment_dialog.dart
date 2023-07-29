@@ -10,7 +10,18 @@ import '../../load/application/loading_notifier.dart';
 import '../repository/payment_repository.dart';
 
 class PaymentDialog extends ConsumerStatefulWidget {
-  const PaymentDialog({super.key});
+  const PaymentDialog._();
+
+  static void showFullScreenDialog(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const PaymentDialog._();
+        },
+      ),
+    );
+  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PaymentDialogState();

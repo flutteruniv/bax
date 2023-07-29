@@ -48,6 +48,7 @@ dependencies:
   maps_launcher:
   firebase_analytics: ^10.4.4
   sliding_up_panel: ^2.0.0+1
+  glassmorphism: ^3.0.0
 
 dev_dependencies:
   flutter_test:

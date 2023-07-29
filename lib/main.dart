@@ -32,7 +32,7 @@ void main() async {
         preferencesProvider.overrideWithValue(Preferences(preferences)),
         if (kDebugMode) localeProvider.overrideWithValue(const Locale('en')),
         if (kDebugMode) localizationsProvider.overrideWithValue(AppLocalizations(LType.en)),
-        if (kDebugMode) isProProvider.overrideWithValue(true),
+        if (kDebugMode) isProProvider.overrideWithValue(false),
       ],
       child: const MyApp(),
     ),

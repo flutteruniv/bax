@@ -15,6 +15,7 @@ import '../../facility/data/facility_repository.dart';
 import '../../facility/presentation/facility_details_widget.dart';
 import '../../location/domain/my_location.dart';
 import '../../measurement_wifi/presentation/measure_wifi_speed_page.dart';
+import '../../payment/presentation/payment_dialog.dart';
 import '../../payment/repository/payment_repository.dart';
 import '../../user/application/user_service.dart';
 import '../../user/presentation/my_page.dart';
@@ -104,6 +105,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
     final facilities = ref.watch(facilitiesStreamProvider).valueOrNull ?? [];
     final isPro = ref.watch(isProProvider);
     final selectedFacility = ref.watch(selectedFacilityProvider);
+
     const radius = BorderRadius.only(
       topLeft: Radius.circular(16),
       topRight: Radius.circular(16),
@@ -240,9 +242,13 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  hasPowerSpot = !hasPowerSpot;
-                                });
+                                if (isPro) {
+                                  setState(() {
+                                    hasPowerSpot = !hasPowerSpot;
+                                  });
+                                } else {
+                                  PaymentDialog.showFullScreenDialog(context);
+                                }
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -268,7 +274,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                                       color: hasPowerSpot ? Colors.yellow[900]! : null,
                                     ),
                                     Text(
-                                      '電源席あり',
+                                      l.hasPowerSeats,
                                       style: hasPowerSpot
                                           ? TextStyle(
                                               color: Colors.yellow[900]!,
