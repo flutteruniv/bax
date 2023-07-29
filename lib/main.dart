@@ -30,7 +30,7 @@ void main() async {
     ProviderScope(
       overrides: [
         preferencesProvider.overrideWithValue(Preferences(preferences)),
-        if (kDebugMode) localeProvider.overrideWith((ref) => const Locale('en')),
+        if (kDebugMode) localeProvider.overrideWithValue(const Locale('en')),
         if (kDebugMode) localizationsProvider.overrideWithValue(AppLocalizations(LType.en)),
         if (kDebugMode) isProProvider.overrideWithValue(true),
       ],

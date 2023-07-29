@@ -56,7 +56,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   }
 
   Future<void> fetchLocationDataAndMoveCamera() async {
-    position = await ref.refresh(initLocationProvider.future);
+    position = await ref.refresh(locationProvider.future);
     final mapController = await mapControllerCompleter.future;
     final latitude = position?.latitude;
     final longitude = position?.longitude;
@@ -191,9 +191,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
           body: SlidingUpPanel(
             renderPanelSheet: false, //selectedFacilitySnapshot != null,
             borderRadius: radius,
-            maxHeight: MediaQuery.sizeOf(context).height -
-                MediaQuery.of(context).viewPadding.top -
-                MediaQuery.of(context).viewPadding.bottom,
+            maxHeight: MediaQuery.sizeOf(context).height - MediaQuery.of(context).viewPadding.top,
             snapPoint: .3,
             minHeight: 180,
             panelBuilder: (controller) {
@@ -324,7 +322,16 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                           focusNode: focusNode,
                         ),
                         const SizedBox(height: 8),
-                        if (shouldShowPredicationResultList) const PredicationResultList(),
+                        if (shouldShowPredicationResultList)
+                          PredicationResultList(
+                            onTap: (predictionResult) {
+                              ref.read(mapServiceProvider).geocoding(
+                                    predictionResult.placeId,
+                                    predictionResult.resultFormatting.name,
+                                    predictionResult.resultFormatting.address,
+                                  );
+                            },
+                          ),
                       ],
                     ),
                   ),

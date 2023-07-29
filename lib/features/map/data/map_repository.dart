@@ -64,7 +64,7 @@ final nearbyFacilityProvider = StreamProvider.autoDispose.family((ref, GeoPoint 
 class MapRepository {
   MapRepository(this.ref);
 
-  final _predictionResultController = StreamController<List<FacilityPredictionResult>>();
+  final _predictionResultController = StreamController<List<FacilityPredictionResult>>()..add([]);
 
   final Ref ref;
 

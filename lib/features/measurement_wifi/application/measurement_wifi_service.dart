@@ -6,8 +6,7 @@ import '../../../configs/union_timestamp.dart';
 import '../../authentication/data/firebase_auth.dart';
 import '../../bax/domain/bax.dart';
 import '../../bax/domain/bax_reasons.dart';
-import '../../facility/data/facility_repository.dart';
-import '../../map/domain/nearby_search_results/nearby_search_result.dart';
+import '../../facility/domain/facility.dart';
 import '../../payment/repository/payment_repository.dart';
 import '../../user/data/user_repository.dart';
 import '../data/measurement_wifi_repository.dart';
@@ -31,7 +30,7 @@ class MeasurementWifiService {
   Future<Bax?> postMeasurementResult(
     String ssid,
     FastNetResult fastNetResult,
-    NearbySearchResult nearbySearchResult,
+    Facility facility,
   ) async {
     final uid = ref.watch(firebaseAuthProvider).currentUser?.uid;
     if (uid == null) {
@@ -44,7 +43,7 @@ class MeasurementWifiService {
       latencyValue: fastNetResult.latencyValue,
       bufferbloatValue: fastNetResult.bufferbloatValue,
       usrISP: fastNetResult.usrISP,
-      placeId: nearbySearchResult.placeId,
+      placeId: facility.id,
       uid: uid,
       terminalTime: UnionTimestamp.dateTime(
         DateTime.now().toUtc(),
@@ -58,7 +57,7 @@ class MeasurementWifiService {
       await measurementWifiRepository.addWifiMeasurementResult(wifiMeasurementResult);
 
       // 同施設のこれまでの計測結果を取得して平均値スピードを算出する
-      final results = await measurementWifiRepository.getWifiMeasurementResults(nearbySearchResult.placeId);
+      final results = await measurementWifiRepository.getWifiMeasurementResults(facility.id);
 
       var totalDownloadSpeed = 0.0;
       var totalUploadSpeed = 0.0;
@@ -70,16 +69,12 @@ class MeasurementWifiService {
       final averageDownloadSpeed = double.parse((totalDownloadSpeed / results.length).toStringAsFixed(1));
       final averageUploadSpeed = double.parse((totalUploadSpeed / results.length).toStringAsFixed(1));
 
-      // 施設情報を追加 or 更新する
-      await ref.watch(facilityRepositoryProvider).saveFacility(
-            nearbySearchResult.placeId,
-            nearbySearchResult.name,
-            nearbySearchResult.geometry.location.latitude,
-            nearbySearchResult.geometry.location.longitude,
-            nearbySearchResult.vicinity,
-            averageDownloadSpeed,
-            averageUploadSpeed,
-          );
+      await facility.docRef.set(
+        facility.copyWith(
+          downloadSpeed: averageDownloadSpeed,
+          uploadSpeed: averageUploadSpeed,
+        ),
+      );
 
       final bax = Bax(
         uid: uid,

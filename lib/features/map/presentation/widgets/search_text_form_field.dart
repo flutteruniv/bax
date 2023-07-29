@@ -12,17 +12,20 @@ class SearchTextFormField extends ConsumerStatefulWidget {
     super.key,
     required this.controller,
     required this.focusNode,
+    this.searchMode = false,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
+
+  final bool searchMode;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SearchTextFormFieldState();
 }
 
 class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
-  bool searchMode = false;
+  late bool searchMode = widget.searchMode;
 
   @override
   void initState() {
@@ -39,7 +42,6 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
   @override
   Widget build(BuildContext context) {
     final languageCode = ref.watch(localeProvider).languageCode.split('_').first;
-
     final isPro = ref.watch(isProProvider);
     final localizations = ref.watch(localizationsProvider);
     return AnimatedContainer(

@@ -25,7 +25,7 @@ class _WelComePageState extends ConsumerState<WelComePage> {
   @override
   void initState() {
     super.initState();
-    ref.read(initLocationProvider);
+    ref.read(locationProvider);
   }
 
   @override

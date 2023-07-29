@@ -24,7 +24,7 @@ final mapServiceProvider = Provider((ref) {
 /// 自分の現在位置の近くの施設を検索して結果を返す。
 final myNearbyFacilityProvider = Provider.autoDispose(
   (ref) {
-    final position = ref.watch(initLocationProvider).valueOrNull;
+    final position = ref.watch(locationProvider).valueOrNull;
     if (position == null) {
       return null;
     }
@@ -40,7 +40,7 @@ final myNearbyFacilityProvider = Provider.autoDispose(
         .valueOrNull;
   },
   dependencies: [
-    initLocationProvider,
+    locationProvider,
     mapRepositoryProvider,
   ],
 );
@@ -62,7 +62,7 @@ class MapService {
   Future<void> searchFacilities(String query, String localeLanguage) async {
     _holdQuery = query;
 
-    final location = await ref.read(initLocationProvider.future);
+    final location = await ref.read(locationProvider.future);
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
     await Future<void>.delayed(const Duration(milliseconds: 300));
     if (_holdQuery == query) {

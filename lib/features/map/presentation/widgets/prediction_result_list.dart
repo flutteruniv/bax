@@ -5,11 +5,15 @@ import '../../../../common_widgets/bax_indicator.dart';
 import '../../../../configs/localizations.dart';
 import '../../application/map_service.dart';
 import '../../data/map_repository.dart';
+import '../../domain/facility_prediction_results/facility_prediction_result.dart';
 
 class PredicationResultList extends ConsumerWidget {
   const PredicationResultList({
     super.key,
+    required this.onTap,
   });
+
+  final void Function(FacilityPredictionResult) onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,11 +32,7 @@ class PredicationResultList extends ConsumerWidget {
                   title: Text(predictionResult.resultFormatting.name),
                   subtitle: Text(predictionResult.resultFormatting.address),
                   onTap: () async {
-                    await ref.read(mapServiceProvider).geocoding(
-                          predictionResult.placeId,
-                          predictionResult.resultFormatting.name,
-                          predictionResult.resultFormatting.address,
-                        );
+                    onTap.call(predictionResult);
                   },
                 );
               },

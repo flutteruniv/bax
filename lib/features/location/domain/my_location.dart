@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
-final initLocationProvider = FutureProvider((ref) async {
+final locationProvider = FutureProvider((ref) async {
   bool serviceEnabled;
   LocationPermission permission;
 

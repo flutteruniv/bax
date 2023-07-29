@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+import '../../../configs/logger.dart';
 import '../../authentication/application/auth_service.dart';
 import '../../user/application/user_service.dart';
 
@@ -53,6 +54,15 @@ class PaymentRepository {
       }
       Purchases.logIn(uid);
     });
+
+    final user = await ref.read(loginUserProvider.future);
+    if (user.data()?.isPro == true) {
+      try {
+        await Purchases.restorePurchases();
+      } catch (e) {
+        logger.e(e);
+      }
+    }
   }
 
   /// サブスクリプションを開始する

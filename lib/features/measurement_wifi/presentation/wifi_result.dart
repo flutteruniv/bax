@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../configs/localizations.dart';
-import '../../map/domain/nearby_search_results/nearby_search_result.dart';
+import '../../facility/domain/facility.dart';
 import '../domain/fast_net_result.dart';
 
 class WiFiResultDialog extends ConsumerStatefulWidget {
@@ -16,12 +16,12 @@ class WiFiResultDialog extends ConsumerStatefulWidget {
     super.key,
     required this.ssid,
     required this.fastNetResult,
-    required this.nearbySearchResult,
+    required this.facility,
   });
 
   final String ssid;
   final FastNetResult fastNetResult;
-  final NearbySearchResult nearbySearchResult;
+  final Facility facility;
 
   @override
   ConsumerState<WiFiResultDialog> createState() => _WiFiResultDialogState();
@@ -107,16 +107,16 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
                           Marker(
                             markerId: const MarkerId('id'),
                             position: LatLng(
-                              widget.nearbySearchResult.geometry.location.latitude,
-                              widget.nearbySearchResult.geometry.location.longitude,
+                              widget.facility.geo.latitude,
+                              widget.facility.geo.longitude,
                             ),
                           ),
                         },
                         initialCameraPosition: CameraPosition(
                           zoom: 16,
                           target: LatLng(
-                            widget.nearbySearchResult.geometry.location.latitude + 0.002,
-                            widget.nearbySearchResult.geometry.location.longitude,
+                            widget.facility.geo.latitude + 0.002,
+                            widget.facility.geo.longitude,
                           ),
                         ),
                       ),
@@ -148,7 +148,7 @@ class _WiFiResultDialogState extends ConsumerState<WiFiResultDialog> {
                                     horizontal: 40,
                                   ),
                                   child: Text(
-                                    widget.nearbySearchResult.name,
+                                    widget.facility.name,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
