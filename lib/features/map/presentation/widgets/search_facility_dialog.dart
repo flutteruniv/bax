@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/map_service.dart';
+import '../../data/map_repository.dart';
 import 'prediction_result_list.dart';
 import 'search_text_form_field.dart';
 
@@ -27,7 +28,7 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.watch(predictionResultStreamProvider);
+    ref.watch(predictionResultStreamProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -41,6 +42,9 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
                   controller: controller,
                   focusNode: focusNode,
                   searchMode: true,
+                  onFieldSubmitted: (_) {
+                    Navigator.of(context).pop();
+                  },
                 ),
                 const SizedBox(height: 16),
                 PredicationResultList(

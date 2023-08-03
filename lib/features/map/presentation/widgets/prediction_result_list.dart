@@ -57,15 +57,6 @@ class PredicationResultList extends ConsumerWidget {
           );
         } else {
           return const SizedBox();
-          return Container(
-            width: double.infinity,
-            height: 56,
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(l.noMatchingResults),
-            ),
-          );
         }
       },
       error: (error, stackTrace) {

@@ -13,7 +13,7 @@ final speedTestProvider = StreamProvider.autoDispose(
 
 class FlutterFastNet {
   static const _testServer = 'https://fast.com/#';
-
+  HeadlessInAppWebView? browser;
   HeadlessInAppWebView _createHeadlessBrowser(StreamController<FastNetResult> streamController) {
     return HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: Uri.parse(_testServer)),
@@ -24,14 +24,13 @@ class FlutterFastNet {
   }
 
   Stream<FastNetResult> analyzeSpeed() {
-    HeadlessInAppWebView? browser;
     final streamController = StreamController<FastNetResult>(
       onCancel: () async {
         await browser?.dispose();
       },
     );
     browser = _createHeadlessBrowser(streamController);
-    unawaited(browser.run());
+    unawaited(browser?.run());
     return streamController.stream;
   }
 

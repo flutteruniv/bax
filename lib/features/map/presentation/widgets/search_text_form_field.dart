@@ -12,10 +12,12 @@ class SearchTextFormField extends ConsumerStatefulWidget {
     required this.controller,
     required this.focusNode,
     this.searchMode = false,
+    this.onFieldSubmitted,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
+  final void Function(String)? onFieldSubmitted;
 
   final bool searchMode;
 
@@ -63,6 +65,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
       ),
       child: searchMode
           ? TextFormField(
+              onFieldSubmitted: widget.onFieldSubmitted,
               controller: widget.controller,
               focusNode: widget.focusNode,
               autofocus: true,
