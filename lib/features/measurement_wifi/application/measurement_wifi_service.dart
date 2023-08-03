@@ -70,10 +70,12 @@ class MeasurementWifiService {
       final averageUploadSpeed = double.parse((totalUploadSpeed / results.length).toStringAsFixed(1));
 
       await facility.docRef.set(
-        facility.copyWith(
-          downloadSpeed: averageDownloadSpeed,
-          uploadSpeed: averageUploadSpeed,
-        ),
+        facility
+            .copyWith(
+              downloadSpeed: averageDownloadSpeed,
+              uploadSpeed: averageUploadSpeed,
+            )
+            .toJson(),
       );
 
       final bax = Bax(
@@ -83,8 +85,8 @@ class MeasurementWifiService {
         bonusRate: ref.read(isProProvider) ? 2 : 1,
         baxReasons: [
           /// 過去に計測がなければボーナスポイントを付与
-          if (results.length == 1) BaxReasons.findingNewWiFi,
-          BaxReasons.measurementWifi,
+          if (results.length == 1) ref.read(baxReasonsProvider).findingNewWiFi,
+          ref.read(baxReasonsProvider).measurementWifi,
         ],
       );
 

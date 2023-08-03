@@ -27,7 +27,7 @@ export const sendNotificationToSlack = functions.firestore
     }
 
     // Slackに送信するメッセージを作成
-    const message = `💰 BAX取引:\n ${text}\n${point}BAX`;
+    const message = `💰 BAX取引:\n ${text}\n${point}BAX\nuid: ${bax.uid}`;
 
     try {
       // Slackに通知を送信

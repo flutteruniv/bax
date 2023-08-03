@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/localizations.dart';
-import '../../../payment/repository/payment_repository.dart';
 import '../../application/map_service.dart';
 
 class SearchTextFormField extends ConsumerStatefulWidget {
@@ -41,7 +40,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
   @override
   Widget build(BuildContext context) {
     final languageCode = ref.watch(localeProvider).languageCode.split('_').first;
-    final isPro = ref.watch(isProProvider);
+
     final localizations = ref.watch(localizationsProvider);
     return AnimatedContainer(
       width: searchMode ? MediaQuery.of(context).size.width : 56,

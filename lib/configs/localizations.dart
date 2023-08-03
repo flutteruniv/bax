@@ -390,8 +390,29 @@ class AppLocalizations {
         LType.ja => 'マップアプリで表示',
         LType.en => 'Show in Map App',
       };
+  String get earnedBAX => switch (l) {
+        LType.ja => '獲得したBAX',
+        LType.en => 'Earned BAX',
+      };
+  String get proBoost => switch (l) {
+        LType.ja => 'Pro ブースト',
+        LType.en => 'Pro Boost',
+      };
+
+  String get sum => switch (l) {
+        LType.ja => '合計',
+        LType.en => 'Sum',
+      };
+  String get newWifiSpot => switch (l) {
+        LType.ja => '新Wi-Fiスポット発見',
+        LType.en => 'New Wi-Fi Spot Discovered',
+      };
+  String get amazonGiftCardExchange => switch (l) {
+        LType.ja => 'Amazonギフト券交換',
+        LType.en => 'Amazon Gift Card Exchange',
+      };
   String get XXX => switch (l) {
-        LType.ja => 'マップアプリで表示',
+        LType.ja => 'Amazonギフト券交換',
         LType.en => 'XXX',
       };
 }

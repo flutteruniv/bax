@@ -213,7 +213,7 @@ class _UseBaxDialogState extends ConsumerState<UseBaxDialog> {
                         Bax(
                           uid: uid,
                           baxReasons: [
-                            BaxReasons.redeemForAmazonGiftCard,
+                            ref.read(baxReasonsProvider).redeemForAmazonGiftCard,
                           ],
                         ),
                       );

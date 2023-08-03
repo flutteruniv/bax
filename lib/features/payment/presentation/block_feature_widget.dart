@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 
 import '../../../configs/localizations.dart';
+import '../repository/payment_repository.dart';
 import 'payment_dialog.dart';
 
 class BlockFeatureWidget extends ConsumerWidget {
@@ -20,6 +21,10 @@ class BlockFeatureWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = ref.watch(localizationsProvider);
+    final isPro = ref.watch(isProProvider);
+    if (isPro) {
+      return const SizedBox.shrink();
+    }
     return GlassmorphicContainer(
       width: width,
       height: height,

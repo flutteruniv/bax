@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../configs/localizations.dart';
 import '../../payment/repository/payment_repository.dart';
 import '../domain/bax.dart';
 
@@ -18,8 +19,9 @@ class BaxRewordDialog extends ConsumerStatefulWidget {
 class _BaxRewordDialogState extends ConsumerState<BaxRewordDialog> {
   @override
   Widget build(BuildContext context) {
+    final l = ref.watch(localizationsProvider);
     return AlertDialog(
-      title: const Text('獲得したBAX'),
+      title: Text(l.earnedBAX),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -51,10 +53,10 @@ class _BaxRewordDialogState extends ConsumerState<BaxRewordDialog> {
                 if (ref.watch(isProProvider))
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Pro ブースト',
-                          style: TextStyle(),
+                          l.proBoost,
+                          style: const TextStyle(),
                         ),
                       ),
                       Text(
@@ -65,10 +67,10 @@ class _BaxRewordDialogState extends ConsumerState<BaxRewordDialog> {
                   ),
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        '合計',
-                        style: TextStyle(
+                        l.sum,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -11,6 +11,8 @@ firebase use prod
 ## デプロイコマンド例
 
 ```
+本番環境デプロイ
+firebase deploy --only firestore:rules --project bax-wifi
 firebase deploy --only firestore:rules --project=dev
 firebase deploy --only functions --project=dev
 ```
