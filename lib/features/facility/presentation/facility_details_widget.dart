@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../common_widgets/bax_indicator.dart';
 import '../../../configs/localizations.dart';
 import '../../authentication/application/auth_service.dart';
+import '../../load/application/scaffold_manager_key.dart';
 import '../../measurement_wifi/data/measurement_wifi_repository.dart';
 import '../../payment/presentation/block_feature_widget.dart';
 import '../../payment/repository/payment_repository.dart';
@@ -88,52 +89,74 @@ class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
             PowerTile(
               hasPowerSpotUserSelect: facility.data().hasPowerSpotUserSelect(uid ?? ''),
               hasPowerSpot: isPro ? facility.data().haaPowerSpot : null,
-              onTapPower: () {
+              onTapPower: () async {
                 if (uid == null) {
                   return;
                 }
+
                 if (facility.data().hasPowerSource.contains(uid)) {
-                  facility.reference.set(
+                  await facility.reference.set(
                     facility.data().copyWith(
+                      noPowerSource: {
+                        for (final e in facility.data().noPowerSource)
+                          if (e != uid) e
+                      },
                       hasPowerSource: {
                         for (final e in facility.data().hasPowerSource)
                           if (e != uid) e
                       },
                     ),
                   );
+                  ref.read(showSnackBarProvider)('報告を取り消しました。');
                 } else {
-                  facility.reference.set(
+                  await facility.reference.set(
                     facility.data().copyWith(
+                      noPowerSource: {
+                        for (final e in facility.data().noPowerSource)
+                          if (e != uid) e
+                      },
                       hasPowerSource: {
                         ...facility.data().hasPowerSource,
                         uid,
                       },
                     ),
                   );
+                  ref.read(showSnackBarProvider)('電源ありの報告をしました。');
                 }
               },
-              onTapNoPower: () {
+              onTapNoPower: () async {
                 if (uid == null) {
                   return;
                 }
+
                 if (facility.data().noPowerSource.contains(uid)) {
-                  facility.reference.set(
+                  await facility.reference.set(
                     facility.data().copyWith(
+                      hasPowerSource: {
+                        for (final e in facility.data().hasPowerSource)
+                          if (e != uid) e
+                      },
                       noPowerSource: {
                         for (final e in facility.data().noPowerSource)
                           if (e != uid) e
                       },
                     ),
                   );
+                  ref.read(showSnackBarProvider)('報告を取り消しました。');
                 } else {
-                  facility.reference.set(
+                  await facility.reference.set(
                     facility.data().copyWith(
+                      hasPowerSource: {
+                        for (final e in facility.data().hasPowerSource)
+                          if (e != uid) e
+                      },
                       noPowerSource: {
                         ...facility.data().noPowerSource,
                         uid,
                       },
                     ),
                   );
+                  ref.read(showSnackBarProvider)('電源なしの報告をしました。');
                 }
               },
             ),
@@ -275,9 +298,11 @@ class PowerTile extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: (hasPowerSpotUserSelect != true)
                               ? null
-                              : (hasPowerSpot == true)
-                                  ? activeColor
-                                  : nonActiveColor,
+                              : hasPowerSpot == null
+                                  ? nonActiveColor
+                                  : hasPowerSpot == true
+                                      ? activeColor
+                                      : nonActiveColor,
                           border: Border.all(
                             width: 4,
                             color: hasPowerSpot == true ? activeColor! : nonActiveColor!,
@@ -291,9 +316,11 @@ class PowerTile extends ConsumerWidget {
                                 Icons.power_outlined,
                                 color: hasPowerSpotUserSelect == true
                                     ? Colors.white
-                                    : hasPowerSpot == true
-                                        ? activeColor!
-                                        : nonActiveColor!,
+                                    : hasPowerSpot == null
+                                        ? nonActiveColor!
+                                        : hasPowerSpot == true
+                                            ? activeColor!
+                                            : nonActiveColor!,
                                 size: 80,
                               ),
                             ],
@@ -310,9 +337,11 @@ class PowerTile extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: (hasPowerSpotUserSelect != false)
                               ? null
-                              : (hasPowerSpot == false)
-                                  ? activeColor
-                                  : nonActiveColor,
+                              : hasPowerSpot == null
+                                  ? nonActiveColor
+                                  : hasPowerSpot == false
+                                      ? activeColor
+                                      : nonActiveColor,
                           border: Border.all(
                             width: 4,
                             color: hasPowerSpot == false ? activeColor! : nonActiveColor!,
@@ -325,9 +354,11 @@ class PowerTile extends ConsumerWidget {
                               Icons.power_off_outlined,
                               color: hasPowerSpotUserSelect == false
                                   ? Colors.white
-                                  : hasPowerSpot == false
-                                      ? activeColor!
-                                      : nonActiveColor!,
+                                  : hasPowerSpot == null
+                                      ? nonActiveColor
+                                      : hasPowerSpot == false
+                                          ? activeColor
+                                          : nonActiveColor,
                               size: 80,
                             ),
                           ],

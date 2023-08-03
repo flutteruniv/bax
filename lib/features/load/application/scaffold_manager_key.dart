@@ -11,6 +11,12 @@ final snackBarServiceProvider = Provider((ref) {
   return SnackBarService(scaffoldMessengerKey);
 });
 
+final showSnackBarProvider = Provider((ref) {
+  return (String text) {
+    ref.watch(snackBarServiceProvider).showSnackBar(text);
+  };
+});
+
 class SnackBarService {
   SnackBarService(this.globalKey);
 

@@ -27,6 +27,7 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // ref.watch(predictionResultStreamProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(

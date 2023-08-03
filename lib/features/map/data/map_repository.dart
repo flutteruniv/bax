@@ -72,6 +72,10 @@ class MapRepository {
     return _predictionResultController.stream;
   }
 
+  void clearPrediction() {
+    _predictionResultController.add([]);
+  }
+
   /// Reference: https://developers.google.com/maps/documentation/places/web-service/autocomplete?hl=ja
   Future<void> searchFacilities(
     String word,

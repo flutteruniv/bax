@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/localizations.dart';
 import '../../application/map_service.dart';
+import '../../data/map_repository.dart';
 
 class SearchTextFormField extends ConsumerStatefulWidget {
   const SearchTextFormField({
@@ -33,6 +34,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
         setState(() {
           searchMode = false;
         });
+        ref.watch(mapRepositoryProvider).clearPrediction();
       }
     });
   }
