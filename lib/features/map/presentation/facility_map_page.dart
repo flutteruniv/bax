@@ -77,11 +77,7 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
   @override
   void initState() {
     super.initState();
-    searchTextEditingController.addListener(() {
-      setState(() {});
-    });
     fetchLocationDataAndMoveCamera();
-
     // FDLの監視。リンクを踏んでアプリを起動したときに処理が走る。
     subDynamicLinks = FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
       // TODO(kenta-wakasa): 毎回認証リンクとは限らないはずなので、その辺りをハンドリングする仕組みが必要そう
@@ -175,11 +171,6 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
         );
         markers.add(searchedMarker!);
       }
-
-      // 追加したMarkerが描画されるのを一瞬待ってからMarkerInfoを表示する
-      // Future.delayed(const Duration(milliseconds: 100), () async {
-      //   await mapController.showMarkerInfoWindow(MarkerId(facility.id));
-      // });
     });
 
     return WillPopScope(
@@ -328,16 +319,15 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                           focusNode: focusNode,
                         ),
                         const SizedBox(height: 8),
-                        if (shouldShowPredicationResultList)
-                          PredicationResultList(
-                            onTap: (predictionResult) {
-                              ref.read(mapServiceProvider).geocoding(
-                                    predictionResult.placeId,
-                                    predictionResult.resultFormatting.name,
-                                    predictionResult.resultFormatting.address,
-                                  );
-                            },
-                          ),
+                        PredicationResultList(
+                          onTap: (predictionResult) {
+                            ref.read(mapServiceProvider).geocoding(
+                                  predictionResult.placeId,
+                                  predictionResult.resultFormatting.name,
+                                  predictionResult.resultFormatting.address,
+                                );
+                          },
+                        ),
                       ],
                     ),
                   ),

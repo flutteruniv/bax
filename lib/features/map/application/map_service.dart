@@ -64,7 +64,7 @@ class MapService {
 
     final location = await ref.read(locationProvider.future);
     // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
+    await Future<void>.delayed(const Duration(milliseconds: 300));
     if (_holdQuery == query) {
       // TODO: Validationチェック。
       /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。

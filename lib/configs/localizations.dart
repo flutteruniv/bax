@@ -411,8 +411,20 @@ class AppLocalizations {
         LType.ja => 'Amazonギフト券交換',
         LType.en => 'Amazon Gift Card Exchange',
       };
+  String get powerOutletReported => switch (l) {
+        LType.ja => '電源ありの報告をしました。',
+        LType.en => 'You reported that there is a power outlet.',
+      };
+  String get noPowerOutletReported => switch (l) {
+        LType.ja => '電源なしの報告をしました。',
+        LType.en => 'You reported that there is no power outlet.',
+      };
+  String get reportCancelled => switch (l) {
+        LType.ja => '報告を取り消しました。',
+        LType.en => 'You cancelled the report.',
+      };
   String get XXX => switch (l) {
-        LType.ja => 'Amazonギフト券交換',
+        LType.ja => '報告を取り消しました。',
         LType.en => 'XXX',
       };
 }

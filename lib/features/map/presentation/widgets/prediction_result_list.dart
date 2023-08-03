@@ -27,18 +27,45 @@ class PredicationResultList extends ConsumerWidget {
               itemCount: predictionResults.length,
               itemBuilder: (context, index) {
                 final predictionResult = predictionResults[index];
-                return ListTile(
-                  title: Text(predictionResult.resultFormatting.name),
-                  subtitle: Text(predictionResult.resultFormatting.address),
+                return InkWell(
                   onTap: () async {
                     onTap.call(predictionResult);
                   },
+                  child: SizedBox(
+                    height: 56,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            predictionResult.resultFormatting.name,
+                            maxLines: 1,
+                          ),
+                          Text(
+                            predictionResult.resultFormatting.address,
+                            maxLines: 1,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
           );
         } else {
           return const SizedBox();
+          return Container(
+            width: double.infinity,
+            height: 56,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(l.noMatchingResults),
+            ),
+          );
         }
       },
       error: (error, stackTrace) {

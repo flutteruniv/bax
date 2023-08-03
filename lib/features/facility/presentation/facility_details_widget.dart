@@ -107,7 +107,7 @@ class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
                       },
                     ),
                   );
-                  ref.read(showSnackBarProvider)('報告を取り消しました。');
+                  ref.read(showSnackBarProvider)(l.reportCancelled);
                 } else {
                   await facility.reference.set(
                     facility.data().copyWith(
@@ -121,7 +121,7 @@ class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
                       },
                     ),
                   );
-                  ref.read(showSnackBarProvider)('電源ありの報告をしました。');
+                  ref.read(showSnackBarProvider)(l.powerOutletReported);
                 }
               },
               onTapNoPower: () async {
@@ -142,7 +142,7 @@ class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
                       },
                     ),
                   );
-                  ref.read(showSnackBarProvider)('報告を取り消しました。');
+                  ref.read(showSnackBarProvider)(l.reportCancelled);
                 } else {
                   await facility.reference.set(
                     facility.data().copyWith(
@@ -156,7 +156,7 @@ class _FacilityPageState extends ConsumerState<FacilityDetailsWidget> {
                       },
                     ),
                   );
-                  ref.read(showSnackBarProvider)('電源なしの報告をしました。');
+                  ref.read(showSnackBarProvider)(l.noPowerOutletReported);
                 }
               },
             ),
