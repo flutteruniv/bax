@@ -4,75 +4,61 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
+import '../../../configs/localizations.dart';
 import '../../../configs/logger.dart';
 import '../../facility/data/facility_repository.dart';
 import '../../facility/domain/facility.dart';
 import '../../location/domain/my_location.dart';
 import '../data/map_repository.dart';
+import '../domain/common_searched_facility.dart';
 
-/// ユーザーが施設予測結果から選択したときにロケーション情報が返される[StreamProvider]
-final selectedLocationInfoStreamProvider = StreamProvider(
-  (ref) {
-    return ref.watch(mapServiceProvider).selectedLocationInfoStream();
-  },
+final commonSearchedFacilitiesNotifierProvider =
+    NotifierProvider.autoDispose<CommonSearchedFacilitiesNotifier, List<CommonSearchedFacility>>(
+  CommonSearchedFacilitiesNotifier.new,
 );
 
-final mapServiceProvider = Provider((ref) {
-  return MapService(ref);
-});
-
-/// 自分の現在位置の近くの施設を検索して結果を返す。
-final myNearbyFacilityProvider = Provider.autoDispose(
-  (ref) {
-    final position = ref.watch(locationProvider).valueOrNull;
-    if (position == null) {
-      return null;
-    }
-    return ref
-        .watch(
-          nearbyFacilityProvider(
-            GeoPoint(
-              position.latitude,
-              position.longitude,
-            ),
-          ),
-        )
-        .valueOrNull;
-  },
-  dependencies: [
-    locationProvider,
-    mapRepositoryProvider,
-  ],
-);
-
-class MapService {
-  MapService(this.ref);
-
-  final Ref ref;
+class CommonSearchedFacilitiesNotifier extends AutoDisposeNotifier<List<CommonSearchedFacility>> {
+  @override
+  List<CommonSearchedFacility> build() {
+    return [];
+  }
 
   /// 保留中の検索文字列
   String? _holdQuery;
 
-  final _selectedLocationInfoController = StreamController<Facility>();
+  Future<void> fetchNearbyFacility() async {
+    final location = await ref.read(locationProvider.future);
+    if (location == null) {
+      return;
+    }
+    final nearbySearchResults = await ref.read(mapRepositoryProvider).fetchNearByFacility(
+          GeoPoint(
+            location.latitude,
+            location.longitude,
+          ),
+        );
 
-  Stream<Facility> selectedLocationInfoStream() {
-    return _selectedLocationInfoController.stream;
+    state = nearbySearchResults.results
+        .map(
+          (e) => CommonSearchedFacility(
+            placeId: e.placeId,
+            name: e.name,
+            // TODO(kenta-wakasa): vicinityでいいのか？
+            address: e.vicinity,
+          ),
+        )
+        .toList();
   }
 
-  Future<void> searchFacilities(String query, String localeLanguage) async {
+  Future<void> searchFacilities(String query) async {
     _holdQuery = query;
-
     final location = await ref.read(locationProvider.future);
-    // 無駄な連続リクエストをなるべく避けるため、一定時間後のholdQueryがqueryと一致していた場合のみリクエストを送信する
     await Future<void>.delayed(const Duration(milliseconds: 300));
     if (_holdQuery == query) {
-      // TODO: Validationチェック。
-      /// 無駄なリクエストを避けるため空文字や無意味な記号などが来たらリクエストしないようにする。
-
       logger.i('検索Query: $query');
-      return ref.watch(mapRepositoryProvider).searchFacilities(
+      final facilityPredictionResults = await ref.read(mapRepositoryProvider).searchFacilities(
             query,
-            localeLanguage,
+            ref.read(localeProvider).languageCode.split('_').first,
             geoPoint: location == null
                 ? null
                 : GeoPoint(
@@ -80,13 +66,39 @@ class MapService {
                     location.longitude,
                   ),
           );
+      state = facilityPredictionResults.predictions
+          .map(
+            (e) => CommonSearchedFacility(
+              placeId: e.placeId,
+              name: e.resultFormatting.name,
+              address: e.resultFormatting.address,
+            ),
+          )
+          .toList();
     }
   }
 
+  void clear() {
+    state = [];
+  }
+}
+
+final selectedFacilityNotifierProvider =
+    NotifierProvider.autoDispose<SelectedFacilityNotifier, Facility?>(SelectedFacilityNotifier.new);
+
+class SelectedFacilityNotifier extends AutoDisposeNotifier<Facility?> {
+  @override
+  Facility? build() {
+    return null;
+  }
+
+  // TODO(kenta-wakasa): 名前を変えた方がいい
   Future<void> geocoding(String facilityId, String name, String address) async {
+    ref.read(commonSearchedFacilitiesNotifierProvider.notifier).clear();
+
     final facility = await ref.watch(facilityRepositoryProvider).fetchFacility(facilityId);
     if (facility != null) {
-      _selectedLocationInfoController.add(facility.data());
+      state = facility.data();
       return;
     }
 
@@ -109,8 +121,6 @@ class MapService {
 
     /// Firestoreに保存
     await newFacility.docRef.set(newFacility);
-    _selectedLocationInfoController.add(
-      newFacility,
-    );
+    state = newFacility;
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/map_service.dart';
-import '../../data/map_repository.dart';
 import 'prediction_result_list.dart';
 import 'search_text_form_field.dart';
 
@@ -20,6 +19,12 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
   final focusNode = FocusNode();
 
   @override
+  void initState() {
+    ref.read(commonSearchedFacilitiesNotifierProvider.notifier).fetchNearbyFacility();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     controller.dispose();
@@ -28,7 +33,6 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(predictionResultStreamProvider);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -43,16 +47,17 @@ class _SearchFacilityDialogState extends ConsumerState<SearchFacilityDialog> {
                   focusNode: focusNode,
                   searchMode: true,
                   onFieldSubmitted: (_) {
+                    ref.read(commonSearchedFacilitiesNotifierProvider.notifier).clear();
                     Navigator.of(context).pop();
                   },
                 ),
                 const SizedBox(height: 16),
                 PredicationResultList(
-                  onTap: (predictionResult) async {
-                    await ref.read(mapServiceProvider).geocoding(
-                          predictionResult.placeId,
-                          predictionResult.resultFormatting.name,
-                          predictionResult.resultFormatting.address,
+                  onTap: (value) async {
+                    await ref.read(selectedFacilityNotifierProvider.notifier).geocoding(
+                          value.placeId,
+                          value.name,
+                          value.address,
                         );
                     if (!mounted) {
                       return;

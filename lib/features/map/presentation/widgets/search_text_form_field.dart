@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../configs/localizations.dart';
 import '../../application/map_service.dart';
-import '../../data/map_repository.dart';
 
 class SearchTextFormField extends ConsumerStatefulWidget {
   const SearchTextFormField({
@@ -36,15 +35,13 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
         setState(() {
           searchMode = false;
         });
-        ref.watch(mapRepositoryProvider).clearPrediction();
+        ref.read(commonSearchedFacilitiesNotifierProvider.notifier).clear();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final languageCode = ref.watch(localeProvider).languageCode.split('_').first;
-
     final localizations = ref.watch(localizationsProvider);
     return AnimatedContainer(
       width: searchMode ? MediaQuery.of(context).size.width : 56,
@@ -74,7 +71,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
               ),
               inputFormatters: [LengthLimitingTextInputFormatter(60)], // 一旦60文字で制限
               enableInteractiveSelection: true, // コピペ可
-              onChanged: (value) => ref.watch(mapServiceProvider).searchFacilities(value, languageCode),
+              onChanged: (value) => ref.read(commonSearchedFacilitiesNotifierProvider.notifier).searchFacilities(value),
             )
           : Row(
               children: [
@@ -83,6 +80,7 @@ class _SearchTextFormFieldState extends ConsumerState<SearchTextFormField> {
                     setState(() {
                       searchMode = true;
                     });
+                    ref.read(commonSearchedFacilitiesNotifierProvider.notifier).fetchNearbyFacility();
                   },
                   child: const Icon(Icons.search),
                 ),

@@ -135,8 +135,8 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
       }
     }
 
-    ref.listen(selectedLocationInfoStreamProvider, (previous, next) async {
-      final facility = next.value;
+    ref.listen(selectedFacilityNotifierProvider, (previous, next) async {
+      final facility = next;
       if (facility == null) {
         return;
       }
@@ -320,11 +320,11 @@ class _FacilityMapPageState extends ConsumerState<FacilityMapPage> {
                         ),
                         const SizedBox(height: 8),
                         PredicationResultList(
-                          onTap: (predictionResult) {
-                            ref.read(mapServiceProvider).geocoding(
-                                  predictionResult.placeId,
-                                  predictionResult.resultFormatting.name,
-                                  predictionResult.resultFormatting.address,
+                          onTap: (value) {
+                            ref.read(selectedFacilityNotifierProvider.notifier).geocoding(
+                                  value.placeId,
+                                  value.name,
+                                  value.address,
                                 );
                           },
                         ),

@@ -6,7 +6,7 @@ publish_to: "none"
 version: 1.3.0+30
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.0.4 <4.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.2
@@ -55,11 +55,11 @@ dev_dependencies:
     sdk: flutter
   riverpod_lint: ^1.1.3
   flutter_lints: ^2.0.0
-  json_serializable: ^6.5.4
+  json_serializable: ^6.7.1
   pedantic_mono:
-  flutter_launcher_icons: ^0.11.0
   build_runner: ^2.4.6
   freezed: ^2.3.3
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true

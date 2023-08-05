@@ -1,81 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../common_widgets/bax_indicator.dart';
-import '../../../../configs/localizations.dart';
-import '../../data/map_repository.dart';
-import '../../domain/facility_prediction_results/facility_prediction_result.dart';
+import '../../application/map_service.dart';
+import '../../domain/common_searched_facility.dart';
 
-class PredicationResultList extends ConsumerWidget {
+class PredicationResultList extends ConsumerStatefulWidget {
   const PredicationResultList({
     super.key,
     required this.onTap,
   });
 
-  final void Function(FacilityPredictionResult) onTap;
+  final void Function(CommonSearchedFacility) onTap;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = ref.watch(localizationsProvider);
-    return ref.watch(predictionResultStreamProvider).when(
-      data: (predictionResults) {
-        if (predictionResults.isNotEmpty) {
-          return ColoredBox(
-            color: Colors.white,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: predictionResults.length,
-              itemBuilder: (context, index) {
-                final predictionResult = predictionResults[index];
-                return InkWell(
-                  onTap: () async {
-                    onTap.call(predictionResult);
-                  },
-                  child: SizedBox(
-                    height: 56,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            predictionResult.resultFormatting.name,
-                            maxLines: 1,
-                          ),
-                          Text(
-                            predictionResult.resultFormatting.address,
-                            maxLines: 1,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+  ConsumerState<PredicationResultList> createState() => _PredicationResultListState();
+}
+
+class _PredicationResultListState extends ConsumerState<PredicationResultList> {
+  final controller = ScrollController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final commonFacilities = ref.watch(commonSearchedFacilitiesNotifierProvider);
+    if (commonFacilities.isNotEmpty) {
+      return Container(
+        height: 280,
+        color: Colors.white,
+        child: Scrollbar(
+          controller: controller,
+          thumbVisibility: true,
+          child: ListView.builder(
+            controller: controller,
+            itemCount: commonFacilities.length,
+            itemBuilder: (context, index) {
+              final commonFacility = commonFacilities[index];
+              return InkWell(
+                onTap: () async {
+                  widget.onTap.call(commonFacility);
+                },
+                child: SizedBox(
+                  height: 56,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          commonFacility.name,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          commonFacility.address,
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
-      error: (error, stackTrace) {
-        return Container(
-          width: double.infinity,
-          height: 80,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(l.errorOccurred),
+                ),
+              );
+            },
           ),
-        );
-      },
-      loading: () {
-        return const Padding(
-          padding: EdgeInsets.all(12),
-          child: BaxIndicator(),
-        );
-      },
-    );
+        ),
+      );
+    }
+    return const SizedBox();
   }
 }
