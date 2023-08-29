@@ -1,5 +1,4 @@
 import 'package:bax/configs/validators.dart';
-import 'package:bax/features/load/application/scaffold_manager_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
